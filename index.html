@@ -232,7 +232,6 @@
             margin-bottom: 40px;
             max-width: 800px;
             margin-left: auto;
-            margin-right: auto;
             color: var(--soft-white);
         }
 
@@ -785,19 +784,21 @@
 
         // *** الأماكن التي يجب عليك تعديلها بمعلومات تطبيقك على Discord ***
         // 1. Client ID لبوتك
-        const CLIENT_ID = '1387126725602709534'; // <--- استبدل هذا بمعرف تطبيقك (Client ID) من Discord Developer Portal
+        const CLIENT_ID = '1387126725602709534'; // <--- تم التعديل إلى Client ID الخاص بك
 
         // 2. رابط إعادة التوجيه (Redirect URI) بعد تسجيل الدخول بـ OAuth2
         // يجب أن يكون هذا مطابقًا تمامًا لما هو مسجل في Discord Developer Portal
-        const REDIRECT_URI = 'http://localhost:3000/callback'; // <--- استبدل هذا برابط موقعك أو (http://localhost:XXXX/callback) للتطوير
+        const REDIRECT_URI = 'https://vnd-beryl.vercel.app'; // <--- تم التعديل إلى Redirect URI الخاص بك
 
         // 3. رابط دعوة البوت إلى السيرفر (مع الأذونات المطلوبة)
-        // Permissions: 8 = Administrator (للاختبار)، يمكنك تخصيص الأذونات بدقة
-        const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&permissions=8&scope=bot%20applications.commands`;
+        // Permissions: 1153419908984311 هو الرقم الذي أرفقته في رابط الـ Redirect URI الأصلي (صلاحيات Admin)
+        // Scope: bot هو المطلوب لدعوة البوت. applications.commands للslash commands
+        const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&permissions=1153419908984311&scope=bot%20applications.commands`;
 
         // 4. رابط تسجيل الدخول بـ Discord OAuth2
         // Scope: identify = للحصول على معلومات المستخدم, guilds = للحصول على قائمة سيرفرات المستخدم
-        const LOGIN_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=identify%20guilds`;
+        // إذا كنت قد فعلت guilds.members.read في Discord Developer Portal، يمكنك إضافته هنا أيضاً: 'identify%20guilds%20guilds.members.read'
+        const LOGIN_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=identify%20guilds`;
         // *******************************************************************
 
 
@@ -805,12 +806,25 @@
         // في تطبيق حقيقي، ستتحقق من وجود "رمز وصول" (access token) في Local Storage أو في ملفات تعريف الارتباط (cookies)
         function checkLoginStatus() {
             // هذا مجرد محاكاة بسيطة. في الواقع، ستحتاج إلى طلب من الخادم للتحقق من الجلسة.
+            // يمكنك هنا التحقق من وجود 'code' في الـ URL بعد إعادة التوجيه، للدلالة على محاولة تسجيل دخول ناجحة.
+            const urlParams = new URLSearchParams(window.location.search);
+            const authCode = urlParams.get('code');
+
+            if (authCode) {
+                // إذا وجد كود المصادقة، هذا يعني أن ديسكورد أعاد توجيه المستخدم بنجاح.
+                // في هذه المرحلة، يجب أن يرسل الـ Backend هذا الكود إلى Discord لتبديله برمز الوصول (access token).
+                // هنا نقوم بمحاكاة بسيطة لغرض الواجهة الأمامية.
+                localStorage.setItem('isLoggedIn', 'true');
+                // لإزالة الكود من الـ URL بعد التعامل معه (لجعل الـ URL نظيفاً)
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; // تحقق من Local Storage
 
             if (isLoggedIn) {
                 loginButton.style.display = 'none';
                 dashboardButton.style.display = 'inline-block';
-                // يمكنك أيضًا إظهار اسم المستخدم وصورته هنا
+                // يمكنك أيضًا إظهار اسم المستخدم وصورته هنا (يتطلب واجهة خلفية)
             } else {
                 loginButton.style.display = 'inline-block';
                 dashboardButton.style.display = 'none';
@@ -822,7 +836,7 @@
 
 
         // -----------------------------------------------------------
-        //              تفعيل الأزرار (ربطها بالروابط الصحيحة)
+        //               تفعيل الأزرار (ربطها بالروابط الصحيحة)
         // -----------------------------------------------------------
 
         // زر "تسجيل الدخول بالديسكورد" في الهيدر وفي قسم "كيف يعمل؟"
@@ -878,7 +892,7 @@
 
 
         // -----------------------------------------------------------
-        //              وظائف الـ UI (القائمة المتنقلة والتمرير السلس)
+        //               وظائف الـ UI (القائمة المتنقلة والتمرير السلس)
         // -----------------------------------------------------------
         hamburger.addEventListener('click', () => {
             navLinks.classList.toggle('active');
@@ -888,24 +902,10 @@
         // إغلاق قائمة التنقل عند النقر على رابط (للجوال)
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                if (navLinks.classList.contains('active')) {
-                    navLinks.classList.remove('active');
-                    hamburger.classList.remove('open');
-                }
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('open');
             });
         });
-
-        // التمرير السلس للروابط الداخلية
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
     </script>
 </body>
 </html>

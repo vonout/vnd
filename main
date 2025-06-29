@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم بوت VND - تحكم كامل ببوك في الديسكورد</title>
+    <link rel="icon" href="https://media.discordapp.net/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=6862c4f3&is=68617373&hm=8f081e2ff1124f60bdc0035e8922fd3772694033c360e180caefa707545b0c2e" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #FFD700; /* Gold */
+            --secondary-color: #FFA500; /* Orange */
+            --dark-bg: #1a1a1a;
+            --medium-dark-bg: #2a2a2a;
+            --light-text: #ffffff;
+            --soft-white: #f0f0f0;
+            --border-color: #3a3a3a;
+            --hover-color: #FFC000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.6;
+            direction: rtl; /* Right-to-left for Arabic */
+            text-align: right;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--hover-color);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--dark-bg);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--dark-bg);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .section-heading {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--medium-dark-bg);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-left: 10px;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .logo span {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            margin-right: auto; /* Push navigation links to the left in RTL */
+        }
+
+        .nav-links li a {
+            color: var(--soft-white);
+            font-weight: bold;
+            font-size: 1.1em;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links li a:hover::after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            margin-right: 20px;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            /* استخدام رابط الصورة المباشر للخلفية */
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('https://media.discordapp.net/attachments/1248636782342443021/1388929555149885553/ChatGPT_Image_27_2025_03_36_55_.png?ex=6862c4f3&is=68617373&hm=1a50204bece5989e2e89f711499b4aa22c255a1dd3237f8f5bd0faf1805ea901') no-repeat center center/cover;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 3.8em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--soft-white);
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background-color: var(--dark-bg);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background-color: var(--medium-dark-bg);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+        }
+
+        .feature-card i {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .feature-card h3 {
+            font-size: 1.7em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .feature-card p {
+            color: var(--soft-white);
+            font-size: 0.95em;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 80px 0;
+            background-color: var(--medium-dark-bg);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .step-card {
+            background-color: var(--dark-bg);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 350px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--primary-color);
+            position: relative;
+        }
+
+        .step-card .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: var(--dark-bg);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            border: 3px solid var(--dark-bg);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        }
+
+        .step-card h3 {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-size: 1.5em;
+        }
+
+        .step-card p {
+            color: var(--soft-white);
+        }
+
+        /* Dashboard Overview Section (Simulated) */
+        .dashboard-overview {
+            padding: 80px 0;
+            background-color: var(--dark-bg);
+        }
+
+        .dashboard-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .dashboard-section {
+            background-color: var(--medium-dark-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+        }
+
+        .dashboard-section h3 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .dashboard-section p {
+            color: var(--soft-white);
+            margin-bottom: 15px;
+        }
+
+        .dashboard-section ul {
+            list-style: disc;
+            padding-right: 20px;
+            color: var(--soft-white);
+        }
+
+        .dashboard-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .dashboard-image {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .dashboard-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Call to Action */
+        .cta {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            padding: 60px 0;
+            text-align: center;
+            color: var(--dark-bg);
+            margin-top: 50px;
+        }
+
+        .cta h2 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            color: var(--dark-bg);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .cta p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: var(--dark-bg);
+        }
+
+        .cta .btn {
+            background-color: var(--dark-bg);
+            color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta .btn:hover {
+            background-color: var(--medium-dark-bg);
+            color: var(--hover-color);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--medium-dark-bg);
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-links a {
+            color: var(--soft-white);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .social-icons {
+            margin-bottom: 30px;
+        }
+
+        .social-icons a {
+            color: var(--soft-white);
+            font-size: 1.8em;
+            margin: 0 15px;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer p {
+            font-size: 0.9em;
+            color: var(--soft-white);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: var(--medium-dark-bg);
+                position: absolute;
+                top: 90px; /* Adjust based on header height */
+                left: 0;
+                padding: 20px 0;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                text-align: center;
+                margin: 10px 0;
+            }
+
+            .auth-buttons {
+                margin-top: 20px;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 3em;
+            }
+
+            .hero p {
+                font-size: 1.1em;
+            }
+
+            .features-grid, .steps-container {
+                grid-template-columns: 1fr;
+            }
+
+            .step-card {
+                max-width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-heading {
+                font-size: 2em;
+            }
+
+            .hero {
+                padding: 70px 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .hero p {
+                font-size: 1em;
+            }
+
+            .feature-card, .step-card {
+                padding: 25px;
+            }
+
+            .dashboard-section h3 {
+                font-size: 1.7em;
+            }
+
+            .cta h2 {
+                font-size: 2.2em;
+            }
+
+            .cta p {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo span {
+                font-size: 1.5em;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+
+            .auth-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .hero p {
+                font-size: 0.9em;
+            }
+
+            .feature-card h3 {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <img src="https://media.discordapp.net/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=6862c4f3&is=68617373&hm=8f081e2ff1124f60bdc0035e8922fd3772694033c360e180caefa707545b0c2e" alt="VND Bot Logo">
+                    <span>VND Bot</span>
+                </a>
+
+                <div class="hamburger" id="hamburger-menu">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#features">المميزات</a></li>
+                    <li><a href="#how-it-works">كيف يعمل؟</a></li>
+                    <li><a href="#dashboard-preview">لوحة التحكم</a></li>
+                    <li><a href="#support">الدعم</a></li>
+                </ul>
+
+                <div class="auth-buttons">
+                    <a href="#" class="btn" id="login-button"><i class="fab fa-discord"></i> تسجيل الدخول بالديسكورد</a>
+                    <a href="/dashboard" class="btn btn-outline" id="dashboard-button" style="display: none;"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="container">
+                <img src="https://media.discordapp.net/attachments/1248636782342443021/1388929555540213881/68186675_60_BNRConverted.png?ex=6862c4f3&is=68617373&hm=6cb1618f6a0cf0a540d7e6be3a4675b6c916f4ca2d0b31082e7a2f42e1ac6f32" alt="VND Bot Banner" style="max-width: 80%; height: auto; margin-bottom: 40px; border-radius: 15px; box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);">
+                <h1>ارتقِ بمجتمعك مع بوت VND للديسكورد</h1>
+                <p>تحكم كامل ومرونة لا مثيل لها لإدارة سيرفرك. من الإعدادات الأساسية إلى الميزات المتقدمة، كل شيء بين يديك.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn" id="invite-bot-button"><i class="fab fa-discord"></i> دعوة البوت الآن</a>
+                    <a href="#features" class="btn btn-outline"><i class="fas fa-info-circle"></i> اكتشف المميزات</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <div class="container">
+                <h2 class="section-heading">ميزات لا غنى عنها لـ VND Bot</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-cogs"></i>
+                        <h3>إعدادات متقدمة</h3>
+                        <p>لوحة تحكم سهلة الاستخدام تمنحك تحكمًا دقيقًا في كل جانب من جوانب البوت، دون الحاجة لأي برمجة.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>نظام حماية قوي</h3>
+                        <p>حافظ على سيرفرك آمنًا من التخريب والرسائل المزعجة باستخدام أدوات الإشراف الأوتوماتيكية والمخصصة.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-robot"></i>
+                        <h3>أوامر مخصصة</h3>
+                        <p>أنشئ أوامر بوت خاصة بسيرفرك لتلبية احتياجاتك الفريدة ولإضفاء طابع شخصي على تفاعلات الأعضاء.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-bell"></i>
+                        <h3>إشعارات ترحيب ومغادرة</h3>
+                        <p>اجذب أعضاء جددًا واجعلهم يشعرون بالترحيب عبر رسائل ترحيب مخصصة وقابلة للتعديل بالكامل.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>إحصائيات السيرفر</h3>
+                        <p>راقب نشاط سيرفرك وأداء البوت من خلال لوحة الإحصائيات الشاملة التي توفر لك رؤى قيمة.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-star"></i>
+                        <h3>نظام المستويات (Leveling)</h3>
+                        <p>شجع التفاعل في سيرفرك بمكافأة الأعضاء النشطين بنظام مستويات XP وتوزيع الرتب تلقائيًا.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <h2 class="section-heading">كيف يعمل بوت VND؟</h2>
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>دعوة البوت</h3>
+                        <p>قم بدعوة بوت VND إلى سيرفرك على Discord. الأمر لا يستغرق سوى ثوانٍ!</p>
+                        <a href="#" class="btn btn-outline btn-small" id="invite-bot-step-button" style="margin-top: 15px;">دعوة الآن</a>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>تسجيل الدخول</h3>
+                        <p>سجل الدخول إلى لوحة التحكم الخاصة بنا باستخدام حسابك على Discord.</p>
+                        <a href="#" class="btn btn-outline btn-small" id="login-step-button" style="margin-top: 15px;"><i class="fab fa-discord"></i> تسجيل الدخول</a>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>تحكم كامل</h3>
+                        <p>ابدأ بتخصيص إعدادات البوت، تفعيل الميزات، وإدارة سيرفرك بسهولة تامة.</p>
+                        <a href="/dashboard" class="btn btn-outline btn-small" id="dashboard-preview-button" style="margin-top: 15px;"><i class="fas fa-tachometer-alt"></i> استكشف اللوحة</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-overview" id="dashboard-preview">
+            <div class="container">
+                <h2 class="section-heading">نظرة سريعة على لوحة التحكم</h2>
+                <div class="dashboard-content">
+                    <div class="dashboard-section">
+                        <h3><i class="fas fa-tachometer-alt"></i> نظرة عامة على السيرفر</h3>
+                        <p>شاهد أهم المعلومات عن سيرفرك بنظرة واحدة: عدد الأعضاء، القنوات، وحالة البوت.</p>
+                        <p>ستتمكن من:</p>
+                        <ul>
+                            <li>مراقبة إحصائيات الأعضاء النشطين.</li>
+                            <li>تتبع استخدام الأوامر الشائعة.</li>
+                            <li>الحصول على تقارير دورية عن أداء البوت.</li>
+                        </ul>
+                    </div>
+                    <div class="dashboard-section">
+                        <h3><i class="fas fa-sliders-h"></i> إعدادات المودريشن</h3>
+                        <p>تحكم بقوانين سيرفرك بدقة. قم بإعداد القوانين التلقائية، عقوبات المخالفين، والمزيد.</p>
+                        <ul>
+                            <li>تفعيل نظام التنبيهات (Warns)</li>
+                            <li>ضبط فلتر الكلمات المحظورة</li>
+                            <li>إدارة الأذونات للمشرفين</li>
+                        </ul>
+                    </div>
+                    <div class="dashboard-section">
+                        <h3><i class="fas fa-comments"></i> تخصيص الردود والأوامر</h3>
+                        <p>اجعل بوتك فريدًا من نوعه. قم بتخصيص رسائل الترحيب، رسائل المغادرة، وحتى إنشاء أوامر نصية مخصصة.</p>
+                        <ul>
+                            <li>تحرير رسالة الترحيب مع دعم المتغيرات.</li>
+                            <li>إنشاء أوامر نصية سريعة ومفيدة.</li>
+                            <li>إضافة ردود تلقائية على كلمات معينة.</li>
+                        </ul>
+                    </div>
+                    <div class="dashboard-image">
+                        <img src="https://via.placeholder.com/900x500/1a1a1a/FFD700?text=Dashboard+Mockup+Here" alt="Dashboard Screenshot" title="صورة توضيحية للوحة التحكم">
+                        <p style="margin-top: 20px; font-style: italic; color: var(--soft-white);">*صورة توضيحية لواجهة لوحة التحكم، قد تختلف الواجهة النهائية.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="container">
+                <h2>جاهز للارتقاء بسيرفرك؟</h2>
+                <p>دع بوت VND يغير تجربة إدارة مجتمعك على Discord إلى الأفضل.</p>
+                <a href="#" class="btn" id="cta-button-invite"><i class="fas fa-plus-circle"></i> ابدأ الآن!</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#home">الرئيسية</a>
+                <a href="#features">المميزات</a>
+                <a href="#support">الدعم الفني</a>
+                <a href="#">سياسة الخصوصية</a>
+                <a href="#">شروط الخدمة</a>
+            </div>
+            <div class="social-icons">
+                <a href="#" target="_blank" title="Discord Server"><i class="fab fa-discord"></i></a>
+                <a href="#" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <p>&copy; 2025 VND Bot. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburger-menu');
+        const navLinks = document.getElementById('nav-links');
+
+        // الأزرار التي تحتاج إلى تفعيل
+        const loginButton = document.getElementById('login-button'); // زر تسجيل الدخول في الهيدر
+        const inviteBotButton = document.getElementById('invite-bot-button'); // زر دعوة البوت في الهيرو سكشن
+        const inviteBotStepButton = document.getElementById('invite-bot-step-button'); // زر دعوة البوت في قسم "كيف يعمل؟"
+        const loginStepButton = document.getElementById('login-step-button'); // زر تسجيل الدخول في قسم "كيف يعمل؟"
+        const dashboardPreviewButton = document.getElementById('dashboard-preview-button'); // زر استكشاف اللوحة في قسم "كيف يعمل؟"
+        const ctaButtonInvite = document.getElementById('cta-button-invite'); // زر "ابدأ الآن!" في قسم الـ CTA
+        const dashboardButton = document.getElementById('dashboard-button'); // زر لوحة التحكم في الهيدر (يظهر بعد تسجيل الدخول)
+
+        // *** الأماكن التي يجب عليك تعديلها بمعلومات تطبيقك على Discord ***
+        // 1. Client ID لبوتك
+        const CLIENT_ID = '1387126725602709534'; // <--- استبدل هذا بمعرف تطبيقك (Client ID) من Discord Developer Portal
+
+        // 2. رابط إعادة التوجيه (Redirect URI) بعد تسجيل الدخول بـ OAuth2
+        // يجب أن يكون هذا مطابقًا تمامًا لما هو مسجل في Discord Developer Portal
+        const REDIRECT_URI = 'http://localhost:3000/callback'; // <--- استبدل هذا برابط موقعك أو (http://localhost:XXXX/callback) للتطوير
+
+        // 3. رابط دعوة البوت إلى السيرفر (مع الأذونات المطلوبة)
+        // Permissions: 8 = Administrator (للاختبار)، يمكنك تخصيص الأذونات بدقة
+        const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&permissions=8&scope=bot%20applications.commands`;
+
+        // 4. رابط تسجيل الدخول بـ Discord OAuth2
+        // Scope: identify = للحصول على معلومات المستخدم, guilds = للحصول على قائمة سيرفرات المستخدم
+        const LOGIN_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=identify%20guilds`;
+        // *******************************************************************
+
+
+        // وظيفة للتحقق مما إذا كان المستخدم مسجل الدخول (محاكاة أو تحقق حقيقي)
+        // في تطبيق حقيقي، ستتحقق من وجود "رمز وصول" (access token) في Local Storage أو في ملفات تعريف الارتباط (cookies)
+        function checkLoginStatus() {
+            // هذا مجرد محاكاة بسيطة. في الواقع، ستحتاج إلى طلب من الخادم للتحقق من الجلسة.
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; // تحقق من Local Storage
+
+            if (isLoggedIn) {
+                loginButton.style.display = 'none';
+                dashboardButton.style.display = 'inline-block';
+                // يمكنك أيضًا إظهار اسم المستخدم وصورته هنا
+            } else {
+                loginButton.style.display = 'inline-block';
+                dashboardButton.style.display = 'none';
+            }
+        }
+
+        // استدعاء الوظيفة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
+
+        // -----------------------------------------------------------
+        //              تفعيل الأزرار (ربطها بالروابط الصحيحة)
+        // -----------------------------------------------------------
+
+        // زر "تسجيل الدخول بالديسكورد" في الهيدر وفي قسم "كيف يعمل؟"
+        loginButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = LOGIN_URL; // توجيه المستخدم لصفحة تسجيل الدخول بالديسكورد
+        });
+
+        loginStepButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = LOGIN_URL; // توجيه المستخدم لصفحة تسجيل الدخول بالديسكورد
+        });
+
+        // زر "دعوة البوت الآن" في الهيرو سكشن وفي قسم "كيف يعمل؟" وفي الـ CTA
+        inviteBotButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = INVITE_URL; // توجيه المستخدم لصفحة دعوة البوت
+        });
+
+        inviteBotStepButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = INVITE_URL; // توجيه المستخدم لصفحة دعوة البوت
+        });
+
+        ctaButtonInvite.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = INVITE_URL; // توجيه المستخدم لصفحة دعوة البوت
+        });
+
+        // زر "لوحة التحكم" في الهيدر و "استكشف اللوحة" في قسم "كيف يعمل؟"
+        // هذه الأزرار ستأخذ المستخدم إلى واجهة التحكم الداخلية
+        dashboardButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            // في تطبيق حقيقي، يجب التحقق هنا من أن المستخدم مسجل الدخول
+            // ثم إعادة توجيهه إلى لوحة التحكم
+            if (localStorage.getItem('isLoggedIn') === 'true') { // تحقق مبدئي (سيتم التعامل معه بشكل أفضل في الواجهة الخلفية)
+                window.location.href = '/dashboard'; // هذا سيذهب إلى مسار في الواجهة الخلفية لموقعك
+            } else {
+                alert('الرجاء تسجيل الدخول أولاً للوصول إلى لوحة التحكم.');
+                window.location.href = LOGIN_URL;
+            }
+        });
+
+        dashboardPreviewButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                window.location.href = '/dashboard'; // هذا سيذهب إلى مسار في الواجهة الخلفية لموقعك
+            } else {
+                alert('الرجاء تسجيل الدخول أولاً لاستكشاف لوحة التحكم.');
+                window.location.href = LOGIN_URL;
+            }
+        });
+
+
+        // -----------------------------------------------------------
+        //              وظائف الـ UI (القائمة المتنقلة والتمرير السلس)
+        // -----------------------------------------------------------
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('open');
+        });
+
+        // إغلاق قائمة التنقل عند النقر على رابط (للجوال)
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    hamburger.classList.remove('open');
+                }
+            });
+        });
+
+        // التمرير السلس للروابط الداخلية
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>

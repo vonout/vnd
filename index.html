@@ -429,15 +429,11 @@
             flex-wrap: wrap;
         }
 
-        /* أنيميشن الظهور التدريجي للأقسام */
+        /* أنيميشن الظهور التدريجي للأقسام - تم إزالته لجعل المحتوى ظاهرًا دائمًا */
         .section-animation {
-            opacity: 0;
-            transform: translateY(90px); /* حركة أطول */
-            transition: opacity 1s cubic-bezier(0.25, 0.8, 0.25, 1), transform 1s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .section-animation.in-view {
-            opacity: 1;
-            transform: translateY(0);
+            opacity: 1; /* Always visible */
+            transform: translateY(0); /* No initial transform */
+            transition: none; /* No animation */
         }
 
 
@@ -453,7 +449,7 @@
             backdrop-filter: blur(var(--glass-blur));
             position: relative;
             overflow: hidden;
-            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
+            opacity: 1; /* Always visible - changed from 0 */
             will-change: transform, opacity, box-shadow; /* تحسين الأداء */
             transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
         }
@@ -521,7 +517,21 @@
 
         .feature-item {
             /* استخدم الفئة العامة للبطاقات المتوهجة */
-            @extend .glow-card;
+            /* @extend .glow-card; */ /* Removed @extend as it's not standard CSS. Properties are manually copied below. */
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
+            border: var(--neon-border);
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+            overflow: hidden;
+            opacity: 1; /* Always visible */
+            will-change: transform, opacity, box-shadow;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+            
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -536,7 +546,7 @@
         }
         .feature-item:hover i {
             transform: rotateY(20deg) scale(1.15); /* دوران وتكبير للأيقونة */
-            filter: drop-shadow(0 0 15px rgba(254, 231, 92, 0.8)) drop-shadow(0 0 25px rgba(254, 231, 92, 0.4));
+            filter: drop_shadow(0 0 15px rgba(254, 231, 92, 0.8)) drop_shadow(0 0 25px rgba(254, 231, 92, 0.4));
         }
 
         .feature-item h3 {
@@ -575,15 +585,12 @@
         .dashboard-screenshot {
             text-align: center;
             margin-top: 70px;
-            opacity: 0;
+            opacity: 1; /* Always visible - changed from 0 */
             will-change: transform, opacity;
-            transform: perspective(1000px) rotateX(5deg) scale(0.95);
-            transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+            transform: perspective(1000px) rotateX(0deg) scale(1); /* No initial transform - changed from rotateX(5deg) scale(0.95) */
+            transition: none; /* No animation - changed from transform 0.8s ease-out, opacity 0.8s ease-out */
         }
-        .dashboard-screenshot.in-view {
-            transform: perspective(1000px) rotateX(0deg) scale(1);
-            opacity: 1;
-        }
+        /* Removed .dashboard-screenshot.in-view as animation is removed */
 
         .dashboard-screenshot img {
             max-width: 95%; /* أقصى عرض لتملأ المساحة */
@@ -620,20 +627,32 @@
 
         .server-stat-card {
             /* استخدم الفئة العامة للبطاقات المتوهجة */
-            @extend .glow-card;
+            /* @extend .glow-card; */ /* Removed @extend */
+            background: var(--card-bg);
             padding: 40px;
+            border-radius: 20px; /* Specific to this card */
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
+            border: var(--neon-border);
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+            overflow: hidden;
+            opacity: 1; /* Always visible */
+            will-change: transform, opacity, box-shadow;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 20px;
         }
 
         .server-stat-card i {
             font-size: 4.5rem;
             color: var(--primary-color);
             margin-bottom: 25px;
-            filter: drop-shadow(0 0 12px rgba(88, 101, 242, 0.7));
+            filter: drop_shadow(0 0 12px rgba(88, 101, 242, 0.7));
             transition: transform 0.3s ease;
         }
         .server-stat-card:hover i {
@@ -711,7 +730,7 @@
             font-size: 1.8rem;
             color: var(--accent-color);
             flex-shrink: 0;
-            filter: drop-shadow(0 0 5px rgba(254, 231, 92, 0.5));
+            filter: drop_shadow(0 0 5px rgba(254, 231, 92, 0.5));
         }
 
         .activity-content {
@@ -741,8 +760,21 @@
 
         .command-builder-content {
             /* استخدم الفئة العامة للبطاقات المتوهجة */
-            @extend .glow-card;
+            /* @extend .glow-card; */ /* Removed @extend */
+            background: var(--card-bg);
             padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
+            border: var(--neon-border);
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+            overflow: hidden;
+            opacity: 1; /* Always visible */
+            will-change: transform, opacity, box-shadow;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+
             max-width: 1000px;
             margin: 60px auto 0;
         }
@@ -858,7 +890,21 @@
         }
         .gemini-card {
             /* استخدم الفئة العامة للبطاقات المتوهجة */
-            @extend .glow-card;
+            /* @extend .glow-card; */ /* Removed @extend */
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
+            border: var(--neon-border);
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+            overflow: hidden;
+            opacity: 1; /* Always visible */
+            will-change: transform, opacity, box-shadow;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+
             margin-bottom: 60px;
         }
 
@@ -970,8 +1016,21 @@
 
         .testimonial-item {
             /* استخدم الفئة العامة للبطاقات المتوهجة */
-            @extend .glow-card;
+            /* @extend .glow-card; */ /* Removed @extend */
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 25px;
             text-align: right;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
+            border: var(--neon-border);
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+            overflow: hidden;
+            opacity: 1; /* Always visible */
+            will-change: transform, opacity, box-shadow;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+
             display: flex;
             flex-direction: column;
             align-items: flex-end;
@@ -1053,11 +1112,23 @@
         /* قسم إضافة التعليق */
         .add-comment-section {
             /* استخدم الفئة العامة للبطاقات المتوهجة */
-            @extend .glow-card;
-            padding: 60px; /* مساحة داخلية أكبر */
+            /* @extend .glow-card; */ /* Removed @extend */
+            background: var(--card-bg);
+            padding: 60px;
+            border-radius: 25px;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
+            border: var(--neon-border);
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+            overflow: hidden;
+            opacity: 1; /* Always visible */
+            will-change: transform, opacity, box-shadow;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+
             max-width: 950px; /* عرض أكبر */
             margin: 70px auto 0;
-            text-align: center;
         }
 
         .add-comment-section h3 {
@@ -1153,10 +1224,22 @@
 
         .faq-item {
             /* استخدم الفئة العامة للبطاقات المتوهجة */
-            @extend .glow-card;
-            margin-bottom: 30px;
+            /* @extend .glow-card; */ /* Removed @extend */
+            background: var(--card-bg);
             padding: 0; /* سنقوم بتعيينها داخليًا */
+            border-radius: 25px;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
+            border: var(--neon-border);
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
             overflow: hidden;
+            opacity: 1; /* Always visible */
+            will-change: transform, opacity, box-shadow;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+
+            margin-bottom: 30px;
         }
         .faq-item:hover {
             box-shadow: 0 15px 45px rgba(0, 0, 0, 0.7), var(--neon-shadow);
@@ -1234,9 +1317,22 @@
 
         .contact-form {
             /* استخدم الفئة العامة للبطاقات المتوهجة */
-            @extend .glow-card;
-            width: 100%;
+            /* @extend .glow-card; */ /* Removed @extend */
+            background: var(--card-bg);
             padding: 60px;
+            border-radius: 25px;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
+            border: var(--neon-border);
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+            overflow: hidden;
+            opacity: 1; /* Always visible */
+            will-change: transform, opacity, box-shadow;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+
+            width: 100%;
         }
 
         .contact-form .form-group {
@@ -1395,7 +1491,7 @@
             height: 80px;
             object-fit: contain;
             margin-top: 30px;
-            filter: drop-shadow(0 0 20px rgba(88, 101, 242, 0.9));
+            filter: drop_shadow(0 0 20px rgba(88, 101, 242, 0.9));
             transition: transform 0.4s ease, filter 0.4s ease;
         }
         .custom-icon img:hover {
@@ -2142,7 +2238,7 @@
             </div>
         </section>
 
-        <!-- قسم اتصل بنا (Contact Us Section) -->
+        <!-- قسم اتصل بنا (Contact Us) -->
         <section id="contact" class="contact section-animation">
             <div class="container">
                 <h2 class="section-heading" data-lang-key="contact_title">تواصل معنا</h2>
@@ -2613,7 +2709,7 @@
                 testimonial2_text: "使用起来非常简单！即使您不是机器人专家，也可以轻松控制一切。",
                 testimonial2_author: "xpoint",
                 testimonial2_role: "服务器所有者",
-                testimonial3_text: "我真的很喜欢这个机器人，它是免费的，它的功能在一个机器人中找不到，但是这个机器人让一切都变得简单，但我更喜欢不使用它。",
+                testimonial3_text: "我真的很喜欢这个机器人، 它是免费的، 它的功能在一个机器人中找不到، 但是这个机器人让一切都变得简单، 但我更喜欢不使用它。",
                 testimonial3_author: "SDsniper",
                 testimonial3_role: "Discord 用户",
                 add_comment_title: "添加评论",
@@ -2681,30 +2777,25 @@
             setLanguage(savedLang);
         });
 
-        // Intersection Observer for Section Animations
+        // Intersection Observer for Section Animations - REMOVED to make content always visible
+        /*
         const observerOptions = {
             root: null, // viewport
             rootMargin: '0px',
             threshold: 0.2 // Trigger when 20% of the section is visible
         };
 
-        // This map will keep track of sections that have already been animated
         const animatedSections = new Map();
 
         const sectionObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Check if it's already animated. If not, add 'in-view'
                     if (!animatedSections.has(entry.target)) {
                         entry.target.classList.add('in-view');
-                        animatedSections.set(entry.target, true); // Mark as animated
+                        animatedSections.set(entry.target, true);
                     }
-                    // If it's intersecting and already animated, keep 'in-view' class
                 } else {
-                    // For persistent visibility, we don't remove 'in-view' when it leaves
-                    // Unless we want the animation to *reset* every time it goes out of view.
-                    // Based on previous feedback, we want persistent visibility after reveal.
-                    // So, we do nothing here to remove the class.
+                    // We don't remove 'in-view' class to ensure persistent visibility
                 }
             });
         }, observerOptions);
@@ -2712,6 +2803,7 @@
         document.querySelectorAll('.section-animation').forEach(section => {
             sectionObserver.observe(section);
         });
+        */
 
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

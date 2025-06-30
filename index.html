@@ -12,6 +12,30 @@
     <!-- Three.js Library for 3D background -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
+        /* تعريف الخط AA-TYPO */
+        /*
+           هام: لاستخدام خط AA-TYPO، يجب عليك استضافة ملفات الخط (مثل .ttf، .woff، .woff2) على خادمك الخاص
+           أو استخدام رابط CDN إذا كان متاحًا. قم بتحديث روابط `src` أدناه لتعكس المسارات الصحيحة لملفات الخط الخاصة بك.
+        */
+        @font-face {
+            font-family: 'AA-TYPO';
+            src: url('fonts/AA-TYPO-Regular.woff2') format('woff2'),
+                 url('fonts/AA-TYPO-Regular.woff') format('woff'),
+                 url('fonts/AA-TYPO-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap; /* يسمح بعرض النص بخط احتياطي أثناء تحميل الخط */
+        }
+        @font-face {
+            font-family: 'AA-TYPO';
+            src: url('fonts/AA-TYPO-Bold.woff2') format('woff2'),
+                 url('fonts/AA-TYPO-Bold.woff') format('woff'),
+                 url('fonts/AA-TYPO-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+
         /* المتغيرات الأساسية للألوان لسهولة التعديل */
         :root {
             --primary-color: #5865F2; /* أزرق ديسكورد */
@@ -70,7 +94,7 @@
 
         /* الأنماط العامة للجسم */
         body {
-            font-family: 'Noto Sans', 'Cairo', sans-serif;
+            font-family: 'AA-TYPO', 'Noto Sans', 'Cairo', sans-serif; /* تم تغيير الخط الأساسي */
             background-color: var(--dark-bg);
             color: var(--light-text);
             line-height: 1.7;
@@ -114,15 +138,15 @@
             justify-content: center;
             background: linear-gradient(45deg, var(--gradient-1-start), var(--gradient-1-end));
             color: var(--light-text);
-            padding: 18px 40px; /* حجم أكبر */
+            padding: 20px 45px; /* حجم أكبر للأزرار */
             border-radius: 12px; /* حواف أكثر استدارة */
             font-weight: bold;
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             box-shadow: var(--button-shadow); /* توهج خفيف */
             border: var(--neon-border); /* حدود نيونية */
             cursor: pointer;
-            font-size: 1.2rem; /* حجم خط أكبر */
-            gap: 12px;
+            font-size: 1.3rem; /* حجم خط أكبر */
+            gap: 15px; /* مسافة أكبر بين النص والأيقونة */
             position: relative;
             overflow: hidden;
             z-index: 1;
@@ -233,7 +257,7 @@
 
         .logo:hover {
             transform: scale(1.1);
-            text-shadow: 0 0 20px var(--primary-color);
+            /* Removed text-shadow on hover */
         }
 
         .logo img {
@@ -250,10 +274,13 @@
         .logo span {
             font-size: 2.5rem; /* حجم أكبر للشعار النصي */
             font-weight: 900; /* عريض جداً */
-            color: var(--light-text);
-            background: linear-gradient(90deg, var(--light-text), var(--primary-color), var(--light-text));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--light-text); /* Reverted to light-text color */
+            text-shadow: none; /* Removed text shadow */
+            background: none; /* Removed background gradient */
+            -webkit-background-clip: unset; /* Reset clip */
+            background-clip: unset; /* Reset clip */
+            -webkit-text-fill-color: unset; /* Reset fill color */
+            font-family: 'Cairo', 'Noto Sans', sans-serif; /* Changed to normal font */
         }
 
         .nav-links {
@@ -377,7 +404,7 @@
         .hero-content {
             position: relative;
             z-index: 10;
-            max-width: 1000px; /* عرض أكبر للمحتوى */
+            max-width: 1100px; /* عرض أكبر للمحتوى */
             color: var(--light-text);
             padding: 50px 40px; /* مساحة داخلية أكبر */
             background: rgba(13, 12, 29, 0.7); /* خلفية شفافة أكثر تناسقاً */
@@ -389,6 +416,8 @@
             overflow: hidden;
             transform: perspective(1000px) rotateX(0deg) rotateY(0deg); /* بدء منظور ثلاثي الأبعاد */
             transition: transform 0.5s ease;
+            /* Removed padding-top adjustment because icon is removed */
+            padding-top: 70px; /* Ensure sufficient padding at the top */
         }
         .hero-content:hover {
             transform: perspective(1000px) rotateX(2deg) rotateY(-2deg); /* تأثير منظور عند التحويم */
@@ -400,16 +429,27 @@
             to { opacity: 1; transform: scale(1); }
         }
 
+        /* Removed .hero-content .bot-icon-above-heading styles as the element is removed */
+
+
         .hero-content h1 {
-            font-size: 5.8rem; /* حجم أكبر بكثير - تم التعديل هنا */
+            font-family: 'AA-TYPO', 'Cairo', 'Noto Sans', sans-serif; /* تطبيق الخط الجديد */
+            font-size: 4.5rem; /* Reduced font size to fit */
             margin-bottom: 40px;
             line-height: 1.1;
-            text-shadow: 0 0 35px rgba(255, 255, 255, 1), 0 0 20px var(--accent-color); /* توهج أبيض وأصفر أقوى */
-            letter-spacing: 5px; /* تباعد الحروف أكثر - تم التعديل هنا */
-            background: linear-gradient(90deg, #E0E0FF, var(--primary-color), #E0E0FF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 900; /* عريض جداً - تم التعديل هنا */
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Subtle white glow */
+            /* Adjusted letter-spacing and word-spacing for Arabic text */
+            letter-spacing: 0.05em; /* Reduced letter spacing */
+            word-spacing: 0.05em; /* Reduced word spacing */
+            white-space: normal; /* Allow text to wrap */
+            text-wrap: balance; /* To improve line breaks */
+            margin-top: 0px; /* Adjusted margin-top now that the icon is removed */
+
+            background: none; /* Removed background gradient */
+            -webkit-background-clip: unset; /* Reset clip */
+            background-clip: unset; /* Reset clip */
+            -webkit-text-fill-color: var(--light-text); /* Reverted to light text color */
+            font-weight: 900; /* عريض جداً */
         }
 
         .hero-content p {
@@ -445,7 +485,7 @@
             text-align: center;
             transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
-            border: var(--neon-border); /* حدود نيونية */
+            border: var(--neon-border);
             backdrop-filter: blur(var(--glass-blur));
             position: relative;
             overflow: hidden;
@@ -516,8 +556,6 @@
         }
 
         .feature-item {
-            /* استخدم الفئة العامة للبطاقات المتوهجة */
-            /* @extend .glow-card; */ /* Removed @extend as it's not standard CSS. Properties are manually copied below. */
             background: var(--card-bg);
             padding: 50px;
             border-radius: 25px;
@@ -528,7 +566,7 @@
             backdrop-filter: blur(var(--glass-blur));
             position: relative;
             overflow: hidden;
-            opacity: 1; /* Always visible */
+            opacity: 1;
             will-change: transform, opacity, box-shadow;
             transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
             
@@ -539,14 +577,15 @@
 
         .feature-item i {
             font-size: 6rem; /* أيقونات أكبر بكثير */
-            color: var(--accent-color); /* لون أصفر للأيقونات */
+            color: var(--primary-color); /* لون أزرق للأيقونات بشكل افتراضي */
             margin-bottom: 35px;
-            filter: var(--glow-filter); /* توهج للأيقونات */
-            transition: transform 0.4s ease, filter 0.4s ease;
+            filter: drop-shadow(0 0 8px rgba(88, 101, 242, 0.6)); /* توهج أزرق للأيقونات */
+            transition: transform 0.4s ease, color 0.4s ease, filter 0.4s ease;
         }
         .feature-item:hover i {
             transform: rotateY(20deg) scale(1.15); /* دوران وتكبير للأيقونة */
-            filter: drop_shadow(0 0 15px rgba(254, 231, 92, 0.8)) drop_shadow(0 0 25px rgba(254, 231, 92, 0.4));
+            color: var(--accent-color); /* لون أصفر عند التحويم */
+            filter: drop-shadow(0 0 15px rgba(254, 231, 92, 0.8)) drop-shadow(0 0 25px rgba(254, 231, 92, 0.4)); /* توهج أصفر عند التحويم */
         }
 
         .feature-item h3 {
@@ -626,8 +665,6 @@
         }
 
         .server-stat-card {
-            /* استخدم الفئة العامة للبطاقات المتوهجة */
-            /* @extend .glow-card; */ /* Removed @extend */
             background: var(--card-bg);
             padding: 40px;
             border-radius: 20px; /* Specific to this card */
@@ -749,250 +786,15 @@
             opacity: 0.7;
         }
         
-        /* قسم بناء الأوامر المخصصة (Custom Command Builder) */
+        /* قسم بناء الأوامر المخصصة (Custom Command Builder) - تم إزالته بالكامل */
         .command-builder {
-            padding: 120px 0;
-            background-color: var(--medium-dark-bg);
-            overflow: hidden;
-            text-align: center;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .command-builder-content {
-            /* استخدم الفئة العامة للبطاقات المتوهجة */
-            /* @extend .glow-card; */ /* Removed @extend */
-            background: var(--card-bg);
-            padding: 50px;
-            border-radius: 25px;
-            text-align: center;
-            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
-            border: var(--neon-border);
-            backdrop-filter: blur(var(--glass-blur));
-            position: relative;
-            overflow: hidden;
-            opacity: 1; /* Always visible */
-            will-change: transform, opacity, box-shadow;
-            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-
-            max-width: 1000px;
-            margin: 60px auto 0;
-        }
-
-        .command-builder-content h3 {
-            font-size: 3rem;
-            color: var(--light-text);
-            margin-bottom: 35px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            font-weight: 800;
-        }
-
-        .builder-area {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .command-input-group {
-            display: flex;
-            align-items: center;
-            background-color: rgba(26, 25, 52, 0.6);
-            border-radius: 15px;
-            border: var(--neon-border);
-            padding: 18px 25px;
-            box-shadow: var(--inset-shadow);
-            transition: border-color 0.4s ease, box-shadow 0.4s ease;
-        }
-        .command-input-group:focus-within {
-            border-color: var(--accent-color);
-            box-shadow: var(--inset-shadow), 0 0 15px rgba(254, 231, 92, 0.6);
-        }
-
-        .command-input-group label {
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            font-weight: bold;
-            margin-left: 20px;
-            min-width: 120px; /* لتناسق التسميات */
-            text-align: right;
-        }
-
-        .command-input-group input[type="text"],
-        .command-input-group select {
-            flex-grow: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--light-text);
-            font-size: 1.15rem;
-            padding: 10px 0;
-        }
-
-        .command-input-group select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%235865F2"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>');
-            background-repeat: no-repeat;
-            background-position: left 0.8em top 50%, 0 0;
-            background-size: 1.3em auto, 100%;
-            padding-left: 3em; /* مساحة للأيقونة */
-            cursor: pointer;
-        }
-
-        .command-preview {
-            background-color: rgba(13, 12, 29, 0.7);
-            border: var(--neon-border);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 50px;
-            text-align: right;
-            min-height: 120px;
-            color: var(--soft-white);
-            font-size: 1.2rem;
-            line-height: 1.8;
-            position: relative;
-            box-shadow: var(--inset-shadow);
-        }
-        .command-preview::before {
-            content: 'معاينة الأمر';
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1rem;
-            color: var(--accent-color);
-            opacity: 0.8;
-        }
-        .command-preview code {
-            display: block;
-            background-color: rgba(0,0,0,0.4);
-            padding: 15px;
-            border-radius: 8px;
-            color: #E0E0FF;
-            font-family: 'Fira Code', 'monospace'; /* خط للبرمجة */
-            white-space: pre-wrap;
-            word-break: break-all;
-            box-shadow: inset 0 0 10px rgba(88, 101, 242, 0.2);
+            display: none; /* Hide the entire section */
         }
 
 
-        /* قسم ميزات الذكاء الاصطناعي (Gemini API Features) */
-        .gemini-section {
-            padding: 120px 0;
-            background-color: var(--dark-bg);
-            overflow: hidden;
-            text-align: center;
-            border-bottom: 2px solid var(--medium-dark-bg);
-        }
-        .gemini-section .container {
-            max-width: 1000px;
-        }
-        .gemini-card {
-            /* استخدم الفئة العامة للبطاقات المتوهجة */
-            /* @extend .glow-card; */ /* Removed @extend */
-            background: var(--card-bg);
-            padding: 50px;
-            border-radius: 25px;
-            text-align: center;
-            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
-            border: var(--neon-border);
-            backdrop-filter: blur(var(--glass-blur));
-            position: relative;
-            overflow: hidden;
-            opacity: 1; /* Always visible */
-            will-change: transform, opacity, box-shadow;
-            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+        /* قسم ميزات الذكاء الاصطناعي (Gemini API Features) - تم إزالته بالكامل */
+        /* .gemini-section { display: none; } */
 
-            margin-bottom: 60px;
-        }
-
-        .gemini-card h3 {
-            font-size: 3rem;
-            color: var(--accent-color);
-            margin-bottom: 35px;
-            text-shadow: 0 0 20px rgba(254, 231, 92, 0.8);
-            font-weight: 800;
-        }
-        .gemini-card textarea {
-            width: 100%;
-            padding: 25px;
-            margin-bottom: 30px;
-            border: var(--neon-border);
-            background-color: rgba(13, 12, 29, 0.6);
-            color: var(--light-text);
-            border-radius: 15px;
-            font-size: 1.2rem;
-            min-height: 150px;
-            resize: vertical;
-            transition: border-color 0.4s ease, box-shadow 0.4s ease;
-            box-shadow: var(--inset-shadow);
-        }
-        .gemini-card textarea:focus {
-            border-color: var(--accent-color);
-            outline: none;
-            box-shadow: var(--inset-shadow), 0 0 20px rgba(254, 231, 92, 0.7);
-        }
-        .gemini-card button {
-            margin-top: 20px;
-            width: auto;
-            padding: 16px 35px;
-            font-size: 1.15rem;
-        }
-        .gemini-output {
-            background-color: rgba(13, 12, 29, 0.7);
-            border: var(--neon-border);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 45px;
-            text-align: right;
-            min-height: 150px;
-            max-height: 500px;
-            overflow-y: auto;
-            color: var(--soft-white);
-            font-size: 1.2rem;
-            line-height: 1.9;
-            white-space: pre-wrap;
-            position: relative;
-            box-shadow: var(--inset-shadow);
-            transition: border-color 0.4s ease, box-shadow 0.4s ease;
-        }
-        .gemini-output.loading::before {
-            content: 'جاري التوليد...';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--accent-color);
-            font-weight: bold;
-            font-size: 1.8rem;
-            animation: pulse 1.5s infinite ease-in-out;
-            z-index: 10;
-        }
-        @keyframes pulse {
-            0% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-            100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
-        }
-        .gemini-output.error {
-            border-color: #E04343; /* أحمر للخطأ */
-            box-shadow: var(--inset-shadow), 0 0 15px rgba(224, 67, 67, 0.7);
-        }
-        .gemini-output:empty:not(.loading) {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--soft-white);
-            opacity: 0.7;
-        }
-        .gemini-output:empty:not(.loading)::before {
-            content: attr(data-placeholder);
-            position: static;
-            transform: none;
-            animation: none;
-            font-size: 1.2rem;
-        }
 
         /* قسم التقييمات (Testimonials Section) */
         .testimonials {
@@ -1015,19 +817,17 @@
         }
 
         .testimonial-item {
-            /* استخدم الفئة العامة للبطاقات المتوهجة */
-            /* @extend .glow-card; */ /* Removed @extend */
             background: var(--card-bg);
-            padding: 50px;
+            padding: 60px; /* مساحة داخلية أكبر */
             border-radius: 25px;
             text-align: right;
             transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
-            border: var(--neon-border);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 255, 255, 0.2); /* ظل وتوهج أكثر احترافية */
+            border: 3px solid var(--primary-color); /* حدود سميكة وواضحة */
             backdrop-filter: blur(var(--glass-blur));
             position: relative;
             overflow: hidden;
-            opacity: 1; /* Always visible */
+            opacity: 1;
             will-change: transform, opacity, box-shadow;
             transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
 
@@ -1035,6 +835,11 @@
             flex-direction: column;
             align-items: flex-end;
             gap: 28px; /* مسافة أكبر */
+        }
+        .testimonial-item:hover {
+            transform: translateY(-15px) scale(1.03) perspective(1000px) rotateX(2deg) rotateY(-2deg);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), var(--glow-strong);
+            border-color: var(--accent-color);
         }
 
         .testimonial-author {
@@ -1079,40 +884,38 @@
         }
         
         .testimonial-item .testimonial-text-content {
-            font-size: 1.3rem; /* حجم نص أكبر */
+            font-size: 1.45rem; /* حجم نص أكبر وواضح */
             font-style: italic; /* نص مائل */
             color: var(--soft-white);
             margin-bottom: 0;
             text-align: right;
             width: 100%;
-            line-height: 2;
+            line-height: 2.1; /* تباعد أسطر أوضح */
             quotes: "„" "“" "‚" "‘"; /* علامات اقتباس عربية */
         }
         .testimonial-text-content::before {
             content: open-quote;
-            font-size: 2.2em;
+            font-size: 2.5em; /* علامات اقتباس أكبر */
             color: var(--accent-color);
             line-height: 0.1em;
             vertical-align: -0.4em;
             margin-left: 0.1em;
-            opacity: 0.8;
+            opacity: 0.9; /* أكثر وضوحاً */
             filter: var(--glow-filter);
         }
         .testimonial-text-content::after {
             content: close-quote;
-            font-size: 2.2em;
+            font-size: 2.5em; /* علامات اقتباس أكبر */
             color: var(--accent-color);
             line-height: 0.1em;
             vertical-align: -0.4em;
             margin-right: 0.1em;
-            opacity: 0.8;
+            opacity: 0.9; /* أكثر وضوحاً */
             filter: var(--glow-filter);
         }
 
         /* قسم إضافة التعليق */
         .add-comment-section {
-            /* استخدم الفئة العامة للبطاقات المتوهجة */
-            /* @extend .glow-card; */ /* Removed @extend */
             background: var(--card-bg);
             padding: 60px;
             border-radius: 25px;
@@ -1123,7 +926,7 @@
             backdrop-filter: blur(var(--glass-blur));
             position: relative;
             overflow: hidden;
-            opacity: 1; /* Always visible */
+            opacity: 1;
             will-change: transform, opacity, box-shadow;
             transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
 
@@ -1223,8 +1026,6 @@
         }
 
         .faq-item {
-            /* استخدم الفئة العامة للبطاقات المتوهجة */
-            /* @extend .glow-card; */ /* Removed @extend */
             background: var(--card-bg);
             padding: 0; /* سنقوم بتعيينها داخليًا */
             border-radius: 25px;
@@ -1235,7 +1036,7 @@
             backdrop-filter: blur(var(--glass-blur));
             position: relative;
             overflow: hidden;
-            opacity: 1; /* Always visible */
+            opacity: 1;
             will-change: transform, opacity, box-shadow;
             transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
 
@@ -1316,8 +1117,6 @@
         }
 
         .contact-form {
-            /* استخدم الفئة العامة للبطاقات المتوهجة */
-            /* @extend .glow-card; */ /* Removed @extend */
             background: var(--card-bg);
             padding: 60px;
             border-radius: 25px;
@@ -1328,7 +1127,7 @@
             backdrop-filter: blur(var(--glass-blur));
             position: relative;
             overflow: hidden;
-            opacity: 1; /* Always visible */
+            opacity: 1;
             will-change: transform, opacity, box-shadow;
             transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
 
@@ -1584,7 +1383,7 @@
         /* الاستجابة لتصغير الشاشات (Responsive Design) */
         @media (max-width: 1024px) {
             .hero-content h1 {
-                font-size: 4.5rem;
+                font-size: 4rem; /* Adjusted for smaller screens */
                 letter-spacing: 4px;
             }
             .hero-content p {
@@ -1593,7 +1392,7 @@
             .section-heading {
                 font-size: 3.5rem;
             }
-            .feature-item h3, .gemini-card h3, .command-builder-content h3 {
+            .feature-item h3, .command-builder-content h3 { /* removed .gemini-card h3 */
                 font-size: 2.5rem;
             }
             .feature-item i {
@@ -1647,7 +1446,7 @@
                 order: 0;
             }
             .hero-content h1 {
-                font-size: 3.5rem;
+                font-size: 3.2rem; /* Adjusted for smaller screens */
                 letter-spacing: 3px;
             }
             .hero-content p {
@@ -1712,9 +1511,7 @@
             .contact-form textarea {
                 min-height: 200px;
             }
-            .gemini-card h3 {
-                font-size: 2.4rem;
-            }
+            /* removed .gemini-card h3 */
             .gemini-output {
                 font-size: 1.1rem;
             }
@@ -1743,8 +1540,9 @@
                 font-size: 2rem;
             }
             .hero-content h1 {
-                font-size: 2.8rem;
-                letter-spacing: 2px;
+                font-size: 2.5rem; /* Adjusted for smaller screens */
+                letter-spacing: 0em; /* إزالة التباعد لتجنب التقطيع */
+                word-spacing: 0em;
             }
             .hero-content p {
                 font-size: 1.1rem;
@@ -1791,9 +1589,7 @@
             .modal-content p {
                 font-size: 1.2rem;
             }
-            .gemini-card h3 {
-                font-size: 2rem;
-            }
+            /* removed .gemini-card h3 */
             .gemini-card textarea {
                 padding: 20px;
                 min-height: 120px;
@@ -1806,17 +1602,6 @@
             }
             .server-stat-card .stat-label {
                 font-size: 1.05rem;
-            }
-            .command-builder-content h3 {
-                font-size: 2rem;
-            }
-            .command-input-group label {
-                margin-left: 10px;
-                font-size: 1.05rem;
-            }
-            .command-input-group input[type="text"],
-            .command-input-group select {
-                font-size: 0.95rem;
             }
             .activity-display {
                 height: 350px;
@@ -1934,8 +1719,8 @@
                     <li><a href="#dashboard" data-lang-key="dashboard">لوحة التحكم</a></li>
                     <li><a href="#server-overview" data-lang-key="server_overview_nav">نظرة على السيرفر</a></li>
                     <li><a href="#live-activity" data-lang-key="live_activity_nav">النشاط المباشر</a></li> <!-- New Nav Link -->
-                    <li><a href="#command-builder" data-lang-key="command_builder_nav">بناء الأوامر</a></li>
-                    <li><a href="#llm-features" data-lang-key="llm_features_nav">ميزات الذكاء الاصطناعي</a></li>
+                    <!-- <li><a href="#command-builder" data-lang-key="command_builder_nav">بناء الأوامر</a></li> --> <!-- Removed Command Builder Nav Link -->
+                    <!-- <li><a href="#llm-features" data-lang-key="llm_features_nav">ميزات الذكاء الاصطناعي</a></li> --> <!-- Removed LLM Features Nav Link -->
                     <li><a href="#testimonials" data-lang-key="testimonials">التقييمات</a></li>
                     <li><a href="#faq" data-lang-key="faq">الأسئلة الشائعة</a></li>
                     <li><a href="#contact" data-lang-key="contact">اتصل بنا</a></li>
@@ -1958,7 +1743,8 @@
         <section id="hero" class="hero">
             <canvas id="three-js-canvas"></canvas>
             <div class="container hero-content">
-                <h1 data-lang-key="hero_heading">تحكم كامل ببووت الديسكورد الخاص بك، بسهولة واحترافية</h1>
+                <!-- Removed Bot Icon - Per user request -->
+                <h1 data-lang-key="hero_heading">كل شيء في بوت واحد</h1>
                 <p data-lang-key="hero_subheading">
                     لوحة تحكم VND Bot توفر لك كل الأدوات التي تحتاجها لإدارة خادمك، الأوامر، الأعضاء والمزيد، بفضل واجهة بسيطة ومريحة.
                 </p>
@@ -1986,7 +1772,7 @@
                         <p data-lang-key="feature2_desc">أدوات متقدمة لإدارة الأعضاء، الأدوار، والعقوبات في خادمك.</p>
                     </div>
                     <div class="feature-item glow-card">
-                        <i class="fab fa-youtube" style="color: var(--primary-color);"></i>
+                        <i class="fab fa-youtube"></i>
                         <h3 data-lang-key="feature3_title">نظام لليوتيوبرز</h3>
                         <p data-lang-key="feature3_desc">استخدم البوت لتنبيه الأعضاء بآخر فيديو تم تنزيله على قناتك، كما يمكنك إنشاء غرفة لتكون عداد مشتركين يتم تحديثه تلقائيًا.</p>
                     </div>
@@ -1996,12 +1782,12 @@
                         <p data-lang-key="feature4_desc">حافظ على أمان خادمك من خلال أنظمة حماية متقدمة ضد السبام والاختراق.</p>
                     </div>
                     <div class="feature-item glow-card">
-                        <i class="fas fa-ticket-alt" style="color: var(--primary-color);"></i>
+                        <i class="fas fa-ticket-alt"></i>
                         <h3 data-lang-key="feature5_title">نظام التذاكر</h3>
                         <p data-lang-key="feature5_desc">نظام التذاكر الاحترافي الذي يسهل على الأعضاء التواصل مع الإداريين وطلب المساعدة بكفاءة، إنه أفضل نظام تذاكر على الإطلاق.</p>
                     </div>
                     <div class="feature-item glow-card">
-                        <i class="fas fa-music" style="color: var(--primary-color);"></i>
+                        <i class="fas fa-music"></i>
                         <h3 data-lang-key="feature6_title">تشغيل الأغاني</h3>
                         <p data-lang-key="feature6_desc">يستطيع البوت تشغيل الأغاني المفضلة في غرفتك الصوتية على ديسكورد بجودة عالية وبدون تقطيع، مع دعم قوائم التشغيل والتحكم الكامل.</p>
                     </div>
@@ -2077,68 +1863,13 @@
             </div>
         </section>
 
-        <!-- قسم بناء الأوامر المخصصة (Custom Command Builder Section) -->
-        <section id="command-builder" class="command-builder section-animation">
-            <div class="container">
-                <h2 class="section-heading" data-lang-key="command_builder_title">🛠️ بناء الأوامر المخصصة</h2>
-                <p data-lang-key="command_builder_desc">
-                    أنشئ أوامر بوت فريدة لسيرفرك باستخدام واجهة سهلة وسلسة، دون الحاجة لأي برمجة!
-                </p>
-                <div class="command-builder-content glow-card">
-                    <h3>بناء أمر جديد</h3>
-                    <div class="builder-area">
-                        <div class="command-input-group">
-                            <label for="command-name" data-lang-key="command_name_label">اسم الأمر:</label>
-                            <input type="text" id="command-name" placeholder="مثال: hello، ping" onkeyup="updateCommandPreview()">
-                        </div>
-                        <div class="command-input-group">
-                            <label for="command-type" data-lang-key="command_type_label">نوع الأمر:</label>
-                            <select id="command-type" onchange="updateCommandPreview()">
-                                <option value="text" data-lang-key="command_type_text">رسالة نصية</option>
-                                <option value="embed" data-lang-key="command_type_embed">رسالة مضمنة (Embed)</option>
-                                <option value="kick" data-lang-key="command_type_kick">طرد عضو</option>
-                            </select>
-                        </div>
-                        <div class="command-input-group" id="command-response-group">
-                            <label for="command-response" data-lang-key="command_response_label">الاستجابة:</label>
-                            <input type="text" id="command-response" placeholder="الرسالة التي سيرد بها البوت" onkeyup="updateCommandPreview()">
-                        </div>
-                    </div>
-                    <div class="command-preview">
-                        <code id="command-code-preview">/hello -> يرد بـ: أهلاً بك في السيرفر!</code>
-                    </div>
-                    <button class="btn" data-lang-key="save_command_btn"><i class="fas fa-save"></i> حفظ الأمر</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- قسم ميزات الذكاء الاصطناعي (Gemini API Features) -->
-        <section id="llm-features" class="gemini-section section-animation">
-            <div class="container">
-                <h2 class="section-heading" data-lang-key="llm_features_title">✨ ميزات الذكاء الاصطناعي بواسطة Gemini</h2>
-
-                <!-- مولّد رسائل الترحيب الذكي -->
-                <div class="gemini-card glow-card">
-                    <h3 data-lang-key="welcome_message_generator_title">✨ مولّد رسائل الترحيب الذكي</h3>
-                    <textarea id="welcome-input" placeholder="اكتب أفكاراً لرسالة ترحيب (مثال: سيرفر ألعاب، ترحيب حماسي، قواعد أساسية)..." data-lang-key="welcome_input_placeholder"></textarea>
-                    <button class="btn" id="generate-welcome-btn" data-lang-key="generate_welcome_btn"><i class="fas fa-magic"></i> توليد رسالة ترحيب</button>
-                    <div class="gemini-output" id="welcome-output" data-placeholder="سيظهر النص الذي تم توليده هنا..."></div>
-                </div>
-
-                <!-- مقترح قواعد الإشراف الذكي -->
-                <div class="gemini-card glow-card">
-                    <h3 data-lang-key="moderation_rules_generator_title">✨ مقترح قواعد الإشراف الذكي</h3>
-                    <textarea id="moderation-input" placeholder="صف نوع خادمك (مثال: سيرفر مجتمع، ألعاب تنافسية، تعليمي) وما هي المشاكل الشائعة التي تواجهها..." data-lang-key="moderation_input_placeholder"></textarea>
-                    <button class="btn" id="generate-moderation-btn" data-lang-key="generate_moderation_btn"><i class="fas fa-scroll"></i> اقتراح قواعد إشراف</button>
-                    <div class="gemini-output" id="moderation-output" data-placeholder="سيظهر النص الذي تم توليده هنا..."></div>
-                </div>
-            </div>
-        </section>
+        <!-- قسم بناء الأوامر المخصصة (Custom Command Builder Section) - تم إزالته بالكامل -->
+        <!-- <section id="command-builder" class="command-builder section-animation"> ... </section> -->
 
         <!-- قسم التقييمات (Testimonials Section) -->
         <section id="testimonials" class="testimonials section-animation">
             <div class="container">
-                <h2 class="section-heading" data-lang-key="testimonials_title">ماذا يقول المستخدمون عنا؟</h2>
+                <h2 class="section-heading" data-lang-key="testimonials_title">آراء المستخدمين المتميزين</h2>
                 <div class="testimonial-grid">
                     <div class="testimonial-item glow-card">
                         <div class="testimonial-author">
@@ -2146,7 +1877,7 @@
                                 <h4 data-lang-key="testimonial1_author">bluetoon</h4>
                                 <span data-lang-key="testimonial1_role">يوتيوبر</span>
                             </div>
-                            <img src="https://cdn.discordapp.com/attachments/1248636782342443021/1389025963714547722/image.png?ex=68631ebc&is=6861cd3c&hm=0f015b8956ee452b9a02e0a83deb2d4bc9365db5804b73d41441020f5d655602&" alt="صورة bluetoon">
+                            <img src="https://cdn.discordapp.com/attachments/1248636782342443021/1389025963714547722/image.png?ex=68631ebc&is=6861cd3c&hm=0f015b8956ee452b9a02e0a83deb2d4bc9365db5804b73d41441020f5d65602&" alt="صورة bluetoon">
                         </div>
                         <p class="testimonial-text-content" data-lang-key="testimonial1_text">البوت ذا رهيب وربي انه من افضل البوتات الي استعملتها , حرفيا اختصر علي كل شي</p>
                     </div>
@@ -2156,7 +1887,7 @@
                                 <h4 data-lang-key="testimonial2_author">xpoint</h4>
                                 <span data-lang-key="testimonial2_role">صاحب سيرفر</span>
                             </div>
-                            <img src="https://media.discordapp.net/attachments/1248636782342443021/1389026001987702877/image.png?ex=68631ec5&is=6861cd45&hm=cd907818b3a7a61e03d6d5ab450e6a62ea5a3d2d05ccd8ff17b608a98aa332b0&=&format=webp&quality=lossless&width=960&height=960" alt="صورة xpoint">
+                            <img src="https://cdn.discordapp.com/attachments/1248636782342443021/1389026001987702877/image.png?ex=6863c785&is=68627605&hm=65281d7952f5ea30a58210b221ff579d8b6bce824d08457bdb232b18aec410b1&" alt="صورة xpoint">
                         </div>
                         <p class="testimonial-text-content" data-lang-key="testimonial2_text">سهولة الاستخدام مذهلة! حتى لو لم تكن خبيرًا في البوتات، يمكنك التحكم بكل شيء بسهولة.</p>
                     </div>
@@ -2289,7 +2020,7 @@
                     <button class="lang-button" data-lang="zh">中文</button>
                 </div>
                 <div class="custom-icon">
-                    <img src="https://media.discordapp.net/attachments/1248636782342443021/1389024051212582993/Layer_12.png?ex=68631cf4&is=6861cb74&hm=8a44e9fbd83c577fb972a9d6085812b097d386019ad30005ee229bc07cfda4ab&=&format=webp&quality=lossless" alt="أيقونة السيرفر VND">
+                    <img src="https://cdn.discordapp.com/attachments/1248636782342443021/1389211667736559696/1128443567195566220.webp?ex=6863cbaf&is=68627a2f&hm=44cdfe536161dc72e67dcdba73315c7c651b9b679692154ea03eb6b341813e32&" alt="أيقونة السيرفر VND">
                 </div>
             </div>
         </div>
@@ -2339,15 +2070,15 @@
                 features: "الميزات",
                 dashboard: "لوحة التحكم",
                 server_overview_nav: "نظرة على السيرفر",
-                live_activity_nav: "النشاط المباشر", // New
+                live_activity_nav: "النشاط المباشر",
                 command_builder_nav: "بناء الأوامر",
-                llm_features_nav: "ميزات الذكاء الاصطناعي",
+                llm_features_nav: "ميزات الذكاء الاصطناعي", // Keep for lang data for flexibility
                 testimonials: "التقييمات",
                 faq: "الأسئلة الشائعة",
                 contact: "اتصل بنا",
                 login: "تسجيل الدخول",
                 invite_bot: "دعوة البوت",
-                hero_heading: "تحكم كامل ببووت الديسكورد الخاص بك، بسهولة واحترافية",
+                hero_heading: "كل شيء في بوت واحد",
                 hero_subheading: "لوحة تحكم VND Bot توفر لك كل الأدوات التي تحتاجها لإدارة خادمك، الأوامر، الأعضاء والمزيد، بفضل واجهة بسيطة ومريحة.",
                 add_bot_to_server: "إضافة البوت إلى سيرفرك",
                 control_bot: "تحكم بالبوت",
@@ -2375,8 +2106,8 @@
                 messages_sent: "الرسائل المرسلة (اليوم)",
                 total_channels: "إجمالي القنوات",
                 commands_used: "الأوامر المستخدمة (اليوم)",
-                live_activity_title: "⚡ نشاط البوت المباشر", // New
-                live_activity_desc: "شاهد كيف يتفاعل بوت VND مع سيرفرات الديسكورد في الوقت الفعلي، من الأوامر إلى الأحداث.", // New
+                live_activity_title: "⚡ نشاط البوت المباشر",
+                live_activity_desc: "شاهد كيف يتفاعل بوت VND مع سيرفرات الديسكورد في الوقت الفعلي، من الأوامر إلى الأحداث.",
                 command_builder_title: "🛠️ بناء الأوامر المخصصة",
                 command_builder_desc: "أنشئ أوامر بوت فريدة لسيرفرك باستخدام واجهة سهلة وسلسة، دون الحاجة لأي برمجة!",
                 command_name_label: "اسم الأمر:",
@@ -2386,15 +2117,20 @@
                 command_type_kick: "طرد عضو",
                 command_response_label: "الاستجابة:",
                 save_command_btn: "حفظ الأمر",
-                llm_features_title: "✨ ميزات الذكاء الاصطناعي بواسطة Gemini",
-                welcome_message_generator_title: "✨ مولّد رسائل الترحيب الذكي",
-                welcome_input_placeholder: "اكتب أفكاراً لرسالة ترحيب (مثال: سيرفر ألعاب، ترحيب حماسي، قواعد أساسية)...",
-                generate_welcome_btn: "توليد رسالة ترحيب",
-                moderation_rules_generator_title: "✨ مقترح قواعد الإشراف الذكي",
-                moderation_input_placeholder: "صف نوع خادمك (مثال: سيرفر مجتمع، ألعاب تنافسية، تعليمي) وما هي المشاكل الشائعة التي تواجهها...",
-                generate_moderation_btn: "اقتراح قواعد إشراف",
-                gemini_output_placeholder: "سيظهر النص الذي تم توليده هنا...",
-                testimonials_title: "ماذا يقول المستخدمون عنا؟",
+                llm_features_title: "✨ ميزات الذكاء الاصطناعي بواسطة Gemini", // Keep for lang data flexibility
+                welcome_message_generator_title: "✨ مولّد رسائل الترحيب الذكي", // Keep for lang data flexibility
+                welcome_input_placeholder: "اكتب أفكاراً لرسالة ترحيب (مثال: سيرفر ألعاب، ترحيب حماسي، قواعد أساسية)...", // Keep for lang data flexibility
+                generate_welcome_btn: "توليد رسالة ترحيب", // Keep for lang data flexibility
+                moderation_rules_generator_title: "✨ مقترح قواعد الإشراف الذكي", // Keep for lang data flexibility
+                moderation_input_placeholder: "صف نوع خادمك (مثال: سيرفر مجتمع، ألعاب تنافسية، تعليمي) وما هي المشاكل الشائعة التي تواجهها...", // Keep for lang data flexibility
+                generate_moderation_btn: "اقتراح قواعد إشراف", // Keep for lang data flexibility
+                gemini_output_placeholder: "سيظهر النص الذي تم توليده هنا...", // Keep for lang data flexibility
+                gemini_output_empty_error: "عذرًا، لم يتمكن الذكاء الاصطناعي من توليد استجابة. الرجاء المحاولة بمطلب مختلف.", // Keep for lang data flexibility
+                gemini_output_fetch_error: "حدث خطأ أثناء الاتصال بالذكاء الاصطناعي", // Keep for lang data flexibility
+                gemini_output_retry_message: "الرجاء التأكد من اتصالك بالإنترنت والمحاولة مرة أخرى.", // Keep for lang data flexibility
+                welcome_input_empty_error: "الرجاء إدخال بعض الأفكار لتوليد رسالة ترحيب.", // Keep for lang data flexibility
+                moderation_input_empty_error: "الرجاء وصف نوع خادمك أو المشاكل الشائعة لاقتراح قواعد الإشراف.", // Keep for lang data flexibility
+                testimonials_title: "آراء المستخدمين المتميزين", // Changed text
                 testimonial1_text: "البوت ذا رهيب وربي انه من افضل البوتات الي استعملتها , حرفيا اختصر علي كل شي",
                 testimonial1_author: "bluetoon",
                 testimonial1_role: "يوتيوبر",
@@ -2443,7 +2179,7 @@
                 features: "Features",
                 dashboard: "Dashboard",
                 server_overview_nav: "Server Overview",
-                live_activity_nav: "Live Activity", // New
+                live_activity_nav: "Live Activity",
                 command_builder_nav: "Command Builder",
                 llm_features_nav: "AI Features",
                 testimonials: "Testimonials",
@@ -2451,7 +2187,7 @@
                 contact: "Contact Us",
                 login: "Login",
                 invite_bot: "Invite Bot",
-                hero_heading: "Full Control of Your Discord Bot, Easily and Professionally",
+                hero_heading: "All in One Bot",
                 hero_subheading: "VND Bot Dashboard provides you with all the tools you need to manage your server, commands, members, and more, with a simple and convenient interface.",
                 add_bot_to_server: "Add Bot to Your Server",
                 control_bot: "Control Bot",
@@ -2479,8 +2215,8 @@
                 messages_sent: "Messages Sent (Today)",
                 total_channels: "Total Channels",
                 commands_used: "Commands Used (Today)",
-                live_activity_title: "⚡ Live Bot Activity", // New
-                live_activity_desc: "See how the VND Bot interacts with Discord servers in real-time, from commands to events.", // New
+                live_activity_title: "⚡ Live Bot Activity",
+                live_activity_desc: "See how the VND Bot interacts with Discord servers in real-time, from commands to events.",
                 command_builder_title: "🛠️ Custom Command Builder",
                 command_builder_desc: "Create unique bot commands for your server using a simple and seamless interface, no coding required!",
                 command_name_label: "Command Name:",
@@ -2498,7 +2234,12 @@
                 moderation_input_placeholder: "Describe your server type (e.g., community server, competitive gaming, educational) and common issues you face...",
                 generate_moderation_btn: "Suggest Moderation Rules",
                 gemini_output_placeholder: "Generated text will appear here...",
-                testimonials_title: "What Our Users Say?",
+                gemini_output_empty_error: "Sorry, AI could not generate a response. Please try with a different query.",
+                gemini_output_fetch_error: "Error connecting to AI",
+                gemini_output_retry_message: "Please ensure you are connected to the internet and try again.",
+                welcome_input_empty_error: "Please enter some ideas to generate a welcome message.",
+                moderation_input_empty_error: "Please describe your server type or common issues to suggest moderation rules.",
+                testimonials_title: "What Our Users Say?", // Changed text
                 testimonial1_text: "This bot is amazing, seriously one of the best bots I've ever used. It literally simplified everything for me.",
                 testimonial1_author: "bluetoon",
                 testimonial1_role: "YouTuber",
@@ -2547,7 +2288,7 @@
                 features: "Fonctionnalités",
                 dashboard: "Tableau de bord",
                 server_overview_nav: "Aperçu du serveur",
-                live_activity_nav: "Activité en direct", // New
+                live_activity_nav: "Activité en direct",
                 command_builder_nav: "Constructeur de commandes",
                 llm_features_nav: "Fonctionnalités IA",
                 testimonials: "Témoignages",
@@ -2555,7 +2296,7 @@
                 contact: "Contactez-nous",
                 login: "Connexion",
                 invite_bot: "Inviter le Bot",
-                hero_heading: "Contrôle total de votre Bot Discord, facilement et professionnellement",
+                hero_heading: "Tout en un Bot",
                 hero_subheading: "Le tableau de bord VND Bot vous offre tous les outils dont vous avez besoin pour gérer votre serveur, vos commandes, vos membres et plus encore, grâce à une interface simple et pratique.",
                 add_bot_to_server: "Ajouter le Bot à votre serveur",
                 control_bot: "Contrôler le Bot",
@@ -2583,8 +2324,8 @@
                 messages_sent: "Messages envoyés (aujourd'hui)",
                 total_channels: "Canaux Totaux",
                 commands_used: "Commandes utilisées (aujourd'hui)",
-                live_activity_title: "⚡ Activité du bot en direct", // New
-                live_activity_desc: "Découvrez comment le bot VND interagit avec les serveurs Discord en temps réel, des commandes aux événements.", // New
+                live_activity_title: "⚡ Activité du bot en direct",
+                live_activity_desc: "Découvrez comment le bot VND interagit avec les serveurs Discord en temps réel, des commandes aux événements.",
                 command_builder_title: "🛠️ Constructeur de commandes personnalisées",
                 command_builder_desc: "Créez des commandes de bot uniques pour votre serveur à l'aide d'une interface simple et transparente, aucun codage requis!",
                 command_name_label: "Nom de la commande:",
@@ -2602,7 +2343,12 @@
                 moderation_input_placeholder: "Décrivez le type de votre serveur (ex : serveur communautaire, jeu compétitif, éducatif) et les problèmes courants que vous rencontrez...",
                 generate_moderation_btn: "Suggérer des règles de modération",
                 gemini_output_placeholder: "Le texte généré apparaîtra ici...",
-                testimonials_title: "Ce que disent nos utilisateurs ?",
+                gemini_output_empty_error: "Désolé, l'AI n'a pas pu générer de réponse. Veuillez essayer avec une requête différente.",
+                gemini_output_fetch_error: "Erreur de connexion à l'IA",
+                gemini_output_retry_message: "Veuillez vérifier votre connexion Internet et réessayer.",
+                welcome_input_empty_error: "Veuillez saisir des idées pour générer un message de bienvenue.",
+                moderation_input_empty_error: "Veuillez décrire le type de votre serveur ou les problèmes courants pour suggérer des règles de modération.",
+                testimonials_title: "Ce que disent nos utilisateurs ?", // Changed text
                 testimonial1_text: "Ce bot est incroyable, sérieusement l'un des meilleurs bots que j'aie jamais utilisé. Il m'a littéralement tout simplifié.",
                 testimonial1_author: "bluetoon",
                 testimonial1_role: "YouTuber",
@@ -2629,7 +2375,7 @@
                 faq3_q: "Ai-je besoin de connaissances en codage pour utiliser le tableau de bord ?",
                 faq3_a: "Non, le tableau de bord VND Bot est conçu pour être convivial et ne nécessite aucune connaissance en codage. Vous pouvez gérer entièrement le bot via l'interface graphique.",
                 faq4_q: "Quels types de commandes puis-je personnaliser ?",
-                faq4_a: "Vous pouvez personnaliser de nombreuses commandes telles que les commandes de bienvenue, les commandes de modération, les commandes de divertissement, et plus encore, en plus de créer vos propres commandes personnalisées.",
+                faq4_a: "Vous pouvez personnaliser de nombreuses commandes such as welcome commands, moderation commands, entertainment commands, and more, in addition to creating your own custom commands.",
                 contact_title: "Contactez-nous",
                 contact_name: "Votre Nom Complet :",
                 contact_email: "Votre E-mail :",
@@ -2647,7 +2393,7 @@
                 features: "功能",
                 dashboard: "仪表板",
                 server_overview_nav: "服务器概览",
-                live_activity_nav: "实时活动", // New
+                live_activity_nav: "实时活动",
                 command_builder_nav: "命令构建器",
                 llm_features_nav: "人工智能功能",
                 testimonials: "推荐",
@@ -2655,38 +2401,38 @@
                 contact: "联系我们",
                 login: "登录",
                 invite_bot: "邀请机器人",
-                hero_heading: "轻松专业地完全控制您的 Discord 机器人",
-                hero_subheading: "VND Bot 仪表板为您提供管理服务器、命令、成员等所需的所有工具，界面简洁方便。",
+                hero_heading: "一站式机器人",
+                hero_subheading: "VND Bot 仪表板为您提供管理服务器、命令、成员等所需的所有工具، 界面简洁方便。",
                 add_bot_to_server: "将机器人添加到您的服务器",
                 control_bot: "控制机器人",
                 explore_features: "探索功能",
-                features_title: "强大功能，全面掌控",
+                features_title: "强大功能، 全面掌控",
                 feature1_title: "命令管理",
-                feature1_desc: "控制您的机器人命令，轻松启用或禁用它们，并进行自定义。",
+                feature1_desc: "控制您的机器人命令، 轻松启用或禁用它们، 并进行自定义。",
                 feature2_title: "成员管理",
                 feature2_desc: "管理服务器成员、角色和惩罚的高级工具。",
                 feature3_title: "YouTube 主播系统",
-                feature3_desc: "使用机器人通知成员您的最新视频，您还可以创建一个频道用于订阅者计数，该计数会自动更新。",
+                feature3_desc: "使用机器人通知成员您的最新视频، 您还可以创建一个频道用于订阅者计数، 该计数会自动更新。",
                 feature4_title: "保护系统",
-                feature4_desc: "通过高级保护系统抵御垃圾邮件和入侵，确保您的服务器安全。",
+                feature4_desc: "通过高级保护系统抵御垃圾邮件和入侵، 确保您的服务器安全。",
                 feature5_title: "工单系统",
-                feature5_desc: "专业的工单系统使成员可以轻松有效地与管理员沟通并寻求帮助，这是有史以来最好的工单系统。",
+                feature5_desc: "专业的工单系统使成员可以轻松有效地与管理员沟通并寻求帮助، 这是有史以来最好的工单系统。",
                 feature6_title: "音乐播放",
-                feature6_desc: "机器人可以在您的 Discord 语音频道中播放您喜欢的歌曲，音质高，不中断，支持播放列表和完全控制。",
+                feature6_desc: "机器人可以在您的 Discord 语音频道中播放您喜欢的歌曲، 音质高، 不中断، 支持播放列表和完全控制。",
                 dashboard_title: "仪表板概览",
-                dashboard_desc: "一个用户友好且直观的界面，让您只需轻触按钮即可完全控制 Discord 机器人的所有方面。",
+                dashboard_desc: "一个用户友好且直观的界面، 让您只需轻触按钮即可完全控制 Discord 机器人的所有方面。",
                 server_overview_title: "📊 服务器概览",
-                server_overview_desc: "监控您的服务器关键实时统计数据，从活跃成员到已发送消息等。",
+                server_overview_desc: "监控您的服务器关键实时统计数据، 从活跃成员到已发送消息等。",
                 total_members: "总成员",
                 new_members_today: "今日新增成员",
                 online_members: "在线成员",
                 messages_sent: "已发送消息（今日）",
                 total_channels: "总频道",
                 commands_used: "已使用命令（今日）",
-                live_activity_title: "⚡ 实时机器人活动", // New
-                live_activity_desc: "查看 VND 机器人在 Discord 服务器上如何实时互动，从命令到事件。", // New
+                live_activity_title: "⚡ 实时机器人活动",
+                live_activity_desc: "查看 VND 机器人在 Discord 服务器上如何实时互动، 从命令到事件。",
                 command_builder_title: "🛠️ 自定义命令构建器",
-                command_builder_desc: "使用简单无缝的界面为您的服务器创建独特的机器人命令，无需编码！",
+                command_builder_desc: "创建独特机器人命令، 无需编码！",
                 command_name_label: "命令名称：",
                 command_type_label: "命令类型：",
                 command_type_text: "文本消息",
@@ -2702,11 +2448,16 @@
                 moderation_input_placeholder: "描述您的服务器类型（例如：社区服务器、竞技游戏、教育）以及您面临的常见问题...",
                 generate_moderation_btn: "建议版主规则",
                 gemini_output_placeholder: "生成的文本将显示在此处...",
+                gemini_output_empty_error: "抱歉، AI 无法生成响应。请尝试其他查询。",
+                gemini_output_fetch_error: "连接到 AI 时出错",
+                gemini_output_retry_message: "请确保您已连接到互联网并重试。",
+                welcome_input_empty_error: "请输入一些想法来生成欢迎消息。",
+                moderation_input_empty_error: "请描述您的服务器类型或常见问题以建议版主规则。",
                 testimonials_title: "用户评价",
-                testimonial1_text: "这个机器人太棒了，说真的，它是我用过的最好的机器人之一。它简直为我简化了一切。",
+                testimonial1_text: "这个机器人太棒了، 说真的، 它是我用过的最好的机器人之一。它简直为我简化了一切。",
                 testimonial1_author: "bluetoon",
                 testimonial1_role: "YouTube 主播",
-                testimonial2_text: "使用起来非常简单！即使您不是机器人专家，也可以轻松控制一切。",
+                testimonial2_text: "使用起来非常简单！即使您不是机器人专家، 也可以轻松控制一切。",
                 testimonial2_author: "xpoint",
                 testimonial2_role: "服务器所有者",
                 testimonial3_text: "我真的很喜欢这个机器人، 它是免费的، 它的功能在一个机器人中找不到، 但是这个机器人让一切都变得简单، 但我更喜欢不使用它。",
@@ -2722,8 +2473,8 @@
                 login_required_dashboard: "请先登录才能控制机器人。",
                 empty_comment_error: "请在提交前撰写评论。",
                 faq_title: "常见问题",
-                faq1_q: "VND Bot 是否免费使用？",
-                faq1_a: "是的，机器人是完全免费的，没有付费计划، 这是我们的座右铭。",
+                faq1_q: "VND Bot 是否免费使用؟",
+                faq1_a: "是的، 机器人是完全免费的، 没有付费计划، 这是我们的座右铭。",
                 faq2_q: "如何邀请机器人到我的服务器؟",
                 faq2_a: "您可以通过点击页面顶部或底部的“邀请机器人”按钮直接邀请机器人到您的服务器。",
                 faq3_q: "我需要编程知识才能使用仪表板吗؟",
@@ -2763,7 +2514,7 @@
 
             localStorage.setItem('selectedLang', lang);
             updateCommentSectionUI();
-            updateCommandPreview(); // Update preview when language changes
+            // No need to call updateCommandPreview() as the section is removed
         }
 
         document.querySelectorAll('.lang-button').forEach(button => {
@@ -2776,34 +2527,6 @@
             const savedLang = localStorage.getItem('selectedLang') || 'ar';
             setLanguage(savedLang);
         });
-
-        // Intersection Observer for Section Animations - REMOVED to make content always visible
-        /*
-        const observerOptions = {
-            root: null, // viewport
-            rootMargin: '0px',
-            threshold: 0.2 // Trigger when 20% of the section is visible
-        };
-
-        const animatedSections = new Map();
-
-        const sectionObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    if (!animatedSections.has(entry.target)) {
-                        entry.target.classList.add('in-view');
-                        animatedSections.set(entry.target, true);
-                    }
-                } else {
-                    // We don't remove 'in-view' class to ensure persistent visibility
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.section-animation').forEach(section => {
-            sectionObserver.observe(section);
-        });
-        */
 
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -3102,97 +2825,6 @@
         window.onload = initThreeJS;
 
 
-        // Gemini API Integration Logic
-        async function callGeminiAPI(prompt, outputElementId) {
-            const outputElement = document.getElementById(outputElementId);
-            const currentLang = localStorage.getItem('selectedLang') || 'ar';
-            
-            outputElement.innerHTML = ''; // Clear previous output
-            outputElement.classList.remove('error'); // Clear any previous error styling
-            outputElement.classList.add('loading'); // Show loading indicator
-            outputElement.removeAttribute('data-placeholder'); // Remove placeholder when loading
-            console.log(`[Gemini API] Sending prompt for ${outputElementId}:`, prompt);
-
-            try {
-                let chatHistory = [];
-                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                const payload = { contents: chatHistory };
-                // API Key is handled by the Canvas environment for gemini-2.0-flash
-                const apiKey = ""; // Keep this empty; Canvas will inject the key
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                console.log(`[Gemini API] Response status for ${outputElementId}:`, response.status);
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error(`[Gemini API] API error for ${outputElementId}:`, errorData);
-                    throw new Error(`API error (${response.status}): ${errorData.error.message || 'Unknown API error'}`);
-                }
-
-                const result = await response.json();
-                console.log(`[Gemini API] Raw result for ${outputElementId}:`, result);
-                
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const text = result.candidates[0].content.parts[0].text;
-                    outputElement.innerText = text; // Display the response
-                    console.log(`[Gemini API] Content displayed for ${outputElementId}.`);
-                } else {
-                    console.warn(`[Gemini API] Unexpected response structure or empty content for ${outputElementId}.`, result);
-                    outputElement.innerText = langData[currentLang].gemini_output_empty_error || 'عذرًا، لم يتمكن الذكاء الاصطناعي من توليد استجابة. قد تكون المشكلة في التنسيق أو لا توجد بيانات متاحة. الرجاء المحاولة مرة أخرى.';
-                    outputElement.classList.add('error');
-                }
-            } catch (error) {
-                console.error(`[Gemini API] Fetch error for ${outputElementId}:`, error);
-                outputElement.innerText = `${langData[currentLang].gemini_output_fetch_error || 'حدث خطأ'}: ${error.message}. ${langData[currentLang].gemini_output_retry_message || 'الرجاء التأكد من اتصالك بالإنترنت والمحاولة مرة أخرى.'}`;
-                outputElement.classList.add('error');
-            } finally {
-                outputElement.classList.remove('loading'); // Hide loading indicator
-                if (outputElement.innerText.trim() === '' || outputElement.classList.contains('error')) { // Only restore placeholder if empty or error
-                    outputElement.setAttribute('data-placeholder', langData[currentLang].gemini_output_placeholder);
-                } else {
-                    outputElement.removeAttribute('data-placeholder'); // Ensure it's removed if content is there
-                }
-                console.log(`[Gemini API] Generation finished for ${outputElementId}.`);
-            }
-        }
-
-        // Event Listeners for Gemini Features
-        document.getElementById('generate-welcome-btn').addEventListener('click', () => {
-            const welcomeInput = document.getElementById('welcome-input').value.trim();
-            const currentLang = localStorage.getItem('selectedLang') || 'ar';
-            if (welcomeInput) {
-                // Instruct Gemini to respond in Arabic
-                const prompt = `Generate a creative and enthusiastic welcome message for a new member joining a Discord server. The message should be friendly and inviting and **must be in Arabic**. Here are some keywords/themes: ${welcomeInput}.`;
-                callGeminiAPI(prompt, 'welcome-output');
-            } else {
-                document.getElementById('welcome-output').innerText = langData[currentLang].welcome_input_empty_error || 'الرجاء إدخال بعض الأفكار لتوليد رسالة ترحيب.';
-                document.getElementById('welcome-output').classList.add('error');
-                document.getElementById('welcome-output').setAttribute('data-placeholder', langData[currentLang].gemini_output_placeholder);
-            }
-        });
-
-        document.getElementById('generate-moderation-btn').addEventListener('click', () => {
-            const moderationInput = document.getElementById('moderation-input').value.trim();
-            const currentLang = localStorage.getItem('selectedLang') || 'ar';
-            if (moderationInput) {
-                // Instruct Gemini to respond in Arabic
-                const prompt = `Suggest a list of concise and effective moderation rules for a Discord server. The server type and common issues are: ${moderationInput}. Format the rules as a numbered list and **they must be in Arabic**.`;
-                callGeminiAPI(prompt, 'moderation-output');
-            } else {
-                document.getElementById('moderation-output').innerText = langData[currentLang].moderation_input_empty_error || 'الرجاء وصف نوع خادمك أو المشاكل الشائعة لاقتراح قواعد الإشراف.';
-                document.getElementById('moderation-output').classList.add('error');
-                document.getElementById('moderation-output').setAttribute('data-placeholder', langData[currentLang].gemini_output_placeholder);
-            }
-        });
-
         // Mock Server Stats Update (for Server Overview Section)
         function updateServerStats() {
             const totalMembers = document.getElementById('total-members');
@@ -3246,7 +2878,12 @@
             activityElement.classList.add('activity-item');
             
             const icon = document.createElement('i');
-            icon.classList.add('activity-icon', activityIcons[item.type]);
+            // Split the class string by space and add each as a separate class
+            if (activityIcons[item.type]) {
+                activityIcons[item.type].split(' ').forEach(cls => {
+                    icon.classList.add(cls);
+                });
+            }
             activityElement.appendChild(icon);
 
             const content = document.createElement('div');
@@ -3286,83 +2923,6 @@
             }
             activityIndex = 5; // Start simulation from next item
         });
-
-
-        // Custom Command Builder Logic
-        function updateCommandPreview() {
-            const commandName = document.getElementById('command-name').value.trim();
-            const commandType = document.getElementById('command-type').value;
-            const commandResponse = document.getElementById('command-response').value.trim();
-            const commandCodePreview = document.getElementById('command-code-preview');
-            const commandResponseGroup = document.getElementById('command-response-group');
-            const currentLang = localStorage.getItem('selectedLang') || 'ar';
-
-            let previewText = '';
-
-            if (commandType === 'text') {
-                commandResponseGroup.style.display = 'flex';
-                document.querySelector('#command-response-group label').innerHTML = langData[currentLang].command_response_label;
-                document.getElementById('command-response').placeholder = 'الرسالة التي سيرد بها البوت';
-                if (commandName && commandResponse) {
-                    previewText = `/${commandName} -> ${langData[currentLang].command_type_text.toLowerCase().replace('رسالة نصية', 'رسالة')}: ${commandResponse}`;
-                } else if (commandName) {
-                    previewText = `/${commandName} -> ${langData[currentLang].command_type_text.toLowerCase().replace('رسالة نصية', 'رسالة')}: ...`;
-                } else {
-                    previewText = `/امر_جديد -> ${langData[currentLang].command_type_text.toLowerCase().replace('رسالة نصية', 'رسالة')}: اهلاً بك`;
-                }
-            } else if (commandType === 'embed') {
-                commandResponseGroup.style.display = 'flex';
-                document.querySelector('#command-response-group label').innerHTML = langData[currentLang].command_response_label;
-                document.getElementById('command-response').placeholder = 'JSON لرسالة Embed';
-                if (commandName && commandResponse) {
-                    previewText = `/${commandName} -> ${langData[currentLang].command_type_embed.toLowerCase().replace('رسالة مضمنة (embed)', 'تضمين')}: ${commandResponse.substring(0, 50)}...`;
-                } else if (commandName) {
-                    previewText = `/${commandName} -> ${langData[currentLang].command_type_embed.toLowerCase().replace('رسالة مضمنة (embed)', 'تضمين')} JSON: { ... }`;
-                } else {
-                    previewText = `/امر_جديد -> ${langData[currentLang].command_type_embed.toLowerCase().replace('رسالة مضمنة (embed)', 'تضمين')} JSON: { "title": "مرحباً!" }`;
-                }
-            } else if (commandType === 'kick') {
-                commandResponseGroup.style.display = 'none'; // No direct response needed for kick
-                if (commandName) {
-                    previewText = `/${commandName} @user -> ${langData[currentLang].command_type_kick.toLowerCase().replace('طرد عضو', 'طرد')} @user`;
-                } else {
-                    previewText = `/طرد @user -> ${langData[currentLang].command_type_kick.toLowerCase().replace('طرد عضو', 'طرد')} @user`;
-                }
-            }
-            
-            commandCodePreview.textContent = previewText;
-        }
-
-        document.getElementById('command-name').addEventListener('keyup', updateCommandPreview);
-        document.getElementById('command-type').addEventListener('change', updateCommandPreview);
-        document.getElementById('command-response').addEventListener('keyup', updateCommandPreview);
-        document.addEventListener('DOMContentLoaded', updateCommandPreview); // Initial update on load
-
-        // Set placeholder for gemini output
-        document.getElementById('welcome-output').setAttribute('data-placeholder', langData[localStorage.getItem('selectedLang') || 'ar']['gemini_output_placeholder']);
-        document.getElementById('moderation-output').setAttribute('data-placeholder', langData[localStorage.getItem('selectedLang') || 'ar']['gemini_output_placeholder']);
-
-        // Add new language strings for Gemini errors/placeholders
-        langData.ar.gemini_output_empty_error = 'عذرًا، لم يتمكن الذكاء الاصطناعي من توليد استجابة. الرجاء المحاولة بمطلب مختلف.';
-        langData.ar.gemini_output_fetch_error = 'حدث خطأ أثناء الاتصال بالذكاء الاصطناعي';
-        langData.ar.gemini_output_retry_message = 'الرجاء التأكد من اتصالك بالإنترنت والمحاولة مرة أخرى.';
-        langData.ar.welcome_input_empty_error = 'الرجاء إدخال بعض الأفكار لتوليد رسالة ترحيب.';
-        langData.ar.moderation_input_empty_error = 'الرجاء وصف نوع خادمك أو المشاكل الشائعة لاقتراح قواعد الإشراف.';
-        langData.en.gemini_output_empty_error = 'Sorry, AI could not generate a response. Please try with a different query.';
-        langData.en.gemini_output_fetch_error = 'Error connecting to AI';
-        langData.en.gemini_output_retry_message = 'Please ensure you are connected to the internet and try again.';
-        langData.en.welcome_input_empty_error = 'Please enter some ideas to generate a welcome message.';
-        langData.en.moderation_input_empty_error = 'Please describe your server type or common issues to suggest moderation rules.';
-        langData.fr.gemini_output_empty_error = 'Désolé, l\'IA n\'a pas pu générer de réponse. Veuillez essayer avec une requête différente.';
-        langData.fr.gemini_output_fetch_error = 'Erreur de connexion à l\'IA';
-        langData.fr.gemini_output_retry_message = 'Veuillez vérifier votre connexion Internet et réessayer.';
-        langData.fr.welcome_input_empty_error = 'Veuillez saisir des idées pour générer un message de bienvenue.';
-        langData.fr.moderation_input_empty_error = 'Veuillez décrire le type de votre serveur ou les problèmes courants pour suggérer des règles de modération.';
-        langData.zh.gemini_output_empty_error = '抱歉，AI 无法生成响应。请尝试其他查询。';
-        langData.zh.gemini_output_fetch_error = '连接到 AI 时出错';
-        langData.zh.zh.gemini_output_retry_message = '请确保您已连接到互联网并重试。';
-        langData.zh.welcome_input_empty_error = '请输入一些想法来生成欢迎消息。';
-        langData.zh.moderation_input_empty_error = '请描述您的服务器类型或常见问题以建议版主规则。';
 
     </script>
 </body>

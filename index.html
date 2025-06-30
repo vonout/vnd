@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VND Bot لوحة التحكم - تحكم كامل ببووت الديسكورد الخاص بك</title>
+    <title>VND Bot لوحة التحكم - محور الديسكورد المتوهج</title>
     <link rel="icon" href="https://media.discordapp.net/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=6862c4f3&is=68617373&hm=8f081e2ff1124f60bdc0035e8922fd3772694033c360e180caefa707545b0c2e" type="image/png">
     <!-- خطوط عربية: Cairo، خطوط لاتينية وعامة: Noto Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Noto+Sans:wght@400;700;900&display=swap" rel="stylesheet">
     <!-- Font Awesome لأيقونات احترافية -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Three.js Library for 3D background -->
@@ -16,26 +16,28 @@
         :root {
             --primary-color: #5865F2; /* أزرق ديسكورد */
             --secondary-color: #43B581; /* أخضر - للرسائل مثلاً */
-            --dark-bg: #1A1A2E; /* خلفية داكنة جداً */
-            --medium-dark-bg: #2B2B4A; /* خلفية داكنة متوسطة */
+            --dark-bg: #0D0C1D; /* خلفية داكنة جداً للمظهر الفضائي */
+            --medium-dark-bg: #1A1934; /* خلفية داكنة متوسطة */
             --light-text: #E0E0FF; /* نص فاتح مع تدرج بنفسجي خفيف */
             --soft-white: #B0B0D0; /* أبيض ناعم مائل للرمادي البنفسجي */
             --border-color: #3C3C60; /* لون الحدود الداكنة */
             --hover-color: #7289DA; /* لون التظليل عند التحويم */
             --accent-color: #FEE75C; /* أصفر، للتركيز وإبراز العناصر */
             --accent-glow: #FEE75C; /* توهج أصفر */
-            --card-bg: rgba(43, 43, 74, 0.7); /* خلفية البطاقات شفافة مع ضبابية */
-            --glass-blur: 8px; /* قيمة الضبابية لتأثير الزجاج */
-            --glow-filter: drop-shadow(0 0 5px rgba(254, 231, 92, 0.5)); /* توهج أصفر للأيقونات */
+            --card-bg: rgba(26, 25, 52, 0.75); /* خلفية البطاقات شفافة مع ضبابية */
+            --glass-blur: 10px; /* قيمة الضبابية لتأثير الزجاج */
+            --glow-filter: drop-shadow(0 0 8px rgba(254, 231, 92, 0.6)); /* توهج أصفر للأيقونات */
 
             /* ألوان جديدة لتدرجات أكثر احترافية */
             --gradient-1-start: #3A478F;
             --gradient-1-end: #5865F2;
             --gradient-2-start: #C5B03C;
             --gradient-2-end: #FEE75C;
-            --glow-strong: 0 0 20px rgba(88, 101, 242, 0.7), 0 0 30px rgba(254, 231, 92, 0.5);
-            --inset-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
-            --button-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px var(--primary-color);
+            --glow-strong: 0 0 25px rgba(88, 101, 242, 0.8), 0 0 40px rgba(254, 231, 92, 0.6);
+            --inset-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.4);
+            --button-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-color);
+            --neon-border: 2px solid rgba(88, 101, 242, 0.7);
+            --neon-shadow: 0 0 15px rgba(88, 101, 242, 0.8), 0 0 25px rgba(254, 231, 92, 0.5);
         }
 
         /* إعادة ضبط CSS */
@@ -52,14 +54,14 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--medium-dark-bg);
+            background: var(--dark-bg);
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             border-radius: 10px;
-            border: 2px solid var(--medium-dark-bg);
+            border: 2px solid var(--dark-bg);
         }
 
         ::-webkit-scrollbar-thumb:hover {
@@ -89,7 +91,7 @@
 
         a:hover {
             color: var(--hover-color);
-            text-shadow: 0 0 8px rgba(88, 101, 242, 0.5);
+            text-shadow: 0 0 10px rgba(88, 101, 242, 0.7);
         }
 
         /* إزالة نقاط القوائم */
@@ -99,9 +101,9 @@
 
         /* الفئات المساعدة (Utility Classes) */
         .container {
-            max-width: 1200px;
+            max-width: 1280px; /* عرض أكبر للتحكم الكامل */
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 25px;
             position: relative; /* للحفاظ على المحتوى فوق الخلفية 3D */
             z-index: 5;
         }
@@ -112,15 +114,15 @@
             justify-content: center;
             background: linear-gradient(45deg, var(--gradient-1-start), var(--gradient-1-end));
             color: var(--light-text);
-            padding: 16px 35px; /* حجم أكبر */
-            border-radius: 10px; /* حواف أكثر استدارة */
+            padding: 18px 40px; /* حجم أكبر */
+            border-radius: 12px; /* حواف أكثر استدارة */
             font-weight: bold;
-            transition: all 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 10px var(--primary-color); /* توهج خفيف */
-            border: none;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: var(--button-shadow); /* توهج خفيف */
+            border: var(--neon-border); /* حدود نيونية */
             cursor: pointer;
-            font-size: 1.1rem; /* حجم خط أكبر */
-            gap: 10px;
+            font-size: 1.2rem; /* حجم خط أكبر */
+            gap: 12px;
             position: relative;
             overflow: hidden;
             z-index: 1;
@@ -134,8 +136,8 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
             z-index: -1;
             transform: skewX(-20deg);
         }
@@ -145,21 +147,21 @@
         }
 
         .btn:hover {
-            transform: translateY(-5px) scale(1.03); /* حركة أكثر وضوحاً */
-            box-shadow: var(--button-shadow), var(--glow-strong); /* توهج أقوى */
+            transform: translateY(-8px) scale(1.05); /* حركة أكثر وضوحاً */
+            box-shadow: var(--button-shadow), var(--neon-shadow); /* توهج أقوى */
             color: #FFF;
         }
         .btn:active {
-            transform: translateY(1px) scale(0.98);
+            transform: translateY(2px) scale(0.97);
         }
 
 
         .btn-outline {
             background: transparent;
-            border: 2px solid var(--primary-color);
+            border: var(--neon-border);
             color: var(--primary-color);
             box-shadow: none;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .btn-outline:hover {
@@ -175,15 +177,15 @@
 
         /* أنماط عناوين الأقسام */
         .section-heading {
-            font-size: 3.5rem; /* حجم أكبر للعناوين */
-            margin-bottom: 50px; /* مسافة أكبر */
+            font-size: 4rem; /* حجم أكبر للعناوين */
+            margin-bottom: 60px; /* مسافة أكبر */
             text-align: center;
             color: var(--light-text);
             position: relative;
-            padding-bottom: 25px; /* مسافة أكبر للخط السفلي */
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 10px var(--accent-color); /* توهج أقوى */
-            letter-spacing: 1.5px;
-            font-weight: 700;
+            padding-bottom: 30px; /* مسافة أكبر للخط السفلي */
+            text-shadow: 0 0 25px rgba(255, 255, 255, 0.7), 0 0 15px var(--accent-color); /* توهج أقوى */
+            letter-spacing: 2px;
+            font-weight: 800; /* أكثر جرأة */
         }
 
         .section-heading::after {
@@ -192,24 +194,24 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px; /* خط أطول وأسمك */
-            height: 6px;
+            width: 150px; /* خط أطول وأسمك */
+            height: 8px;
             background: linear-gradient(90deg, transparent, var(--accent-color), transparent); /* تدرج أصفر */
-            border-radius: 3px;
-            box-shadow: 0 0 15px var(--accent-color); /* توهج للخط */
+            border-radius: 4px;
+            box-shadow: 0 0 20px var(--accent-color); /* توهج للخط */
         }
 
         /* رأس الصفحة (Header) */
         .header {
-            background-color: rgba(43, 43, 74, 0.85); /* خلفية شفافة أكثر */
-            padding: 18px 0; /* مساحة داخلية أكبر */
+            background-color: rgba(13, 12, 29, 0.9); /* خلفية شفافة أكثر */
+            padding: 20px 0; /* مساحة داخلية أكبر */
             border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* ظل أقوى */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4); /* ظل أقوى */
             position: sticky;
             top: 0;
             z-index: 1000;
             backdrop-filter: blur(var(--glass-blur)); /* تأثير الزجاج */
-            animation: slideDown 0.5s ease-out;
+            animation: slideDown 0.6s ease-out;
         }
         @keyframes slideDown {
             from { transform: translateY(-100%); }
@@ -226,57 +228,61 @@
         .logo {
             display: flex;
             align-items: center;
-            transition: transform 0.3s ease, text-shadow 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), text-shadow 0.4s ease;
         }
 
         .logo:hover {
-            transform: scale(1.08);
-            text-shadow: 0 0 15px var(--primary-color);
+            transform: scale(1.1);
+            text-shadow: 0 0 20px var(--primary-color);
         }
 
         .logo img {
-            height: 50px; /* شعار أكبر */
-            margin-left: 15px;
+            height: 55px; /* شعار أكبر */
+            margin-left: 18px;
             border-radius: 50%;
-            box-shadow: 0 0 12px rgba(88, 101, 242, 0.6); /* توهج أقوى */
-            transition: box-shadow 0.3s ease;
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.7); /* توهج أقوى */
+            transition: box-shadow 0.4s ease;
         }
         .logo img:hover {
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.8);
+            box-shadow: 0 0 25px rgba(88, 101, 242, 0.9);
         }
 
         .logo span {
-            font-size: 2.2rem; /* حجم أكبر للشعار النصي */
-            font-weight: bold;
+            font-size: 2.5rem; /* حجم أكبر للشعار النصي */
+            font-weight: 900; /* عريض جداً */
             color: var(--light-text);
+            background: linear-gradient(90deg, var(--light-text), var(--primary-color), var(--light-text));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .nav-links {
             display: flex;
-            gap: 35px; /* مسافة أكبر */
+            gap: 40px; /* مسافة أكبر */
             margin-right: auto;
-            transition: all 0.4s ease;
+            transition: all 0.5s ease;
         }
 
         .nav-links li a {
             color: var(--soft-white);
-            font-weight: 600; /* وزن أكثر جرأة */
-            font-size: 1.15rem; /* حجم أكبر قليلاً */
-            padding: 10px 0;
+            font-weight: 700; /* وزن أكثر جرأة */
+            font-size: 1.25rem; /* حجم أكبر قليلاً */
+            padding: 12px 0;
             position: relative;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
         }
 
         .nav-links li a::after {
             content: '';
             position: absolute;
-            bottom: -5px; /* يظهر أسفل النص قليلاً */
+            bottom: -8px; /* يظهر أسفل النص قليلاً */
             right: 0; /* يبدأ من اليمين في RTL */
             width: 0;
-            height: 3px; /* خط أسمك */
+            height: 4px; /* خط أسمك */
             background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border-radius: 2px;
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
         }
 
         .nav-links li a:hover::after {
@@ -286,41 +292,41 @@
 
         .nav-links li a:hover {
             color: var(--primary-color);
-            text-shadow: 0 0 10px rgba(88, 101, 242, 0.6);
+            text-shadow: 0 0 15px rgba(88, 101, 242, 0.8);
         }
 
         .auth-buttons {
             display: flex;
-            gap: 18px; /* مسافة أكبر */
-            margin-left: 25px;
-            transition: all 0.4s ease;
+            gap: 20px; /* مسافة أكبر */
+            margin-left: 30px;
+            transition: all 0.5s ease;
         }
 
         .hamburger {
             display: none;
             flex-direction: column;
             cursor: pointer;
-            gap: 7px; /* مسافة أكبر بين الخطوط */
-            padding: 8px;
+            gap: 8px; /* مسافة أكبر بين الخطوط */
+            padding: 10px;
         }
 
         .hamburger div {
-            width: 32px; /* حجم أكبر */
-            height: 5px; /* سمك أكبر */
+            width: 35px; /* حجم أكبر */
+            height: 6px; /* سمك أكبر */
             background-color: var(--light-text);
             border-radius: 3px;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
         }
 
         /* Hamburger animation */
         .hamburger.open div:nth-child(1) {
-            transform: translateY(12px) rotate(-45deg);
+            transform: translateY(14px) rotate(-45deg);
         }
         .hamburger.open div:nth-child(2) {
             opacity: 0;
         }
         .hamburger.open div:nth-child(3) {
-            transform: translateY(-12px) rotate(45deg);
+            transform: translateY(-14px) rotate(45deg);
         }
 
         /* قسم البطل (Hero Section) */
@@ -345,83 +351,89 @@
             z-index: 1;
         }
 
-        .hero::before { /* شعار ديسكورد في الخلفية */
+        .hero::before { /* شعار ديسكورد في الخلفية - الآن كتمثيل مجرد */
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) rotate(15deg); /* دوران طفيف */
-            width: 150%; /* اجعلها أكبر لتغطي مساحة أوسع */
-            height: 150%;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Discord_logo_blue.svg/1200px-Discord_logo_blue.svg.png'); /* شعار ديسكورد */
+            transform: translate(-50%, -50%) scale(1.8) rotate(20deg); /* أكبر وأكثر دوران */
+            width: 100%;
+            height: 100%;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Discord_logo_blue.svg/1200px-Discord_logo_blue.svg.png');
             background-repeat: no-repeat;
             background-position: center;
-            background-size: cover; /* تغطية أفضل */
-            opacity: 0.03; /* شفافية خفيفة جداً */
-            z-index: 0; /* تأكد أنها خلف كل شيء */
-            filter: blur(8px) brightness(0.8); /* ضبابية وتغميق أكثر */
-            animation: rotateBackground 30s infinite linear; /* دوران مستمر */
+            background-size: cover;
+            opacity: 0.02; /* شفافية خفيفة جداً */
+            z-index: 0;
+            filter: blur(10px) brightness(0.7); /* ضبابية وتغميق أكثر */
+            animation: rotateBackground 40s infinite linear; /* دوران أبطأ وأكثر سلاسة */
         }
         @keyframes rotateBackground {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
+            from { transform: translate(-50%, -50%) scale(1.8) rotate(0deg); }
+            to { transform: translate(-50%, -50%) scale(1.8) rotate(360deg); }
         }
 
 
         .hero-content {
             position: relative;
             z-index: 10;
-            max-width: 950px; /* عرض أكبر للمحتوى */
+            max-width: 1000px; /* عرض أكبر للمحتوى */
             color: var(--light-text);
-            padding: 40px 30px; /* مساحة داخلية أكبر */
-            background: rgba(0, 0, 0, 0.5); /* خلفية شفافة أكثر */
-            border-radius: 20px;
-            backdrop-filter: blur(var(--glass-blur) + 2px); /* ضبابية أعلى */
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), var(--glow-strong); /* ظل وتوهج أقوى */
-            animation: fadeInScale 1.5s ease-out;
-            border: 2px solid rgba(88, 101, 242, 0.5); /* إطار متوهج */
+            padding: 50px 40px; /* مساحة داخلية أكبر */
+            background: rgba(13, 12, 29, 0.7); /* خلفية شفافة أكثر تناسقاً */
+            border-radius: 25px;
+            backdrop-filter: blur(var(--glass-blur) + 5px); /* ضبابية أعلى */
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7), var(--glow-strong); /* ظل وتوهج أقوى */
+            animation: fadeInScale 1.8s ease-out;
+            border: var(--neon-border); /* إطار نيون متوهج */
             overflow: hidden;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg); /* بدء منظور ثلاثي الأبعاد */
+            transition: transform 0.5s ease;
+        }
+        .hero-content:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg); /* تأثير منظور عند التحويم */
         }
 
+
         @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9); }
+            from { opacity: 0; transform: scale(0.85); }
             to { opacity: 1; transform: scale(1); }
         }
 
         .hero-content h1 {
-            font-size: 5rem; /* حجم أكبر بكثير */
-            margin-bottom: 35px;
+            font-size: 5.8rem; /* حجم أكبر بكثير - تم التعديل هنا */
+            margin-bottom: 40px;
             line-height: 1.1;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.9), 0 0 15px var(--accent-color); /* توهج أبيض وأصفر أقوى */
-            letter-spacing: 3px; /* تباعد الحروف أكثر */
+            text-shadow: 0 0 35px rgba(255, 255, 255, 1), 0 0 20px var(--accent-color); /* توهج أبيض وأصفر أقوى */
+            letter-spacing: 5px; /* تباعد الحروف أكثر - تم التعديل هنا */
             background: linear-gradient(90deg, #E0E0FF, var(--primary-color), #E0E0FF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
+            font-weight: 900; /* عريض جداً - تم التعديل هنا */
         }
 
         .hero-content p {
-            font-size: 1.55rem; /* حجم أكبر */
+            font-size: 1.7rem; /* حجم أكبر */
             opacity: 0.98;
-            margin-bottom: 60px; /* مسافة أكبر */
-            max-width: 750px;
+            margin-bottom: 70px; /* مسافة أكبر */
+            max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            text-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
         }
 
         .hero-buttons {
             display: flex;
             justify-content: center;
-            gap: 25px; /* مسافة أكبر بين الأزرار */
+            gap: 30px; /* مسافة أكبر بين الأزرار */
             flex-wrap: wrap;
         }
 
         /* أنيميشن الظهور التدريجي للأقسام */
         .section-animation {
             opacity: 0;
-            transform: translateY(70px); /* حركة أطول */
-            transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: translateY(90px); /* حركة أطول */
+            transition: opacity 1s cubic-bezier(0.25, 0.8, 0.25, 1), transform 1s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         .section-animation.in-view {
             opacity: 1;
@@ -429,9 +441,47 @@
         }
 
 
+        /* أنماط البطاقات العامة (للخصائص، التقييمات، إلخ) */
+        .glow-card {
+            background: var(--card-bg);
+            padding: 50px; /* مساحة داخلية أكبر */
+            border-radius: 25px;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
+            border: var(--neon-border); /* حدود نيونية */
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+            overflow: hidden;
+            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
+            will-change: transform, opacity, box-shadow; /* تحسين الأداء */
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+        }
+        .glow-card:hover {
+            transform: translateY(-15px) scale(1.04) perspective(1000px) rotateX(2deg) rotateY(-2deg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), var(--glow-strong);
+            border-color: var(--accent-color);
+        }
+        .glow-card::before { /* تأثير وهج داخلي عند التحويم */
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(254, 231, 92, 0.15), transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: -1;
+        }
+        .glow-card:hover::before {
+            opacity: 1;
+        }
+
         /* قسم الميزات (Features Section) */
         .features {
-            padding: 120px 0; /* مساحة داخلية أكبر */
+            padding: 120px 0;
             background-color: var(--dark-bg);
             position: relative;
             overflow: hidden;
@@ -441,97 +491,67 @@
         .features::before { /* شعار ديسكورد في الخلفية */
             content: '';
             position: absolute;
-            bottom: -30%; /* يظهر من الأسفل أكثر */
-            right: -30%; /* يظهر من اليمين أكثر */
-            width: 120%;
-            height: 120%;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Discord_logo_blue.svg/1200px-Discord_logo_blue.svg.png'); /* شعار ديسكورد */
+            bottom: -35%;
+            right: -35%;
+            width: 130%;
+            height: 130%;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Discord_logo_blue.svg/1200px-Discord_logo_blue.svg.png');
             background-repeat: no-repeat;
             background-position: bottom right;
-            background-size: 80%; /* حجم أكبر قليلاً */
-            opacity: 0.02; /* شفافية خفيفة جدا */
-            z-index: 0; /* تأكد أنها خلف كل شيء */
-            filter: blur(6px) brightness(0.7); /* ضبابية وتغميق أكثر */
-            animation: slideInRight 25s infinite alternate ease-in-out;
+            background-size: 85%;
+            opacity: 0.025;
+            z-index: 0;
+            filter: blur(8px) brightness(0.6);
+            animation: slideInRight 30s infinite alternate ease-in-out;
         }
         @keyframes slideInRight {
-            0% { transform: translateX(0); opacity: 0.02; }
-            50% { opacity: 0.04; }
-            100% { transform: translateX(-5%); opacity: 0.02; }
+            0% { transform: translateX(0); opacity: 0.025; }
+            50% { opacity: 0.05; }
+            100% { transform: translateX(-7%); opacity: 0.025; }
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* عرض أكبر للبطاقات */
-            gap: 50px; /* مسافة أكبر */
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* عرض أكبر للبطاقات */
+            gap: 60px; /* مسافة أكبر */
             margin-top: 80px;
             position: relative;
             z-index: 1;
         }
 
         .feature-item {
-            background: var(--card-bg); /* خلفية زجاجية */
-            padding: 45px; /* مساحة داخلية أكبر */
-            border-radius: 20px;
-            text-align: center;
-            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.5s ease;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--border-color); /* حدود أكثر وضوحاً */
-            backdrop-filter: blur(var(--glass-blur));
-            position: relative;
-            overflow: hidden;
-            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
-            will-change: transform, opacity, box-shadow; /* تحسين الأداء */
-        }
-        /* سيتم إضافة "in-view" بواسطة IntersectionObserver */
-
-        .feature-item::before { /* تأثير وهج داخلي */
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(254, 231, 92, 0.1), transparent 70%);
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: -1;
-        }
-        .feature-item:hover::before {
-            opacity: 1;
-        }
-
-        .feature-item:hover {
-            transform: translateY(-12px) scale(1.05); /* حركة وتكبير أكبر */
-            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.8), var(--glow-strong); /* ظل وتوهج أقوى بكثير */
-            border-color: var(--accent-color);
+            /* استخدم الفئة العامة للبطاقات المتوهجة */
+            @extend .glow-card;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .feature-item i {
-            font-size: 5.5rem; /* أيقونات أكبر بكثير */
+            font-size: 6rem; /* أيقونات أكبر بكثير */
             color: var(--accent-color); /* لون أصفر للأيقونات */
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             filter: var(--glow-filter); /* توهج للأيقونات */
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease, filter 0.4s ease;
         }
         .feature-item:hover i {
-            transform: rotateY(15deg) scale(1.1); /* دوران وتكبير للأيقونة */
+            transform: rotateY(20deg) scale(1.15); /* دوران وتكبير للأيقونة */
+            filter: drop-shadow(0 0 15px rgba(254, 231, 92, 0.8)) drop-shadow(0 0 25px rgba(254, 231, 92, 0.4));
         }
 
         .feature-item h3 {
-            font-size: 2.5rem; /* عناوين فرعية أكبر وأكثر بروزاً */
-            margin-bottom: 25px;
+            font-size: 2.8rem; /* عناوين فرعية أكبر وأكثر بروزاً */
+            margin-bottom: 28px;
             color: var(--light-text);
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 5px var(--primary-color);
-            font-weight: 700;
+            text-shadow: 0 0 18px rgba(255, 255, 255, 0.4), 0 0 8px var(--primary-color);
+            font-weight: 800;
         }
 
         .feature-item p {
             color: var(--soft-white);
-            font-size: 1.1rem;
-            opacity: 0.9;
-            line-height: 1.9;
+            font-size: 1.2rem;
+            opacity: 0.95;
+            line-height: 2;
         }
 
         /* قسم لوحة التحكم (Dashboard Preview) */
@@ -539,212 +559,177 @@
             padding: 120px 0;
             background-color: var(--dark-bg);
             overflow: hidden;
+            border-bottom: 2px solid var(--medium-dark-bg);
         }
 
         .dashboard-preview p {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: var(--soft-white);
             text-align: center;
-            margin-bottom: 60px;
-            max-width: 950px;
+            margin-bottom: 70px;
+            max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
         }
 
         .dashboard-screenshot {
             text-align: center;
-            margin-top: 60px;
-            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
+            margin-top: 70px;
+            opacity: 0;
             will-change: transform, opacity;
+            transform: perspective(1000px) rotateX(5deg) scale(0.95);
+            transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+        }
+        .dashboard-screenshot.in-view {
+            transform: perspective(1000px) rotateX(0deg) scale(1);
+            opacity: 1;
         }
 
         .dashboard-screenshot img {
-            max-width: 98%; /* أقصى عرض لتملأ المساحة */
+            max-width: 95%; /* أقصى عرض لتملأ المساحة */
             height: auto;
-            border-radius: 25px; /* حواف أكثر استدارة */
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px var(--primary-color); /* ظل وتوهج أقوى */
-            border: 4px solid var(--primary-color); /* حدود سميكة وبلون أساسي */
-            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            border-radius: 30px; /* حواف أكثر استدارة */
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), var(--glow-strong); /* ظل وتوهج أقوى */
+            border: 5px solid var(--primary-color); /* حدود سميكة وبلون أساسي */
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .dashboard-screenshot img:hover {
-            transform: scale(1.01); /* تكبير طفيف */
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), var(--glow-strong);
+            transform: scale(1.015); /* تكبير طفيف */
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), var(--glow-strong), 0 0 35px var(--accent-color);
         }
-
-        /* قسم ميزات الذكاء الاصطناعي (Gemini API Features) */
-        .gemini-section {
+        
+        /* قسم نظرة على السيرفر (Server Overview) */
+        .server-overview {
             padding: 120px 0;
             background-color: var(--medium-dark-bg);
             overflow: hidden;
             text-align: center;
+            position: relative;
             border-bottom: 2px solid var(--border-color);
-        }
-        .gemini-section .container {
-            max-width: 950px;
-        }
-        .gemini-card {
-            background: var(--card-bg);
-            padding: 45px;
-            border-radius: 20px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
-            border: 2px solid var(--border-color);
-            backdrop-filter: blur(var(--glass-blur));
-            margin-bottom: 50px; /* مسافة أكبر */
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.7s ease-out, transform 0.7s ease-out, box-shadow 0.4s ease;
-            will-change: transform, opacity, box-shadow;
-        }
-        .gemini-card.in-view {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .gemini-card:hover {
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(254, 231, 92, 0.6); /* توهج أصفر عند التحويم */
-        }
-
-        .gemini-card h3 {
-            font-size: 2.8rem; /* حجم أكبر */
-            color: var(--accent-color);
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(254, 231, 92, 0.6);
-            font-weight: 700;
-        }
-        .gemini-card textarea {
-            width: 100%;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 2px solid var(--border-color);
-            background-color: var(--dark-bg);
-            color: var(--light-text);
-            border-radius: 10px;
-            font-size: 1.1rem;
-            min-height: 120px;
-            resize: vertical;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: var(--inset-shadow);
-        }
-        .gemini-card textarea:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: var(--inset-shadow), 0 0 15px rgba(88, 101, 242, 0.6);
-        }
-        .gemini-card button {
-            margin-top: 15px;
-            width: auto;
-            padding: 15px 30px;
-            font-size: 1.05rem;
-        }
-        .gemini-output {
-            background-color: var(--dark-bg);
-            border: 2px solid var(--primary-color);
-            border-radius: 10px;
-            padding: 25px;
-            margin-top: 40px;
-            text-align: right;
-            min-height: 120px;
-            max-height: 450px;
-            overflow-y: auto;
-            color: var(--soft-white);
-            font-size: 1.15rem;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            position: relative;
-            box-shadow: var(--inset-shadow);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .gemini-output.loading::before {
-            content: 'جاري التوليد...';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--accent-color);
-            font-weight: bold;
-            font-size: 1.6rem;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-        .gemini-output.error {
-            border-color: #E04343; /* أحمر للخطأ */
-        }
-        .gemini-output:empty:not(.loading) {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--soft-white);
-            opacity: 0.6;
-        }
-        .gemini-output:empty:not(.loading)::before {
-            content: attr(data-placeholder);
-            position: static;
-            transform: none;
-            animation: none;
-            font-size: 1.15rem;
-        }
-
-        /* قسم نظرة على السيرفر (Server Overview) */
-        .server-overview {
-            padding: 120px 0;
-            background-color: var(--dark-bg);
-            overflow: hidden;
-            text-align: center;
-            position: relative;
-            border-bottom: 2px solid var(--medium-dark-bg);
         }
 
         .server-overview-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            margin-top: 60px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+            margin-top: 70px;
             position: relative;
             z-index: 1;
         }
 
         .server-stat-card {
-            background: var(--card-bg);
-            padding: 35px;
-            border-radius: 18px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(var(--glass-blur));
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            opacity: 0;
-            transform: translateY(30px);
-            will-change: transform, opacity;
-        }
-        .server-stat-card.in-view {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .server-stat-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-color);
+            /* استخدم الفئة العامة للبطاقات المتوهجة */
+            @extend .glow-card;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
         }
 
         .server-stat-card i {
-            font-size: 4rem;
+            font-size: 4.5rem;
             color: var(--primary-color);
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(88, 101, 242, 0.6));
+            margin-bottom: 25px;
+            filter: drop-shadow(0 0 12px rgba(88, 101, 242, 0.7));
+            transition: transform 0.3s ease;
+        }
+        .server-stat-card:hover i {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .server-stat-card .stat-value {
-            font-size: 3.2rem;
-            font-weight: bold;
+            font-size: 3.5rem;
+            font-weight: 900;
             color: var(--light-text);
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 8px var(--primary-color);
         }
 
         .server-stat-card .stat-label {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--soft-white);
             opacity: 0.9;
         }
+        
+        /* قسم Live Activity Feed */
+        .live-activity-feed {
+            padding: 120px 0;
+            background-color: var(--dark-bg);
+            overflow: hidden;
+            border-bottom: 2px solid var(--medium-dark-bg);
+        }
 
+        .activity-display {
+            background: rgba(13, 12, 29, 0.8);
+            border: var(--neon-border);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 900px;
+            margin: 60px auto 0;
+            height: 450px; /* ارتفاع ثابت */
+            overflow-y: scroll; /* شريط تمرير */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6), var(--neon-shadow);
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+        }
+        .activity-display::after {
+            content: '';
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px; /* منطقة شفافة في الأسفل */
+            background: linear-gradient(to top, var(--dark-bg) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            gap: 15px;
+            padding: 15px 20px;
+            background-color: rgba(43, 43, 74, 0.4);
+            border-radius: 12px;
+            border: 1px solid rgba(88, 101, 242, 0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: inset 0 0 10px rgba(88, 101, 242, 0.1);
+        }
+        .activity-item:last-child {
+            margin-bottom: 0;
+        }
+        .activity-item:hover {
+            background-color: rgba(88, 101, 242, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .activity-icon {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 5px rgba(254, 231, 92, 0.5));
+        }
+
+        .activity-content {
+            flex-grow: 1;
+            text-align: right;
+        }
+        .activity-content .message {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            margin-bottom: 5px;
+            line-height: 1.6;
+        }
+        .activity-content .timestamp {
+            font-size: 0.9rem;
+            color: var(--soft-white);
+            opacity: 0.7;
+        }
+        
         /* قسم بناء الأوامر المخصصة (Custom Command Builder) */
         .command-builder {
             padding: 120px 0;
@@ -755,61 +740,49 @@
         }
 
         .command-builder-content {
-            background: var(--card-bg);
+            /* استخدم الفئة العامة للبطاقات المتوهجة */
+            @extend .glow-card;
             padding: 50px;
-            border-radius: 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            border: 2px solid var(--primary-color);
-            backdrop-filter: blur(var(--glass-blur) + 2px);
             max-width: 1000px;
             margin: 60px auto 0;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-            will-change: transform, opacity;
-            position: relative;
-        }
-        .command-builder-content.in-view {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .command-builder-content h3 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             color: var(--light-text);
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
-            font-weight: 700;
+            margin-bottom: 35px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            font-weight: 800;
         }
 
         .builder-area {
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 30px;
             margin-top: 40px;
         }
 
         .command-input-group {
             display: flex;
             align-items: center;
-            background-color: var(--dark-bg);
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            padding: 15px 20px;
+            background-color: rgba(26, 25, 52, 0.6);
+            border-radius: 15px;
+            border: var(--neon-border);
+            padding: 18px 25px;
             box-shadow: var(--inset-shadow);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
         }
         .command-input-group:focus-within {
             border-color: var(--accent-color);
-            box-shadow: var(--inset-shadow), 0 0 10px rgba(254, 231, 92, 0.5);
+            box-shadow: var(--inset-shadow), 0 0 15px rgba(254, 231, 92, 0.6);
         }
 
         .command-input-group label {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--primary-color);
             font-weight: bold;
-            margin-left: 15px;
-            min-width: 100px; /* لتناسق التسميات */
+            margin-left: 20px;
+            min-width: 120px; /* لتناسق التسميات */
             text-align: right;
         }
 
@@ -820,8 +793,8 @@
             border: none;
             outline: none;
             color: var(--light-text);
-            font-size: 1.05rem;
-            padding: 8px 0;
+            font-size: 1.15rem;
+            padding: 10px 0;
         }
 
         .command-input-group select {
@@ -830,109 +803,201 @@
             -moz-appearance: none;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%235865F2"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>');
             background-repeat: no-repeat;
-            background-position: left 0.7em top 50%, 0 0;
-            background-size: 1.2em auto, 100%;
-            padding-left: 2.5em; /* مساحة للأيقونة */
+            background-position: left 0.8em top 50%, 0 0;
+            background-size: 1.3em auto, 100%;
+            padding-left: 3em; /* مساحة للأيقونة */
             cursor: pointer;
         }
 
         .command-preview {
-            background-color: var(--dark-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            padding: 25px;
-            margin-top: 40px;
+            background-color: rgba(13, 12, 29, 0.7);
+            border: var(--neon-border);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 50px;
             text-align: right;
-            min-height: 100px;
+            min-height: 120px;
             color: var(--soft-white);
-            font-size: 1.1rem;
-            line-height: 1.7;
+            font-size: 1.2rem;
+            line-height: 1.8;
             position: relative;
             box-shadow: var(--inset-shadow);
         }
         .command-preview::before {
             content: 'معاينة الأمر';
             position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 0.9rem;
+            top: 15px;
+            right: 20px;
+            font-size: 1rem;
             color: var(--accent-color);
-            opacity: 0.7;
+            opacity: 0.8;
         }
         .command-preview code {
             display: block;
-            background-color: rgba(0,0,0,0.3);
-            padding: 10px;
-            border-radius: 5px;
+            background-color: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 8px;
             color: #E0E0FF;
             font-family: 'Fira Code', 'monospace'; /* خط للبرمجة */
             white-space: pre-wrap;
             word-break: break-all;
+            box-shadow: inset 0 0 10px rgba(88, 101, 242, 0.2);
         }
 
+
+        /* قسم ميزات الذكاء الاصطناعي (Gemini API Features) */
+        .gemini-section {
+            padding: 120px 0;
+            background-color: var(--dark-bg);
+            overflow: hidden;
+            text-align: center;
+            border-bottom: 2px solid var(--medium-dark-bg);
+        }
+        .gemini-section .container {
+            max-width: 1000px;
+        }
+        .gemini-card {
+            /* استخدم الفئة العامة للبطاقات المتوهجة */
+            @extend .glow-card;
+            margin-bottom: 60px;
+        }
+
+        .gemini-card h3 {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 35px;
+            text-shadow: 0 0 20px rgba(254, 231, 92, 0.8);
+            font-weight: 800;
+        }
+        .gemini-card textarea {
+            width: 100%;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: var(--neon-border);
+            background-color: rgba(13, 12, 29, 0.6);
+            color: var(--light-text);
+            border-radius: 15px;
+            font-size: 1.2rem;
+            min-height: 150px;
+            resize: vertical;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: var(--inset-shadow);
+        }
+        .gemini-card textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: var(--inset-shadow), 0 0 20px rgba(254, 231, 92, 0.7);
+        }
+        .gemini-card button {
+            margin-top: 20px;
+            width: auto;
+            padding: 16px 35px;
+            font-size: 1.15rem;
+        }
+        .gemini-output {
+            background-color: rgba(13, 12, 29, 0.7);
+            border: var(--neon-border);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 45px;
+            text-align: right;
+            min-height: 150px;
+            max-height: 500px;
+            overflow-y: auto;
+            color: var(--soft-white);
+            font-size: 1.2rem;
+            line-height: 1.9;
+            white-space: pre-wrap;
+            position: relative;
+            box-shadow: var(--inset-shadow);
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .gemini-output.loading::before {
+            content: 'جاري التوليد...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.8rem;
+            animation: pulse 1.5s infinite ease-in-out;
+            z-index: 10;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+            100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+        }
+        .gemini-output.error {
+            border-color: #E04343; /* أحمر للخطأ */
+            box-shadow: var(--inset-shadow), 0 0 15px rgba(224, 67, 67, 0.7);
+        }
+        .gemini-output:empty:not(.loading) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--soft-white);
+            opacity: 0.7;
+        }
+        .gemini-output:empty:not(.loading)::before {
+            content: attr(data-placeholder);
+            position: static;
+            transform: none;
+            animation: none;
+            font-size: 1.2rem;
+        }
 
         /* قسم التقييمات (Testimonials Section) */
         .testimonials {
             padding: 120px 0;
-            background-color: var(--dark-bg); /* تغيير لون الخلفية لتمايز أفضل */
+            background-color: var(--medium-dark-bg); /* تغيير لون الخلفية لتمايز أفضل */
             text-align: center;
             position: relative;
             overflow: hidden;
-            border-bottom: 2px solid var(--medium-dark-bg);
+            border-bottom: 2px solid var(--border-color);
         }
 
         .testimonial-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* عرض أكبر للبطاقات */
-            gap: 45px;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); /* عرض أكبر للبطاقات */
+            gap: 50px;
             margin-top: 70px;
-            margin-bottom: 70px;
+            margin-bottom: 80px;
             position: relative;
             z-index: 1;
         }
 
         .testimonial-item {
-            background: var(--card-bg); /* خلفية زجاجية */
-            padding: 45px;
-            border-radius: 20px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+            /* استخدم الفئة العامة للبطاقات المتوهجة */
+            @extend .glow-card;
             text-align: right;
-            border: 2px solid var(--border-color);
-            transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 25px; /* مسافة أكبر */
-            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
-            will-change: transform, opacity, box-shadow;
-        }
-
-        .testimonial-item:hover {
-            transform: translateY(-10px) scale(1.03);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.7), var(--glow-strong);
-            border-color: var(--primary-color);
+            gap: 28px; /* مسافة أكبر */
         }
 
         .testimonial-author {
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            gap: 25px; /* مسافة أكبر */
+            gap: 28px; /* مسافة أكبر */
             width: 100%;
         }
 
         .testimonial-author img {
-            width: 80px; /* صور أكبر للمستخدمين */
-            height: 80px;
+            width: 90px; /* صور أكبر للمستخدمين */
+            height: 90px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--accent-color); /* حدود بلون التوهج (أصفر) */
-            box-shadow: 0 0 18px rgba(254, 231, 92, 0.6); /* توهج حول الصورة (أصفر) */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 5px solid var(--accent-color); /* حدود بلون التوهج (أصفر) */
+            box-shadow: 0 0 20px rgba(254, 231, 92, 0.7); /* توهج حول الصورة (أصفر) */
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
         .testimonial-author img:hover {
-            transform: rotateZ(5deg);
-            box-shadow: 0 0 25px rgba(254, 231, 92, 0.8);
+            transform: rotateZ(8deg) scale(1.05);
+            box-shadow: 0 0 30px rgba(254, 231, 92, 0.9);
         }
 
         .author-info {
@@ -940,135 +1005,134 @@
         }
 
         .author-info h4 {
-            font-size: 1.5rem; /* حجم أكبر */
+            font-size: 1.6rem; /* حجم أكبر */
             color: var(--primary-color);
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
-            font-weight: 700;
+            margin-bottom: 12px;
+            text-shadow: 0 0 12px rgba(88, 101, 242, 0.6);
+            font-weight: 800;
         }
 
         .author-info span {
-            font-size: 1.05rem;
+            font-size: 1.15rem;
             color: var(--soft-white);
             display: block;
-            opacity: 0.9;
+            opacity: 0.95;
         }
         
         .testimonial-item .testimonial-text-content {
-            font-size: 1.2rem; /* حجم نص أكبر */
+            font-size: 1.3rem; /* حجم نص أكبر */
             font-style: italic; /* نص مائل */
             color: var(--soft-white);
             margin-bottom: 0;
             text-align: right;
             width: 100%;
-            line-height: 1.9;
+            line-height: 2;
             quotes: "„" "“" "‚" "‘"; /* علامات اقتباس عربية */
         }
         .testimonial-text-content::before {
             content: open-quote;
-            font-size: 2em;
+            font-size: 2.2em;
             color: var(--accent-color);
             line-height: 0.1em;
             vertical-align: -0.4em;
             margin-left: 0.1em;
+            opacity: 0.8;
+            filter: var(--glow-filter);
         }
         .testimonial-text-content::after {
             content: close-quote;
-            font-size: 2em;
+            font-size: 2.2em;
             color: var(--accent-color);
             line-height: 0.1em;
             vertical-align: -0.4em;
             margin-right: 0.1em;
+            opacity: 0.8;
+            filter: var(--glow-filter);
         }
 
         /* قسم إضافة التعليق */
         .add-comment-section {
-            background: var(--card-bg); /* خلفية زجاجية */
-            padding: 55px; /* مساحة داخلية أكبر */
-            border-radius: 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--border-color);
-            max-width: 900px; /* عرض أكبر */
-            margin: 70px auto 0; /* مسافة أعلى وأسفل */
+            /* استخدم الفئة العامة للبطاقات المتوهجة */
+            @extend .glow-card;
+            padding: 60px; /* مساحة داخلية أكبر */
+            max-width: 950px; /* عرض أكبر */
+            margin: 70px auto 0;
             text-align: center;
-            backdrop-filter: blur(var(--glass-blur));
-            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
-            will-change: transform, opacity;
         }
 
         .add-comment-section h3 {
-            font-size: 2.5rem; /* حجم أكبر */
+            font-size: 2.8rem; /* حجم أكبر */
             color: var(--light-text);
-            margin-bottom: 35px;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-            font-weight: 700;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+            font-weight: 800;
         }
 
         .comment-input-area {
             display: flex;
             flex-direction: column;
-            gap: 25px; /* مسافة أكبر */
-            margin-bottom: 35px;
+            gap: 30px; /* مسافة أكبر */
+            margin-bottom: 40px;
         }
 
         .comment-input-area textarea {
             width: 100%;
-            padding: 22px; /* مساحة داخلية أكبر */
-            border: 2px solid var(--border-color);
-            background-color: var(--dark-bg); /* خلفية داكنة */
+            padding: 25px; /* مساحة داخلية أكبر */
+            border: var(--neon-border);
+            background-color: rgba(13, 12, 29, 0.6); /* خلفية داكنة */
             color: var(--light-text);
-            border-radius: 12px; /* حواف أكثر استدارة */
-            font-size: 1.15rem; /* حجم خط أكبر */
-            min-height: 180px; /* ارتفاع أكبر */
+            border-radius: 15px; /* حواف أكثر استدارة */
+            font-size: 1.2rem; /* حجم خط أكبر */
+            min-height: 200px; /* ارتفاع أكبر */
             resize: vertical;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
             box-shadow: var(--inset-shadow);
         }
 
         .comment-input-area textarea:focus {
             border-color: var(--primary-color);
             outline: none;
-            box-shadow: var(--inset-shadow), 0 0 20px rgba(88, 101, 242, 0.7); /* توهج عند التركيز */
+            box-shadow: var(--inset-shadow), 0 0 25px rgba(88, 101, 242, 0.8); /* توهج عند التركيز */
         }
 
         .comment-submit-button {
             width: auto;
-            padding: 16px 40px; /* حجم زر أكبر */
+            padding: 18px 45px; /* حجم زر أكبر */
             align-self: flex-end;
-            font-size: 1.15rem;
+            font-size: 1.25rem;
         }
 
         .login-prompt {
             background-color: var(--medium-dark-bg);
-            padding: 35px;
-            border-radius: 15px;
-            margin-top: 45px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-color);
+            padding: 40px;
+            border-radius: 18px;
+            margin-top: 50px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--border-color);
         }
         .login-prompt p {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: var(--soft-white);
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
         .login-prompt .btn {
-            padding: 14px 28px;
-            font-size: 1.05rem;
+            padding: 16px 30px;
+            font-size: 1.15rem;
         }
 
         .message-box {
             background: linear-gradient(90deg, var(--secondary-color), #60C99E); /* تدرج أخضر */
             color: var(--light-text);
-            padding: 25px;
-            border-radius: 12px;
-            margin-top: 30px;
-            font-size: 1.3rem;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 35px;
+            font-size: 1.4rem;
             opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.5s ease, transform 0.5s ease, background-color 0.4s ease;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-weight: 600;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease, transform 0.6s ease, background-color 0.5s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-weight: 700;
         }
         .message-box.show {
             opacity: 1;
@@ -1088,66 +1152,62 @@
         }
 
         .faq-item {
-            background: var(--card-bg); /* خلفية زجاجية */
-            margin-bottom: 25px;
-            border-radius: 20px;
-            border: 2px solid var(--border-color);
+            /* استخدم الفئة العامة للبطاقات المتوهجة */
+            @extend .glow-card;
+            margin-bottom: 30px;
+            padding: 0; /* سنقوم بتعيينها داخليًا */
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-            transition: box-shadow 0.4s ease, transform 0.3s ease;
-            backdrop-filter: blur(var(--glass-blur));
-            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
-            will-change: transform, opacity;
         }
         .faq-item:hover {
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.2);
-            transform: translateY(-8px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.7), var(--neon-shadow);
+            transform: translateY(-10px);
         }
 
         .faq-question {
-            padding: 30px 35px; /* مساحة داخلية أكبر */
+            padding: 35px 40px; /* مساحة داخلية أكبر */
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1.4rem; /* حجم أكبر */
+            font-size: 1.5rem; /* حجم أكبر */
             font-weight: bold;
             color: var(--light-text);
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.4s ease, color 0.4s ease;
             border-bottom: 1px solid transparent;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
         .faq-question:hover {
-            background-color: var(--border-color);
+            background-color: rgba(43, 43, 74, 0.6);
             color: var(--primary-color);
         }
 
         .faq-question i {
-            transition: transform 0.3s ease;
+            transition: transform 0.4s ease;
             color: var(--primary-color);
             filter: var(--glow-filter);
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
 
         .faq-answer {
-            padding: 0 35px;
+            padding: 0 40px;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), padding 0.5s ease-out;
-            font-size: 1.1rem;
+            transition: max-height 0.7s cubic-bezier(0.25, 0.8, 0.25, 1), padding 0.6s ease-out;
+            font-size: 1.15rem;
             color: var(--soft-white);
-            line-height: 1.9;
-            opacity: 0.9;
+            line-height: 2;
+            opacity: 0.95;
+            text-align: right;
         }
 
         .faq-item.active .faq-answer {
-            max-height: 400px; /* تعديل حسب الحاجة */
-            padding: 20px 35px 30px;
+            max-height: 500px; /* تعديل حسب الحاجة */
+            padding: 25px 40px 35px;
         }
 
         .faq-item.active .faq-question {
-            border-bottom-color: var(--border-color);
+            border-bottom-color: rgba(60, 60, 96, 0.5);
             background-color: var(--medium-dark-bg);
             color: var(--accent-color);
         }
@@ -1167,48 +1227,43 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 60px; /* مسافة أكبر */
-            max-width: 950px;
+            gap: 70px; /* مسافة أكبر */
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .contact-form {
+            /* استخدم الفئة العامة للبطاقات المتوهجة */
+            @extend .glow-card;
             width: 100%;
-            background: var(--card-bg); /* خلفية زجاجية */
-            padding: 55px;
-            border-radius: 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            border: 2px solid var(--border-color);
-            backdrop-filter: blur(var(--glass-blur));
-            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
-            will-change: transform, opacity;
+            padding: 60px;
         }
 
         .contact-form .form-group {
-            margin-bottom: 30px; /* مسافة أكبر */
+            margin-bottom: 35px; /* مسافة أكبر */
             text-align: right;
         }
 
         .contact-form label {
             display: block;
-            margin-bottom: 12px; /* مسافة أكبر */
+            margin-bottom: 15px; /* مسافة أكبر */
             font-weight: bold;
             color: var(--light-text);
-            font-size: 1.2rem;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            font-size: 1.3rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
         .contact-form input[type="text"],
         .contact-form input[type="email"],
         .contact-form textarea {
             width: 100%;
-            padding: 18px 25px; /* مساحة داخلية أكبر */
-            border: 2px solid var(--border-color);
-            background-color: var(--dark-bg);
+            padding: 20px 28px; /* مساحة داخلية أكبر */
+            border: var(--neon-border);
+            background-color: rgba(13, 12, 29, 0.6);
             color: var(--light-text);
-            border-radius: 12px;
-            font-size: 1.1rem;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
             box-shadow: var(--inset-shadow);
         }
 
@@ -1216,30 +1271,30 @@
         .contact-form input[type="email"]:focus,
         .contact-form textarea:focus {
             border-color: var(--primary-color);
-            box-shadow: var(--inset-shadow), 0 0 18px rgba(88, 101, 242, 0.7);
+            box-shadow: var(--inset-shadow), 0 0 20px rgba(88, 101, 242, 0.8);
             outline: none;
         }
 
         .contact-form textarea {
             resize: vertical;
-            min-height: 200px; /* ارتفاع أكبر */
+            min-height: 220px; /* ارتفاع أكبر */
         }
 
         .contact-form button {
             width: 100%;
-            padding: 20px; /* حجم زر أكبر */
-            font-size: 1.3rem;
+            padding: 22px; /* حجم زر أكبر */
+            font-size: 1.4rem;
             font-weight: bold;
         }
 
         /* التذييل (Footer) */
         .footer {
-            background-color: var(--dark-bg); /* تغيير لون الخلفية للتطابق */
-            padding: 60px 0; /* مساحة داخلية أكبر */
+            background-color: var(--dark-bg);
+            padding: 70px 0;
             border-top: 2px solid var(--border-color);
             text-align: center;
             color: var(--soft-white);
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             position: relative;
             z-index: 1;
         }
@@ -1248,61 +1303,61 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 30px; /* مسافة أكبر */
+            gap: 35px;
         }
 
         .footer-links {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 30px 50px; /* مسافة أكبر */
-            margin-bottom: 30px;
+            gap: 35px 60px;
+            margin-bottom: 35px;
         }
 
         .footer-links li a {
             color: var(--soft-white);
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-            font-size: 1.1rem;
-            font-weight: 500;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
 
         .footer-links li a:hover {
             color: var(--primary-color);
-            text-shadow: 0 0 10px rgba(88, 101, 242, 0.6);
+            text-shadow: 0 0 12px rgba(88, 101, 242, 0.7);
         }
 
         .social-media {
-            margin-top: 25px;
-            margin-bottom: 30px;
+            margin-top: 30px;
+            margin-bottom: 35px;
         }
 
         .social-media a {
             color: var(--light-text);
-            font-size: 2.2rem; /* أيقونات أكبر */
-            margin: 0 15px;
-            transition: color 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+            font-size: 2.5rem;
+            margin: 0 18px;
+            transition: color 0.4s ease, transform 0.4s ease, filter 0.4s ease;
         }
 
         .social-media a:hover {
             color: var(--primary-color);
-            transform: translateY(-5px) scale(1.2);
+            transform: translateY(-8px) scale(1.25);
             filter: var(--glow-filter);
         }
 
         /* قسم اختيار اللغة والأيقونة المخصصة */
         .language-selector-section {
-            margin-top: 50px; /* مسافة أعلى أكبر */
-            padding-top: 35px;
+            margin-top: 60px;
+            padding-top: 40px;
             border-top: 2px solid var(--border-color);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
+            gap: 35px;
         }
 
         .language-selector {
             display: flex;
-            gap: 25px;
+            gap: 30px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -1310,21 +1365,21 @@
         .lang-button {
             background-color: var(--medium-dark-bg);
             color: var(--soft-white);
-            padding: 14px 25px; /* حجم زر أكبر */
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
+            padding: 16px 30px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
             cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
             font-weight: bold;
-            font-size: 1.05rem;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            font-size: 1.15rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
         .lang-button:hover {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
             color: var(--light-text);
-            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
+            box-shadow: 0 8px 20px rgba(88, 101, 242, 0.5);
         }
 
         .lang-button.active {
@@ -1332,19 +1387,19 @@
             border-color: var(--primary-color);
             color: var(--light-text);
             pointer-events: none;
-            box-shadow: 0 6px 18px rgba(88, 101, 242, 0.5);
+            box-shadow: 0 10px 25px rgba(88, 101, 242, 0.6);
         }
 
         .custom-icon img {
-            width: 70px; /* أيقونة أكبر */
-            height: 70px;
+            width: 80px;
+            height: 80px;
             object-fit: contain;
-            margin-top: 25px;
-            filter: drop-shadow(0 0 15px rgba(88, 101, 242, 0.8)); /* توهج أكبر */
-            transition: transform 0.3s ease, filter 0.3s ease;
+            margin-top: 30px;
+            filter: drop-shadow(0 0 20px rgba(88, 101, 242, 0.9));
+            transition: transform 0.4s ease, filter 0.4s ease;
         }
         .custom-icon img:hover {
-            transform: scale(1.1) rotate(5deg);
+            transform: scale(1.15) rotate(8deg);
         }
 
         /* المودال للمطور */
@@ -1356,12 +1411,12 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.9); /* خلفية داكنة أكثر */
+            background-color: rgba(0,0,0,0.95);
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.5s ease;
-            backdrop-filter: blur(var(--glass-blur) + 5px); /* ضبابية أعلى */
+            transition: opacity 0.6s ease;
+            backdrop-filter: blur(var(--glass-blur) + 8px);
         }
 
         .developer-modal.show {
@@ -1370,18 +1425,18 @@
         }
 
         .modal-content {
-            background: linear-gradient(135deg, rgba(43, 43, 74, 0.95), rgba(26, 26, 46, 0.95)); /* خلفية متدرجة للمودال */
-            padding: 50px;
-            border: 2px solid var(--primary-color);
-            border-radius: 25px;
+            background: linear-gradient(135deg, rgba(43, 43, 74, 0.98), rgba(26, 26, 46, 0.98));
+            padding: 60px;
+            border: 3px solid var(--primary-color);
+            border-radius: 30px;
             width: 90%;
-            max-width: 500px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.8), var(--glow-strong); /* ظل وتوهج أقوى */
+            max-width: 550px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9), var(--glow-strong);
             text-align: center;
-            transform: translateY(-80px); /* يبدأ من مكان أبعد */
+            transform: translateY(-100px);
             opacity: 0;
-            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-            backdrop-filter: blur(var(--glass-blur));
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+            backdrop-filter: blur(var(--glass-blur) + 3px);
         }
 
         .developer-modal.show .modal-content {
@@ -1392,72 +1447,70 @@
         .close-button {
             color: var(--soft-white);
             float: left;
-            font-size: 38px; /* حجم أكبر */
+            font-size: 42px;
             font-weight: bold;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
+            transition: color 0.4s ease, text-shadow 0.4s ease;
         }
 
         .close-button:hover,
         .close-button:focus {
             color: var(--accent-color);
-            text-shadow: 0 0 12px var(--accent-color);
+            text-shadow: 0 0 15px var(--accent-color);
             cursor: pointer;
         }
 
         .modal-content h3 {
             color: var(--primary-color);
-            font-size: 2.8rem;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(88, 101, 242, 0.6);
-            font-weight: 700;
+            font-size: 3rem;
+            margin-bottom: 35px;
+            text-shadow: 0 0 20px rgba(88, 101, 242, 0.7);
+            font-weight: 800;
         }
 
         .modal-content img {
-            width: 150px; /* صورة مطور أكبر */
-            height: 150px;
+            width: 170px;
+            height: 170px;
             border-radius: 50%;
             object-fit: cover;
-            border: 5px solid var(--accent-color);
-            margin-bottom: 25px;
-            box-shadow: 0 0 25px rgba(254, 231, 92, 0.7); /* توهج أصفر أقوى */
+            border: 6px solid var(--accent-color);
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(254, 231, 92, 0.8);
         }
 
         .modal-content p {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: var(--soft-white);
-            margin-bottom: 18px;
-            opacity: 0.95;
-            line-height: 1.8;
+            margin-bottom: 20px;
+            opacity: 0.98;
+            line-height: 1.9;
         }
 
         /* الاستجابة لتصغير الشاشات (Responsive Design) */
-        @media (max-width: 992px) {
+        @media (max-width: 1024px) {
             .hero-content h1 {
-                font-size: 4rem;
+                font-size: 4.5rem;
+                letter-spacing: 4px;
             }
             .hero-content p {
-                font-size: 1.35rem;
+                font-size: 1.4rem;
             }
             .section-heading {
-                font-size: 3rem;
+                font-size: 3.5rem;
             }
-            .feature-item h3 {
-                font-size: 2.2rem;
+            .feature-item h3, .gemini-card h3, .command-builder-content h3 {
+                font-size: 2.5rem;
             }
-            .gemini-card h3 {
-                font-size: 2.3rem;
+            .feature-item i {
+                font-size: 5rem;
             }
             .server-stat-card .stat-value {
-                font-size: 2.8rem;
+                font-size: 3rem;
             }
             .server-stat-card .stat-label {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
             }
-            .command-builder-content h3 {
-                font-size: 2.3rem;
-            }
-            .command-input-group label {
-                min-width: 80px;
+            .testimonial-item .testimonial-text-content {
+                font-size: 1.2rem;
             }
         }
 
@@ -1474,10 +1527,10 @@
                 flex-direction: column;
                 width: 100%;
                 text-align: center;
-                margin-top: 20px;
-                background-color: rgba(43, 43, 74, 0.95);
-                padding: 15px 0;
-                border-radius: 10px;
+                margin-top: 25px;
+                background-color: rgba(13, 12, 29, 0.95);
+                padding: 20px 0;
+                border-radius: 15px;
                 order: 3;
             }
             .nav-links.active {
@@ -1485,7 +1538,7 @@
             }
             .auth-buttons {
                 margin-left: 0;
-                margin-top: 20px;
+                margin-top: 25px;
                 width: 100%;
                 justify-content: center;
                 order: 2;
@@ -1498,15 +1551,16 @@
                 order: 0;
             }
             .hero-content h1 {
-                font-size: 3.2rem;
+                font-size: 3.5rem;
+                letter-spacing: 3px;
             }
             .hero-content p {
-                font-size: 1.2rem;
-                margin-bottom: 40px;
+                font-size: 1.3rem;
+                margin-bottom: 50px;
             }
             .hero-buttons {
                 flex-direction: column;
-                gap: 18px;
+                gap: 20px;
             }
             .hero-buttons .btn {
                 width: 90%;
@@ -1516,139 +1570,171 @@
                 grid-template-columns: 1fr;
             }
             .section-heading {
-                font-size: 2.5rem;
-                margin-bottom: 40px;
+                font-size: 3rem;
+                margin-bottom: 50px;
             }
-            .feature-item, .testimonial-item, .add-comment-section, .contact-form, .faq-item, .gemini-card, .server-stat-card, .command-builder-content {
-                padding: 35px;
-                margin-bottom: 35px;
+            .glow-card {
+                padding: 40px;
+                margin-bottom: 40px;
             }
             .feature-item i {
                 font-size: 4.5rem;
             }
             .feature-item h3 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             .testimonial-author img {
-                width: 70px;
-                height: 70px;
+                width: 80px;
+                height: 80px;
             }
             .testimonial-author h4 {
-                font-size: 1.4rem;
+                font-size: 1.5rem;
             }
             .testimonial-item .testimonial-text-content {
-                font-size: 1.1rem;
+                font-size: 1.15rem;
             }
             .add-comment-section h3 {
-                font-size: 2.2rem;
-            }
-            .comment-input-area textarea {
-                min-height: 150px;
-            }
-            .faq-question {
-                font-size: 1.25rem;
-                padding: 25px 30px;
-            }
-            .faq-answer {
-                font-size: 1.05rem;
-                padding: 15px 30px 25px;
-            }
-            .contact-form label {
-                font-size: 1.1rem;
-            }
-            .contact-form input[type="text"], .contact-form input[type="email"], .contact-form textarea {
-                padding: 15px 20px;
-            }
-            .contact-form textarea {
-                min-height: 180px;
-            }
-            .gemini-card h3 {
-                font-size: 2.1rem;
-            }
-            .gemini-output {
-                font-size: 1.05rem;
-            }
-            .server-stat-card .stat-value {
                 font-size: 2.5rem;
             }
+            .comment-input-area textarea {
+                min-height: 180px;
+            }
+            .faq-question {
+                font-size: 1.35rem;
+                padding: 30px 35px;
+            }
+            .faq-answer {
+                font-size: 1.1rem;
+                padding: 20px 35px 30px;
+            }
+            .contact-form label {
+                font-size: 1.2rem;
+            }
+            .contact-form input[type="text"], .contact-form input[type="email"], .contact-form textarea {
+                padding: 18px 25px;
+            }
+            .contact-form textarea {
+                min-height: 200px;
+            }
+            .gemini-card h3 {
+                font-size: 2.4rem;
+            }
+            .gemini-output {
+                font-size: 1.1rem;
+            }
+            .server-stat-card .stat-value {
+                font-size: 2.8rem;
+            }
             .command-builder-content h3 {
-                font-size: 2.2rem;
+                font-size: 2.4rem;
             }
             .command-input-group label {
                 min-width: auto;
-                margin-left: 10px;
-                text-align: right;
+                margin-left: 15px;
             }
             .command-input-group input[type="text"],
             .command-input-group select {
-                font-size: 1rem;
-                padding: 6px 0;
+                font-size: 1.05rem;
+                padding: 8px 0;
+            }
+            .activity-display {
+                height: 400px;
             }
         }
 
         @media (max-width: 480px) {
             .logo span {
-                font-size: 1.8rem;
-            }
-            .hero-content h1 {
-                font-size: 2.5rem;
-                letter-spacing: 1px;
-            }
-            .hero-content p {
-                font-size: 1rem;
-                margin-bottom: 30px;
-            }
-            .btn {
-                padding: 12px 25px;
-                font-size: 0.95rem;
-            }
-            .section-heading {
                 font-size: 2rem;
             }
+            .hero-content h1 {
+                font-size: 2.8rem;
+                letter-spacing: 2px;
+            }
+            .hero-content p {
+                font-size: 1.1rem;
+                margin-bottom: 40px;
+            }
+            .btn {
+                padding: 14px 30px;
+                font-size: 1rem;
+                gap: 8px;
+            }
+            .section-heading {
+                font-size: 2.5rem;
+            }
+            .glow-card {
+                padding: 30px;
+            }
             .feature-item h3 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             .feature-item i {
-                font-size: 3.5rem;
+                font-size: 4rem;
             }
             .testimonial-item p {
                 font-size: 1rem;
             }
             .language-selector {
                 flex-direction: column;
-                gap: 15px;
-                width: 90%;
+                gap: 20px;
+                width: 95%;
             }
             .lang-button {
                 width: 100%;
             }
             .modal-content {
-                padding: 30px;
+                padding: 35px;
             }
             .modal-content h3 {
-                font-size: 2rem;
-            }
-            .modal-content img {
-                width: 120px;
-                height: 120px;
-            }
-            .modal-content p {
-                font-size: 1.1rem;
-            }
-            .gemini-card h3 {
-                font-size: 1.8rem;
-            }
-            .gemini-card button {
-                font-size: 0.95rem;
-            }
-            .server-stat-card .stat-value {
                 font-size: 2.2rem;
             }
+            .modal-content img {
+                width: 140px;
+                height: 140px;
+            }
+            .modal-content p {
+                font-size: 1.2rem;
+            }
+            .gemini-card h3 {
+                font-size: 2rem;
+            }
+            .gemini-card textarea {
+                padding: 20px;
+                min-height: 120px;
+            }
+            .gemini-card button {
+                font-size: 1rem;
+            }
+            .server-stat-card .stat-value {
+                font-size: 2.5rem;
+            }
             .server-stat-card .stat-label {
-                font-size: 0.95rem;
+                font-size: 1.05rem;
             }
             .command-builder-content h3 {
-                font-size: 1.8rem;
+                font-size: 2rem;
+            }
+            .command-input-group label {
+                margin-left: 10px;
+                font-size: 1.05rem;
+            }
+            .command-input-group input[type="text"],
+            .command-input-group select {
+                font-size: 0.95rem;
+            }
+            .activity-display {
+                height: 350px;
+                padding: 25px;
+            }
+            .activity-item {
+                padding: 12px 15px;
+                gap: 10px;
+            }
+            .activity-icon {
+                font-size: 1.5rem;
+            }
+            .activity-content .message {
+                font-size: 1rem;
             }
         }
 
@@ -1658,7 +1744,7 @@
             text-align: left;
         }
         body.en .logo img, body.fr .logo img, body.zh .logo img {
-            margin-right: 15px;
+            margin-right: 18px;
             margin-left: 0;
         }
         body.en .nav-links, body.fr .nav-links, body.zh .nav-links {
@@ -1670,7 +1756,7 @@
             left: 0;
         }
         body.en .auth-buttons, body.fr .auth-buttons, body.zh .auth-buttons {
-            margin-right: 25px;
+            margin-right: 30px;
             margin-left: 0;
         }
         body.en .section-heading::after, body.fr .section-heading::after, body.zh .section-heading::after {
@@ -1688,7 +1774,7 @@
             justify-content: flex-start;
         }
         body.en .testimonial-author img, body.fr .testimonial-author img, body.zh .testimonial-author img {
-            margin-right: 25px;
+            margin-right: 28px;
             margin-left: 0;
         }
         body.en .contact-form .form-group, body.fr .contact-form .form-group, body.zh .contact-form .form-group {
@@ -1712,18 +1798,28 @@
             margin-right: 0;
         }
         body.en .command-input-group label, body.fr .command-input-group label, body.zh .command-input-group label {
-            margin-right: 15px;
+            margin-right: 20px;
             margin-left: 0;
             text-align: left;
         }
         body.en .command-input-group select, body.fr .command-input-group select, body.zh .command-input-group select {
-            background-position: right 0.7em top 50%, 0 0;
-            padding-right: 2.5em;
+            background-position: right 0.8em top 50%, 0 0;
+            padding-right: 3em;
             padding-left: 0;
         }
         body.en .command-preview::before, body.fr .command-preview::before, body.zh .command-preview::before {
             right: unset;
-            left: 15px;
+            left: 20px;
+        }
+        body.en .activity-item, body.fr .activity-item, body.zh .activity-item {
+            flex-direction: row-reverse; /* Icons on the left */
+        }
+        body.en .activity-icon, body.fr .activity-icon, body.zh .activity-icon {
+            margin-right: 15px; /* Add margin to the right of the icon */
+            margin-left: 0;
+        }
+        body.en .activity-content, body.fr .activity-content, body.zh .activity-content {
+            text-align: left;
         }
     </style>
 </head>
@@ -1740,8 +1836,9 @@
                     <li><a href="#hero" data-lang-key="home">الرئيسية</a></li>
                     <li><a href="#features" data-lang-key="features">الميزات</a></li>
                     <li><a href="#dashboard" data-lang-key="dashboard">لوحة التحكم</a></li>
-                    <li><a href="#server-overview" data-lang-key="server_overview_nav">نظرة على السيرفر</a></li> <!-- New Nav Link -->
-                    <li><a href="#command-builder" data-lang-key="command_builder_nav">بناء الأوامر</a></li> <!-- New Nav Link -->
+                    <li><a href="#server-overview" data-lang-key="server_overview_nav">نظرة على السيرفر</a></li>
+                    <li><a href="#live-activity" data-lang-key="live_activity_nav">النشاط المباشر</a></li> <!-- New Nav Link -->
+                    <li><a href="#command-builder" data-lang-key="command_builder_nav">بناء الأوامر</a></li>
                     <li><a href="#llm-features" data-lang-key="llm_features_nav">ميزات الذكاء الاصطناعي</a></li>
                     <li><a href="#testimonials" data-lang-key="testimonials">التقييمات</a></li>
                     <li><a href="#faq" data-lang-key="faq">الأسئلة الشائعة</a></li>
@@ -1782,32 +1879,32 @@
             <div class="container">
                 <h2 class="section-heading" data-lang-key="features_title">ميزات قوية، تحكم كامل</h2>
                 <div class="features-grid">
-                    <div class="feature-item">
+                    <div class="feature-item glow-card">
                         <i class="fas fa-cogs"></i>
                         <h3 data-lang-key="feature1_title">إدارة الأوامر</h3>
                         <p data-lang-key="feature1_desc">تحكم بأوامر البوت الخاصة بك، وقم بتفعيلها أو تعطيلها، وتخصيصها بسهولة.</p>
                     </div>
-                    <div class="feature-item">
+                    <div class="feature-item glow-card">
                         <i class="fas fa-users-cog"></i>
                         <h3 data-lang-key="feature2_title">إدارة الأعضاء</h3>
                         <p data-lang-key="feature2_desc">أدوات متقدمة لإدارة الأعضاء، الأدوار، والعقوبات في خادمك.</p>
                     </div>
-                    <div class="feature-item">
+                    <div class="feature-item glow-card">
                         <i class="fab fa-youtube" style="color: var(--primary-color);"></i>
                         <h3 data-lang-key="feature3_title">نظام لليوتيوبرز</h3>
                         <p data-lang-key="feature3_desc">استخدم البوت لتنبيه الأعضاء بآخر فيديو تم تنزيله على قناتك، كما يمكنك إنشاء غرفة لتكون عداد مشتركين يتم تحديثه تلقائيًا.</p>
                     </div>
-                    <div class="feature-item">
+                    <div class="feature-item glow-card">
                         <i class="fas fa-shield-alt"></i>
                         <h3 data-lang-key="feature4_title">نظام حماية</h3>
                         <p data-lang-key="feature4_desc">حافظ على أمان خادمك من خلال أنظمة حماية متقدمة ضد السبام والاختراق.</p>
                     </div>
-                    <div class="feature-item">
+                    <div class="feature-item glow-card">
                         <i class="fas fa-ticket-alt" style="color: var(--primary-color);"></i>
                         <h3 data-lang-key="feature5_title">نظام التذاكر</h3>
                         <p data-lang-key="feature5_desc">نظام التذاكر الاحترافي الذي يسهل على الأعضاء التواصل مع الإداريين وطلب المساعدة بكفاءة، إنه أفضل نظام تذاكر على الإطلاق.</p>
                     </div>
-                    <div class="feature-item">
+                    <div class="feature-item glow-card">
                         <i class="fas fa-music" style="color: var(--primary-color);"></i>
                         <h3 data-lang-key="feature6_title">تشغيل الأغاني</h3>
                         <p data-lang-key="feature6_desc">يستطيع البوت تشغيل الأغاني المفضلة في غرفتك الصوتية على ديسكورد بجودة عالية وبدون تقطيع، مع دعم قوائم التشغيل والتحكم الكامل.</p>
@@ -1829,7 +1926,7 @@
             </div>
         </section>
 
-        <!-- قسم نظرة على السيرفر (Server Overview Section - NEW) -->
+        <!-- قسم نظرة على السيرفر (Server Overview Section) -->
         <section id="server-overview" class="server-overview section-animation">
             <div class="container">
                 <h2 class="section-heading" data-lang-key="server_overview_title">📊 نظرة على سيرفرك</h2>
@@ -1837,32 +1934,32 @@
                     تابع أهم الإحصائيات الحيوية لسيرفرك في الوقت الفعلي، من الأعضاء النشطين إلى الرسائل المرسلة والمزيد.
                 </p>
                 <div class="server-overview-grid">
-                    <div class="server-stat-card">
+                    <div class="server-stat-card glow-card">
                         <i class="fas fa-users"></i>
                         <div class="stat-value" id="total-members">15,340</div>
                         <div class="stat-label" data-lang-key="total_members">إجمالي الأعضاء</div>
                     </div>
-                    <div class="server-stat-card">
+                    <div class="server-stat-card glow-card">
                         <i class="fas fa-user-plus"></i>
                         <div class="stat-value" id="new-members-today">245</div>
                         <div class="stat-label" data-lang-key="new_members_today">أعضاء جدد اليوم</div>
                     </div>
-                    <div class="server-stat-card">
+                    <div class="server-stat-card glow-card">
                         <i class="fas fa-user-friends"></i>
                         <div class="stat-value" id="online-members">9,876</div>
                         <div class="stat-label" data-lang-key="online_members">الأعضاء المتصلون</div>
                     </div>
-                    <div class="server-stat-card">
+                    <div class="server-stat-card glow-card">
                         <i class="fas fa-comments"></i>
                         <div class="stat-value" id="messages-sent">123,456</div>
                         <div class="stat-label" data-lang-key="messages_sent">الرسائل المرسلة (اليوم)</div>
                     </div>
-                    <div class="server-stat-card">
+                    <div class="server-stat-card glow-card">
                         <i class="fas fa-hashtag"></i>
                         <div class="stat-value" id="total-channels">120</div>
                         <div class="stat-label" data-lang-key="total_channels">إجمالي القنوات</div>
                     </div>
-                    <div class="server-stat-card">
+                    <div class="server-stat-card glow-card">
                         <i class="fas fa-robot"></i>
                         <div class="stat-value" id="commands-used">7,890</div>
                         <div class="stat-label" data-lang-key="commands_used">الأوامر المستخدمة (اليوم)</div>
@@ -1871,14 +1968,27 @@
             </div>
         </section>
 
-        <!-- قسم بناء الأوامر المخصصة (Custom Command Builder Section - NEW) -->
+        <!-- قسم Live Activity Feed (NEW) -->
+        <section id="live-activity" class="live-activity-feed section-animation">
+            <div class="container">
+                <h2 class="section-heading" data-lang-key="live_activity_title">⚡ نشاط البوت المباشر</h2>
+                <p data-lang-key="live_activity_desc">
+                    شاهد كيف يتفاعل بوت VND مع سيرفرات الديسكورد في الوقت الفعلي، من الأوامر إلى الأحداث.
+                </p>
+                <div class="activity-display glow-card">
+                    <!-- Dynamic content will be injected here by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم بناء الأوامر المخصصة (Custom Command Builder Section) -->
         <section id="command-builder" class="command-builder section-animation">
             <div class="container">
                 <h2 class="section-heading" data-lang-key="command_builder_title">🛠️ بناء الأوامر المخصصة</h2>
                 <p data-lang-key="command_builder_desc">
                     أنشئ أوامر بوت فريدة لسيرفرك باستخدام واجهة سهلة وسلسة، دون الحاجة لأي برمجة!
                 </p>
-                <div class="command-builder-content">
+                <div class="command-builder-content glow-card">
                     <h3>بناء أمر جديد</h3>
                     <div class="builder-area">
                         <div class="command-input-group">
@@ -1912,7 +2022,7 @@
                 <h2 class="section-heading" data-lang-key="llm_features_title">✨ ميزات الذكاء الاصطناعي بواسطة Gemini</h2>
 
                 <!-- مولّد رسائل الترحيب الذكي -->
-                <div class="gemini-card">
+                <div class="gemini-card glow-card">
                     <h3 data-lang-key="welcome_message_generator_title">✨ مولّد رسائل الترحيب الذكي</h3>
                     <textarea id="welcome-input" placeholder="اكتب أفكاراً لرسالة ترحيب (مثال: سيرفر ألعاب، ترحيب حماسي، قواعد أساسية)..." data-lang-key="welcome_input_placeholder"></textarea>
                     <button class="btn" id="generate-welcome-btn" data-lang-key="generate_welcome_btn"><i class="fas fa-magic"></i> توليد رسالة ترحيب</button>
@@ -1920,7 +2030,7 @@
                 </div>
 
                 <!-- مقترح قواعد الإشراف الذكي -->
-                <div class="gemini-card">
+                <div class="gemini-card glow-card">
                     <h3 data-lang-key="moderation_rules_generator_title">✨ مقترح قواعد الإشراف الذكي</h3>
                     <textarea id="moderation-input" placeholder="صف نوع خادمك (مثال: سيرفر مجتمع، ألعاب تنافسية، تعليمي) وما هي المشاكل الشائعة التي تواجهها..." data-lang-key="moderation_input_placeholder"></textarea>
                     <button class="btn" id="generate-moderation-btn" data-lang-key="generate_moderation_btn"><i class="fas fa-scroll"></i> اقتراح قواعد إشراف</button>
@@ -1934,7 +2044,7 @@
             <div class="container">
                 <h2 class="section-heading" data-lang-key="testimonials_title">ماذا يقول المستخدمون عنا؟</h2>
                 <div class="testimonial-grid">
-                    <div class="testimonial-item">
+                    <div class="testimonial-item glow-card">
                         <div class="testimonial-author">
                             <div class="author-info">
                                 <h4 data-lang-key="testimonial1_author">bluetoon</h4>
@@ -1944,7 +2054,7 @@
                         </div>
                         <p class="testimonial-text-content" data-lang-key="testimonial1_text">البوت ذا رهيب وربي انه من افضل البوتات الي استعملتها , حرفيا اختصر علي كل شي</p>
                     </div>
-                    <div class="testimonial-item">
+                    <div class="testimonial-item glow-card">
                         <div class="testimonial-author">
                             <div class="author-info">
                                 <h4 data-lang-key="testimonial2_author">xpoint</h4>
@@ -1954,7 +2064,7 @@
                         </div>
                         <p class="testimonial-text-content" data-lang-key="testimonial2_text">سهولة الاستخدام مذهلة! حتى لو لم تكن خبيرًا في البوتات، يمكنك التحكم بكل شيء بسهولة.</p>
                     </div>
-                    <div class="testimonial-item">
+                    <div class="testimonial-item glow-card">
                         <div class="testimonial-author">
                             <div class="author-info">
                                 <h4 data-lang-key="testimonial3_author">SDsniper</h4>
@@ -1967,7 +2077,7 @@
                 </div>
 
                 <!-- قسم إضافة التعليق الجديد -->
-                <div class="add-comment-section">
+                <div class="add-comment-section glow-card">
                     <h3 data-lang-key="add_comment_title">إضافة تعليق</h3>
                     <div id="comment-form-area">
                         <!-- هذا القسم سيظهر إذا كان المستخدم مسجل دخول -->
@@ -1992,7 +2102,7 @@
             <div class="container">
                 <h2 class="section-heading" data-lang-key="faq_title">الأسئلة الشائعة</h2>
                 <div class="faq-items">
-                    <div class="faq-item">
+                    <div class="faq-item glow-card">
                         <div class="faq-question" data-lang-key="faq1_q">
                             هل VND Bot مجاني للاستخدام؟
                             <i class="fas fa-chevron-down"></i>
@@ -2001,7 +2111,7 @@
                             نعم البوت مجاني بالكامل ولا يوجد به خطة مدفوعة، هذا هو شعارنا.
                         </div>
                     </div>
-                    <div class="faq-item">
+                    <div class="faq-item glow-card">
                         <div class="faq-question" data-lang-key="faq2_q">
                             كيف يمكنني دعوة البوت إلى خادمي؟
                             <i class="fas fa-chevron-down"></i>
@@ -2010,7 +2120,7 @@
                             يمكنك دعوة البوت إلى خادمك مباشرة من خلال النقر على زر "دعوة البوت" الموجود في أعلى أو أسفل الصفحة.
                         </div>
                     </div>
-                    <div class="faq-item">
+                    <div class="faq-item glow-card">
                         <div class="faq-question" data-lang-key="faq3_q">
                             هل أحتاج إلى معرفة برمجية لاستخدام لوحة التحكم؟
                             <i class="fas fa-chevron-down"></i>
@@ -2019,7 +2129,7 @@
                             لا، تم تصميم لوحة تحكم VND Bot لتكون سهلة الاستخدام ولا تتطلب أي معرفة برمجية. يمكنك إدارة البوت بالكامل من خلال الواجهة الرسومية.
                         </div>
                     </div>
-                    <div class="faq-item">
+                    <div class="faq-item glow-card">
                         <div class="faq-question" data-lang-key="faq4_q">
                             ما هي أنواع الأوامر التي يمكنني تخصيصها؟
                             <i class="fas fa-chevron-down"></i>
@@ -2036,7 +2146,7 @@
         <section id="contact" class="contact section-animation">
             <div class="container">
                 <h2 class="section-heading" data-lang-key="contact_title">تواصل معنا</h2>
-                <div class="contact-form">
+                <div class="contact-form glow-card">
                     <form>
                         <div class="form-group">
                             <label for="name" data-lang-key="contact_name">اسمك الكامل:</label>
@@ -2132,8 +2242,9 @@
                 home: "الرئيسية",
                 features: "الميزات",
                 dashboard: "لوحة التحكم",
-                server_overview_nav: "نظرة على السيرفر", // New
-                command_builder_nav: "بناء الأوامر", // New
+                server_overview_nav: "نظرة على السيرفر",
+                live_activity_nav: "النشاط المباشر", // New
+                command_builder_nav: "بناء الأوامر",
                 llm_features_nav: "ميزات الذكاء الاصطناعي",
                 testimonials: "التقييمات",
                 faq: "الأسئلة الشائعة",
@@ -2160,30 +2271,33 @@
                 feature6_desc: "يستطيع البوت تشغيل الأغاني المفضلة في غرفتك الصوتية على ديسكورد بجودة عالية وبدون تقطيع، مع دعم قوائم التشغيل والتحكم الكامل.",
                 dashboard_title: "نظرة على لوحة التحكم",
                 dashboard_desc: "واجهة سهلة الاستخدام وبديهية، تمنحك تحكمًا كاملاً في جميع جوانب بووت الديسكورد الخاص بك بلمسة زر.",
-                server_overview_title: "نظرة على سيرفرك", // New
-                server_overview_desc: "تابع أهم الإحصائيات الحيوية لسيرفرك في الوقت الفعلي، من الأعضاء النشطين إلى الرسائل المرسلة والمزيد.", // New
-                total_members: "إجمالي الأعضاء", // New
-                new_members_today: "أعضاء جدد اليوم", // New
-                online_members: "الأعضاء المتصلون", // New
-                messages_sent: "الرسائل المرسلة (اليوم)", // New
-                total_channels: "إجمالي القنوات", // New
-                commands_used: "الأوامر المستخدمة (اليوم)", // New
-                command_builder_title: "بناء الأوامر المخصصة", // New
-                command_builder_desc: "أنشئ أوامر بوت فريدة لسيرفرك باستخدام واجهة سهلة وسلسة، دون الحاجة لأي برمجة!", // New
-                command_name_label: "اسم الأمر:", // New
-                command_type_label: "نوع الأمر:", // New
-                command_type_text: "رسالة نصية", // New
-                command_type_embed: "رسالة مضمنة (Embed)", // New
-                command_type_kick: "طرد عضو", // New
-                command_response_label: "الاستجابة:", // New
-                save_command_btn: "حفظ الأمر", // New
-                llm_features_title: "ميزات الذكاء الاصطناعي بواسطة Gemini",
-                welcome_message_generator_title: "مولّد رسائل الترحيب الذكي",
+                server_overview_title: "📊 نظرة على سيرفرك",
+                server_overview_desc: "تابع أهم الإحصائيات الحيوية لسيرفرك في الوقت الفعلي، من الأعضاء النشطين إلى الرسائل المرسلة والمزيد.",
+                total_members: "إجمالي الأعضاء",
+                new_members_today: "أعضاء جدد اليوم",
+                online_members: "الأعضاء المتصلون",
+                messages_sent: "الرسائل المرسلة (اليوم)",
+                total_channels: "إجمالي القنوات",
+                commands_used: "الأوامر المستخدمة (اليوم)",
+                live_activity_title: "⚡ نشاط البوت المباشر", // New
+                live_activity_desc: "شاهد كيف يتفاعل بوت VND مع سيرفرات الديسكورد في الوقت الفعلي، من الأوامر إلى الأحداث.", // New
+                command_builder_title: "🛠️ بناء الأوامر المخصصة",
+                command_builder_desc: "أنشئ أوامر بوت فريدة لسيرفرك باستخدام واجهة سهلة وسلسة، دون الحاجة لأي برمجة!",
+                command_name_label: "اسم الأمر:",
+                command_type_label: "نوع الأمر:",
+                command_type_text: "رسالة نصية",
+                command_type_embed: "رسالة مضمنة (Embed)",
+                command_type_kick: "طرد عضو",
+                command_response_label: "الاستجابة:",
+                save_command_btn: "حفظ الأمر",
+                llm_features_title: "✨ ميزات الذكاء الاصطناعي بواسطة Gemini",
+                welcome_message_generator_title: "✨ مولّد رسائل الترحيب الذكي",
                 welcome_input_placeholder: "اكتب أفكاراً لرسالة ترحيب (مثال: سيرفر ألعاب، ترحيب حماسي، قواعد أساسية)...",
                 generate_welcome_btn: "توليد رسالة ترحيب",
-                moderation_rules_generator_title: "مقترح قواعد الإشراف الذكي",
+                moderation_rules_generator_title: "✨ مقترح قواعد الإشراف الذكي",
                 moderation_input_placeholder: "صف نوع خادمك (مثال: سيرفر مجتمع، ألعاب تنافسية، تعليمي) وما هي المشاكل الشائعة التي تواجهها...",
                 generate_moderation_btn: "اقتراح قواعد إشراف",
+                gemini_output_placeholder: "سيظهر النص الذي تم توليده هنا...",
                 testimonials_title: "ماذا يقول المستخدمون عنا؟",
                 testimonial1_text: "البوت ذا رهيب وربي انه من افضل البوتات الي استعملتها , حرفيا اختصر علي كل شي",
                 testimonial1_author: "bluetoon",
@@ -2232,8 +2346,9 @@
                 home: "Home",
                 features: "Features",
                 dashboard: "Dashboard",
-                server_overview_nav: "Server Overview", // New
-                command_builder_nav: "Command Builder", // New
+                server_overview_nav: "Server Overview",
+                live_activity_nav: "Live Activity", // New
+                command_builder_nav: "Command Builder",
                 llm_features_nav: "AI Features",
                 testimonials: "Testimonials",
                 faq: "FAQ",
@@ -2260,23 +2375,25 @@
                 feature6_desc: "The bot can play your favorite songs in your Discord voice channel with high quality and no interruptions, with playlist support and full control.",
                 dashboard_title: "A Look at the Dashboard",
                 dashboard_desc: "A user-friendly and intuitive interface, giving you full control over all aspects of your Discord bot at the touch of a button.",
-                server_overview_title: "📊 Server Overview", // New
-                server_overview_desc: "Monitor key live statistics for your server, from active members to messages sent and more.", // New
-                total_members: "Total Members", // New
-                new_members_today: "New Members Today", // New
-                online_members: "Online Members", // New
-                messages_sent: "Messages Sent (Today)", // New
-                total_channels: "Total Channels", // New
-                commands_used: "Commands Used (Today)", // New
-                command_builder_title: "🛠️ Custom Command Builder", // New
-                command_builder_desc: "Create unique bot commands for your server using a simple and seamless interface, no coding required!", // New
-                command_name_label: "Command Name:", // New
-                command_type_label: "Command Type:", // New
-                command_type_text: "Text Message", // New
-                command_type_embed: "Embed Message", // New
-                command_type_kick: "Kick Member", // New
-                command_response_label: "Response:", // New
-                save_command_btn: "Save Command", // New
+                server_overview_title: "📊 Server Overview",
+                server_overview_desc: "Monitor key live statistics for your server, from active members to messages sent and more.",
+                total_members: "Total Members",
+                new_members_today: "New Members Today",
+                online_members: "Online Members",
+                messages_sent: "Messages Sent (Today)",
+                total_channels: "Total Channels",
+                commands_used: "Commands Used (Today)",
+                live_activity_title: "⚡ Live Bot Activity", // New
+                live_activity_desc: "See how the VND Bot interacts with Discord servers in real-time, from commands to events.", // New
+                command_builder_title: "🛠️ Custom Command Builder",
+                command_builder_desc: "Create unique bot commands for your server using a simple and seamless interface, no coding required!",
+                command_name_label: "Command Name:",
+                command_type_label: "Command Type:",
+                command_type_text: "Text Message",
+                command_type_embed: "Embed Message",
+                command_type_kick: "Kick Member",
+                command_response_label: "Response:",
+                save_command_btn: "Save Command",
                 llm_features_title: "AI Features Powered by Gemini",
                 welcome_message_generator_title: "Smart Welcome Message Generator",
                 welcome_input_placeholder: "Enter ideas for a welcome message (e.g., gaming server, enthusiastic welcome, basic rules)...",
@@ -2284,6 +2401,7 @@
                 moderation_rules_generator_title: "Smart Moderation Rule Suggestion",
                 moderation_input_placeholder: "Describe your server type (e.g., community server, competitive gaming, educational) and common issues you face...",
                 generate_moderation_btn: "Suggest Moderation Rules",
+                gemini_output_placeholder: "Generated text will appear here...",
                 testimonials_title: "What Our Users Say?",
                 testimonial1_text: "This bot is amazing, seriously one of the best bots I've ever used. It literally simplified everything for me.",
                 testimonial1_author: "bluetoon",
@@ -2332,8 +2450,9 @@
                 home: "Accueil",
                 features: "Fonctionnalités",
                 dashboard: "Tableau de bord",
-                server_overview_nav: "Aperçu du serveur", // New
-                command_builder_nav: "Constructeur de commandes", // New
+                server_overview_nav: "Aperçu du serveur",
+                live_activity_nav: "Activité en direct", // New
+                command_builder_nav: "Constructeur de commandes",
                 llm_features_nav: "Fonctionnalités IA",
                 testimonials: "Témoignages",
                 faq: "FAQ",
@@ -2360,23 +2479,25 @@
                 feature6_desc: "Le bot peut jouer vos chansons préférées dans votre salon vocal Discord en haute qualité et sans interruption, avec prise en charge des listes de lecture et control total.",
                 dashboard_title: "Aperçu du Tableau de bord",
                 dashboard_desc: "Une interface conviviale et intuitive, vous donnant un control total sur tous les aspects de votre bot Discord d'une simple touche.",
-                server_overview_title: "📊 Aperçu du serveur", // New
-                server_overview_desc: "Surveillez les statistiques clés de votre serveur en temps réel, des membres actifs aux messages envoyés et plus encore.", // New
-                total_members: "Membres Totaux", // New
-                new_members_today: "Nouveaux membres aujourd'hui", // New
-                online_members: "Membres en ligne", // New
-                messages_sent: "Messages envoyés (aujourd'hui)", // New
-                total_channels: "Canaux Totaux", // New
-                commands_used: "Commandes utilisées (aujourd'hui)", // New
-                command_builder_title: "🛠️ Constructeur de commandes personnalisées", // New
-                command_builder_desc: "Créez des commandes de bot uniques pour votre serveur à l'aide d'une interface simple et transparente, aucun codage requis!", // New
-                command_name_label: "Nom de la commande:", // New
-                command_type_label: "Type de commande:", // New
-                command_type_text: "Message texte", // New
-                command_type_embed: "Message intégré (Embed)", // New
-                command_type_kick: "Expulser un membre", // New
-                command_response_label: "Réponse:", // New
-                save_command_btn: "Enregistrer la commande", // New
+                server_overview_title: "📊 Aperçu du serveur",
+                server_overview_desc: "Surveillez les statistiques clés de votre serveur en temps réel, des membres actifs aux messages envoyés et plus encore.",
+                total_members: "Membres Totaux",
+                new_members_today: "Nouveaux membres aujourd'hui",
+                online_members: "Membres en ligne",
+                messages_sent: "Messages envoyés (aujourd'hui)",
+                total_channels: "Canaux Totaux",
+                commands_used: "Commandes utilisées (aujourd'hui)",
+                live_activity_title: "⚡ Activité du bot en direct", // New
+                live_activity_desc: "Découvrez comment le bot VND interagit avec les serveurs Discord en temps réel, des commandes aux événements.", // New
+                command_builder_title: "🛠️ Constructeur de commandes personnalisées",
+                command_builder_desc: "Créez des commandes de bot uniques pour votre serveur à l'aide d'une interface simple et transparente, aucun codage requis!",
+                command_name_label: "Nom de la commande:",
+                command_type_label: "Type de commande:",
+                command_type_text: "Message texte",
+                command_type_embed: "Message intégré (Embed)",
+                command_type_kick: "Expulser un membre",
+                command_response_label: "Réponse:",
+                save_command_btn: "Enregistrer la commande",
                 llm_features_title: "Fonctionnalités IA propulsées par Gemini",
                 welcome_message_generator_title: "Générateur de messages de bienvenue intelligent",
                 welcome_input_placeholder: "Saisissez des idées pour un message de bienvenue (ex : serveur de jeu, bienvenue enthousiaste, règles de base)...",
@@ -2384,6 +2505,7 @@
                 moderation_rules_generator_title: "Suggestion de règles de modération intelligente",
                 moderation_input_placeholder: "Décrivez le type de votre serveur (ex : serveur communautaire, jeu compétitif, éducatif) et les problèmes courants que vous rencontrez...",
                 generate_moderation_btn: "Suggérer des règles de modération",
+                gemini_output_placeholder: "Le texte généré apparaîtra ici...",
                 testimonials_title: "Ce que disent nos utilisateurs ?",
                 testimonial1_text: "Ce bot est incroyable, sérieusement l'un des meilleurs bots que j'aie jamais utilisé. Il m'a littéralement tout simplifié.",
                 testimonial1_author: "bluetoon",
@@ -2428,8 +2550,9 @@
                 home: "主页",
                 features: "功能",
                 dashboard: "仪表板",
-                server_overview_nav: "服务器概览", // New
-                command_builder_nav: "命令构建器", // New
+                server_overview_nav: "服务器概览",
+                live_activity_nav: "实时活动", // New
+                command_builder_nav: "命令构建器",
                 llm_features_nav: "人工智能功能",
                 testimonials: "推荐",
                 faq: "常见问题",
@@ -2456,23 +2579,25 @@
                 feature6_desc: "机器人可以在您的 Discord 语音频道中播放您喜欢的歌曲，音质高，不中断，支持播放列表和完全控制。",
                 dashboard_title: "仪表板概览",
                 dashboard_desc: "一个用户友好且直观的界面，让您只需轻触按钮即可完全控制 Discord 机器人的所有方面。",
-                server_overview_title: "📊 服务器概览", // New
-                server_overview_desc: "监控您的服务器关键实时统计数据，从活跃成员到已发送消息等。", // New
-                total_members: "总成员", // New
-                new_members_today: "今日新增成员", // New
-                online_members: "在线成员", // New
-                messages_sent: "已发送消息（今日）", // New
-                total_channels: "总频道", // New
-                commands_used: "已使用命令（今日）", // New
-                command_builder_title: "🛠️ 自定义命令构建器", // New
-                command_builder_desc: "使用简单无缝的界面为您的服务器创建独特的机器人命令，无需编码！", // New
-                command_name_label: "命令名称：", // New
-                command_type_label: "命令类型：", // New
-                command_type_text: "文本消息", // New
-                command_type_embed: "嵌入消息", // New
-                command_type_kick: "踢出成员", // New
-                command_response_label: "回复：", // New
-                save_command_btn: "保存命令", // New
+                server_overview_title: "📊 服务器概览",
+                server_overview_desc: "监控您的服务器关键实时统计数据，从活跃成员到已发送消息等。",
+                total_members: "总成员",
+                new_members_today: "今日新增成员",
+                online_members: "在线成员",
+                messages_sent: "已发送消息（今日）",
+                total_channels: "总频道",
+                commands_used: "已使用命令（今日）",
+                live_activity_title: "⚡ 实时机器人活动", // New
+                live_activity_desc: "查看 VND 机器人在 Discord 服务器上如何实时互动，从命令到事件。", // New
+                command_builder_title: "🛠️ 自定义命令构建器",
+                command_builder_desc: "使用简单无缝的界面为您的服务器创建独特的机器人命令，无需编码！",
+                command_name_label: "命令名称：",
+                command_type_label: "命令类型：",
+                command_type_text: "文本消息",
+                command_type_embed: "嵌入消息",
+                command_type_kick: "踢出成员",
+                command_response_label: "回复：",
+                save_command_btn: "保存命令",
                 llm_features_title: "由 Gemini 提供支持的 AI 功能",
                 welcome_message_generator_title: "智能欢迎消息生成器",
                 welcome_input_placeholder: "输入欢迎消息的想法（例如：游戏服务器、热情欢迎、基本规则）...",
@@ -2480,6 +2605,7 @@
                 moderation_rules_generator_title: "智能版主规则建议",
                 moderation_input_placeholder: "描述您的服务器类型（例如：社区服务器、竞技游戏、教育）以及您面临的常见问题...",
                 generate_moderation_btn: "建议版主规则",
+                gemini_output_placeholder: "生成的文本将显示在此处...",
                 testimonials_title: "用户评价",
                 testimonial1_text: "这个机器人太棒了，说真的，它是我用过的最好的机器人之一。它简直为我简化了一切。",
                 testimonial1_author: "bluetoon",
@@ -2502,11 +2628,11 @@
                 faq_title: "常见问题",
                 faq1_q: "VND Bot 是否免费使用？",
                 faq1_a: "是的，机器人是完全免费的，没有付费计划، 这是我们的座右铭。",
-                faq2_q: "如何邀请机器人到我的服务器？",
+                faq2_q: "如何邀请机器人到我的服务器؟",
                 faq2_a: "您可以通过点击页面顶部或底部的“邀请机器人”按钮直接邀请机器人到您的服务器。",
-                faq3_q: "我需要编程知识才能使用仪表板吗？",
+                faq3_q: "我需要编程知识才能使用仪表板吗؟",
                 faq3_a: "不需要، VND Bot 仪表板设计用户友好، 不需要任何编程知识。您可以通过图形界面完全管理机器人。",
-                faq4_q: "我可以自定义哪些类型的命令？",
+                faq4_q: "我可以自定义哪些类型的命令؟",
                 faq4_a: "您可以自定义许多命令، 例如欢迎命令، 管理命令، 娱乐命令等، 此外还可以创建自己的自定义命令。",
                 contact_title: "联系我们",
                 contact_name: "您的全名：",
@@ -2738,8 +2864,8 @@
             }
         });
 
-        // Three.js Particle Background
-        let scene, camera, renderer, particles, particleMaterial, particleCount;
+        // Three.js Particle Background - Updated for Network/Nexus look
+        let scene, camera, renderer, particles, lines;
         let mouseX = 0, mouseY = 0;
         let windowHalfX = window.innerWidth / 2;
         let windowHalfY = window.innerHeight / 2;
@@ -2749,51 +2875,95 @@
 
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 5;
+            camera.position.z = 10; // Slightly further back
 
             renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio); // For sharp rendering on high-DPI screens
+            renderer.setPixelRatio(window.devicePixelRatio);
 
-            particleCount = 1000; // Increased particle count
+            // Particles (Nodes in the network)
+            const particleCount = 1500; // Increased particle count for denser network
             const particlesGeometry = new THREE.BufferGeometry();
             const positions = [];
             const colors = [];
+            const sizes = []; // For varying particle sizes
 
-            const color1 = new THREE.Color(0x5865F2); // Primary color (Discord Blue)
-            const color2 = new THREE.Color(0xFEE75C); // Accent color (Yellow)
-            const color3 = new THREE.Color(0xBB86FC); // A subtle purple for variety
+            const color1 = new THREE.Color(0x5865F2); // Discord Blue
+            const color2 = new THREE.Color(0xFEE75C); // Accent Yellow
+            const color3 = new THREE.Color(0xBB86FC); // Purple
+            const color4 = new THREE.Color(0x43B581); // Green
 
             for (let i = 0; i < particleCount; i++) {
-                const x = (Math.random() * 2 - 1) * 15; // Wider spread
-                const y = (Math.random() * 2 - 1) * 15;
-                const z = (Math.random() * 2 - 1) * 15;
+                const x = (Math.random() * 2 - 1) * 30; // Wider spread
+                const y = (Math.random() * 2 - 1) * 30;
+                const z = (Math.random() * 2 - 1) * 30;
                 positions.push(x, y, z);
 
                 const lerpFactor = Math.random();
                 const color = new THREE.Color();
-                if (lerpFactor < 0.5) {
-                    color.copy(color1).lerp(color2, lerpFactor * 2);
+                if (lerpFactor < 0.25) {
+                    color.copy(color1).lerp(color2, lerpFactor * 4);
+                } else if (lerpFactor < 0.5) {
+                    color.copy(color2).lerp(color3, (lerpFactor - 0.25) * 4);
+                } else if (lerpFactor < 0.75) {
+                    color.copy(color3).lerp(color4, (lerpFactor - 0.5) * 4);
                 } else {
-                    color.copy(color2).lerp(color3, (lerpFactor - 0.5) * 2);
+                    color.copy(color4).lerp(color1, (lerpFactor - 0.75) * 4);
                 }
                 colors.push(color.r, color.g, color.b);
+                sizes.push(Math.random() * 0.4 + 0.1); // Random sizes for particles
             }
 
             particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
             particlesGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            particlesGeometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1)); // Attach sizes
 
-            particleMaterial = new THREE.PointsMaterial({
-                size: 0.15, // Slightly larger particles
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.3, // Base size
                 vertexColors: true,
                 transparent: true,
-                opacity: 0.8,
+                opacity: 0.9,
                 blending: THREE.AdditiveBlending,
-                sizeAttenuation: true
+                sizeAttenuation: true // Particles closer to camera are larger
             });
 
             particles = new THREE.Points(particlesGeometry, particleMaterial);
             scene.add(particles);
+
+            // Lines (Connections between nodes)
+            const lineMaterial = new THREE.LineBasicMaterial({
+                color: 0x5865F2, // Discord blue for lines
+                transparent: true,
+                opacity: 0.15,
+                blending: THREE.AdditiveBlending,
+                linewidth: 1 // Will be scaled by renderer, but good for base
+            });
+
+            const maxConnections = 200; // Limit number of lines for performance
+            const linePositions = [];
+            const connections = [];
+
+            // Simple connection logic: connect nearby particles
+            for (let i = 0; i < particleCount; i++) {
+                for (let j = i + 1; j < particleCount; j++) {
+                    const dx = positions[i * 3] - positions[j * 3];
+                    const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                    const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                    if (distance < 5 && connections.length < maxConnections) { // Connect if close enough
+                        linePositions.push(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+                        linePositions.push(positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]);
+                        connections.push({ from: i, to: j });
+                    }
+                }
+            }
+
+            const lineGeometry = new THREE.BufferGeometry();
+            lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+            lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+            scene.add(lines);
+
 
             document.addEventListener('mousemove', onDocumentMouseMove, false);
             window.addEventListener('resize', onWindowResize, false);
@@ -2820,14 +2990,19 @@
             requestAnimationFrame(animateThreeJS);
 
             // Smooth camera movement based on mouse
-            camera.position.x += (mouseX * 0.001 - camera.position.x) * 0.05;
-            camera.position.y += (-mouseY * 0.001 - camera.position.y) * 0.05;
+            camera.position.x += (mouseX * 0.0005 - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY * 0.0005 - camera.position.y) * 0.05;
             camera.lookAt(scene.position);
 
             // Particle movement and subtle rotation
-            particles.rotation.x += 0.0003;
-            particles.rotation.y += 0.0005;
-            particles.position.z = Math.sin(Date.now() * 0.0001) * 0.5; // Subtle Z movement
+            particles.rotation.x += 0.0001;
+            particles.rotation.y += 0.0002;
+            particles.position.z = Math.sin(Date.now() * 0.0001) * 0.8; // Subtle Z movement
+
+            // Lines rotation and subtle movement
+            lines.rotation.x += 0.0001;
+            lines.rotation.y += 0.0002;
+            lines.position.z = Math.cos(Date.now() * 0.0001) * 0.8;
 
             renderer.render(scene, camera);
         }
@@ -2838,10 +3013,12 @@
         // Gemini API Integration Logic
         async function callGeminiAPI(prompt, outputElementId) {
             const outputElement = document.getElementById(outputElementId);
+            const currentLang = localStorage.getItem('selectedLang') || 'ar';
+            
             outputElement.innerHTML = ''; // Clear previous output
             outputElement.classList.remove('error'); // Clear any previous error styling
             outputElement.classList.add('loading'); // Show loading indicator
-            outputElement.setAttribute('data-placeholder', ''); // Remove placeholder when loading
+            outputElement.removeAttribute('data-placeholder'); // Remove placeholder when loading
             console.log(`[Gemini API] Sending prompt for ${outputElementId}:`, prompt);
 
             try {
@@ -2877,16 +3054,20 @@
                     console.log(`[Gemini API] Content displayed for ${outputElementId}.`);
                 } else {
                     console.warn(`[Gemini API] Unexpected response structure or empty content for ${outputElementId}.`, result);
-                    outputElement.innerText = 'عذرًا، لم يتمكن الذكاء الاصطناعي من توليد استجابة. قد تكون المشكلة في التنسيق أو لا توجد بيانات متاحة. الرجاء المحاولة مرة أخرى.';
+                    outputElement.innerText = langData[currentLang].gemini_output_empty_error || 'عذرًا، لم يتمكن الذكاء الاصطناعي من توليد استجابة. قد تكون المشكلة في التنسيق أو لا توجد بيانات متاحة. الرجاء المحاولة مرة أخرى.';
                     outputElement.classList.add('error');
                 }
             } catch (error) {
                 console.error(`[Gemini API] Fetch error for ${outputElementId}:`, error);
-                outputElement.innerText = `حدث خطأ: ${error.message}. الرجاء التأكد من اتصالك بالإنترنت والمحاولة مرة أخرى.`;
+                outputElement.innerText = `${langData[currentLang].gemini_output_fetch_error || 'حدث خطأ'}: ${error.message}. ${langData[currentLang].gemini_output_retry_message || 'الرجاء التأكد من اتصالك بالإنترنت والمحاولة مرة أخرى.'}`;
                 outputElement.classList.add('error');
             } finally {
                 outputElement.classList.remove('loading'); // Hide loading indicator
-                outputElement.setAttribute('data-placeholder', langData[localStorage.getItem('selectedLang') || 'ar']['gemini_output_placeholder']); // Restore placeholder
+                if (outputElement.innerText.trim() === '' || outputElement.classList.contains('error')) { // Only restore placeholder if empty or error
+                    outputElement.setAttribute('data-placeholder', langData[currentLang].gemini_output_placeholder);
+                } else {
+                    outputElement.removeAttribute('data-placeholder'); // Ensure it's removed if content is there
+                }
                 console.log(`[Gemini API] Generation finished for ${outputElementId}.`);
             }
         }
@@ -2894,23 +3075,29 @@
         // Event Listeners for Gemini Features
         document.getElementById('generate-welcome-btn').addEventListener('click', () => {
             const welcomeInput = document.getElementById('welcome-input').value.trim();
+            const currentLang = localStorage.getItem('selectedLang') || 'ar';
             if (welcomeInput) {
                 // Instruct Gemini to respond in Arabic
                 const prompt = `Generate a creative and enthusiastic welcome message for a new member joining a Discord server. The message should be friendly and inviting and **must be in Arabic**. Here are some keywords/themes: ${welcomeInput}.`;
                 callGeminiAPI(prompt, 'welcome-output');
             } else {
-                document.getElementById('welcome-output').innerText = 'الرجاء إدخال بعض الأفكار لتوليد رسالة ترحيب.';
+                document.getElementById('welcome-output').innerText = langData[currentLang].welcome_input_empty_error || 'الرجاء إدخال بعض الأفكار لتوليد رسالة ترحيب.';
+                document.getElementById('welcome-output').classList.add('error');
+                document.getElementById('welcome-output').setAttribute('data-placeholder', langData[currentLang].gemini_output_placeholder);
             }
         });
 
         document.getElementById('generate-moderation-btn').addEventListener('click', () => {
             const moderationInput = document.getElementById('moderation-input').value.trim();
+            const currentLang = localStorage.getItem('selectedLang') || 'ar';
             if (moderationInput) {
                 // Instruct Gemini to respond in Arabic
                 const prompt = `Suggest a list of concise and effective moderation rules for a Discord server. The server type and common issues are: ${moderationInput}. Format the rules as a numbered list and **they must be in Arabic**.`;
                 callGeminiAPI(prompt, 'moderation-output');
             } else {
-                document.getElementById('moderation-output').innerText = 'الرجاء وصف نوع خادمك أو المشاكل الشائعة لاقتراح قواعد الإشراف.';
+                document.getElementById('moderation-output').innerText = langData[currentLang].moderation_input_empty_error || 'الرجاء وصف نوع خادمك أو المشاكل الشائعة لاقتراح قواعد الإشراف.';
+                document.getElementById('moderation-output').classList.add('error');
+                document.getElementById('moderation-output').setAttribute('data-placeholder', langData[currentLang].gemini_output_placeholder);
             }
         });
 
@@ -2936,6 +3123,79 @@
         setInterval(updateServerStats, 5000);
         document.addEventListener('DOMContentLoaded', updateServerStats); // Initial update on load
 
+        // Mock Live Activity Feed
+        const activityLog = [];
+        const activityIcons = {
+            'command': 'fas fa-terminal',
+            'join': 'fas fa-user-plus',
+            'leave': 'fas fa-user-minus',
+            'message': 'fas fa-comment-dots',
+            'level_up': 'fas fa-level-up-alt',
+            'role_update': 'fas fa-users-cog',
+            'music': 'fas fa-music'
+        };
+
+        const mockActivities = [
+            { type: 'command', message: 'قام المستخدم **AdminUser** بتشغيل الأمر `/kick @BadMember` في غرفة **#general**', time: 'منذ 5 ثوانٍ' },
+            { type: 'join', message: 'انضم العضو الجديد **GamingGuru** إلى السيرفر! مرحباً به!', time: 'منذ 10 ثوانٍ' },
+            { type: 'message', message: 'أرسل **ChattyPatty** رسالة في **#discussions**: "مرحباً بالجميع!"', time: 'منذ 15 ثانية' },
+            { type: 'level_up', message: 'ارتقى **LevelMaster** إلى المستوى **10**! تهانينا!', time: 'منذ 20 ثانية' },
+            { type: 'music', message: 'قام البوت بتشغيل أغنية **"Epic Soundtrack"** في الغرفة الصوتية **Gaming Zone**', time: 'منذ 25 ثانية' },
+            { type: 'leave', message: 'غادر **SilentUser** السيرفر.', time: 'منذ 30 ثانية' },
+            { type: 'command', message: 'استخدم **ModeratorBot** الأمر `/mute @NoisyUser` في غرفة **#main**', time: 'منذ 35 ثانية' },
+            { type: 'role_update', message: 'تم تحديث دور **Newbie** لـ **ProGamer** بواسطة **Admin**', time: 'منذ 40 ثانية' },
+            { type: 'message', message: 'نشر **InfoBot** إعلاناً جديداً في **#announcements**', time: 'منذ 45 ثانية' },
+            { type: 'command', message: 'قام **HelperBot** بتشغيل الأمر `/help`', time: 'منذ 50 ثانية' },
+        ];
+
+        function addActivityItem(item) {
+            const activityDisplay = document.querySelector('.activity-display');
+            const activityElement = document.createElement('div');
+            activityElement.classList.add('activity-item');
+            
+            const icon = document.createElement('i');
+            icon.classList.add('activity-icon', activityIcons[item.type]);
+            activityElement.appendChild(icon);
+
+            const content = document.createElement('div');
+            content.classList.add('activity-content');
+            
+            const message = document.createElement('div');
+            message.classList.add('message');
+            message.innerHTML = item.message;
+            content.appendChild(message);
+
+            const timestamp = document.createElement('div');
+            timestamp.classList.add('timestamp');
+            timestamp.textContent = item.time;
+            content.appendChild(timestamp);
+
+            activityElement.appendChild(content);
+
+            // Add new item to the top and remove oldest if too many
+            if (activityDisplay.children.length >= 10) { // Keep max 10 items for performance
+                activityDisplay.removeChild(activityDisplay.lastChild);
+            }
+            activityDisplay.prepend(activityElement); // Add to the beginning
+        }
+
+        let activityIndex = 0;
+        function simulateActivity() {
+            addActivityItem(mockActivities[activityIndex % mockActivities.length]);
+            activityIndex++;
+        }
+
+        // Simulate activity every 3 seconds
+        setInterval(simulateActivity, 3000);
+        document.addEventListener('DOMContentLoaded', () => {
+            // Populate initial activity
+            for (let i = 0; i < Math.min(mockActivities.length, 5); i++) { // Show initial 5
+                addActivityItem(mockActivities[i]);
+            }
+            activityIndex = 5; // Start simulation from next item
+        });
+
+
         // Custom Command Builder Logic
         function updateCommandPreview() {
             const commandName = document.getElementById('command-name').value.trim();
@@ -2952,29 +3212,29 @@
                 document.querySelector('#command-response-group label').innerHTML = langData[currentLang].command_response_label;
                 document.getElementById('command-response').placeholder = 'الرسالة التي سيرد بها البوت';
                 if (commandName && commandResponse) {
-                    previewText = `/${commandName} -> ${langData[currentLang].command_type_text.toLowerCase().replace('message', '')}: ${commandResponse}`;
+                    previewText = `/${commandName} -> ${langData[currentLang].command_type_text.toLowerCase().replace('رسالة نصية', 'رسالة')}: ${commandResponse}`;
                 } else if (commandName) {
-                    previewText = `/${commandName} -> ${langData[currentLang].command_type_text.toLowerCase().replace('message', '')}: ...`;
+                    previewText = `/${commandName} -> ${langData[currentLang].command_type_text.toLowerCase().replace('رسالة نصية', 'رسالة')}: ...`;
                 } else {
-                    previewText = `/امر_جديد -> ${langData[currentLang].command_type_text.toLowerCase().replace('message', '')}: اهلاً بك`;
+                    previewText = `/امر_جديد -> ${langData[currentLang].command_type_text.toLowerCase().replace('رسالة نصية', 'رسالة')}: اهلاً بك`;
                 }
             } else if (commandType === 'embed') {
                 commandResponseGroup.style.display = 'flex';
                 document.querySelector('#command-response-group label').innerHTML = langData[currentLang].command_response_label;
                 document.getElementById('command-response').placeholder = 'JSON لرسالة Embed';
                 if (commandName && commandResponse) {
-                    previewText = `/${commandName} -> ${langData[currentLang].command_type_embed.toLowerCase().replace('message', '')} JSON: ${commandResponse.substring(0, 50)}...`;
+                    previewText = `/${commandName} -> ${langData[currentLang].command_type_embed.toLowerCase().replace('رسالة مضمنة (embed)', 'تضمين')}: ${commandResponse.substring(0, 50)}...`;
                 } else if (commandName) {
-                    previewText = `/${commandName} -> ${langData[currentLang].command_type_embed.toLowerCase().replace('message', '')} JSON: { ... }`;
+                    previewText = `/${commandName} -> ${langData[currentLang].command_type_embed.toLowerCase().replace('رسالة مضمنة (embed)', 'تضمين')} JSON: { ... }`;
                 } else {
-                    previewText = `/امر_جديد -> ${langData[currentLang].command_type_embed.toLowerCase().replace('message', '')} JSON: { "title": "مرحباً!" }`;
+                    previewText = `/امر_جديد -> ${langData[currentLang].command_type_embed.toLowerCase().replace('رسالة مضمنة (embed)', 'تضمين')} JSON: { "title": "مرحباً!" }`;
                 }
             } else if (commandType === 'kick') {
                 commandResponseGroup.style.display = 'none'; // No direct response needed for kick
                 if (commandName) {
-                    previewText = `/${commandName} @user -> ${langData[currentLang].command_type_kick.toLowerCase().replace('member', '')} @user`;
+                    previewText = `/${commandName} @user -> ${langData[currentLang].command_type_kick.toLowerCase().replace('طرد عضو', 'طرد')} @user`;
                 } else {
-                    previewText = `/طرد @user -> ${langData[currentLang].command_type_kick.toLowerCase().replace('member', '')} @user`;
+                    previewText = `/طرد @user -> ${langData[currentLang].command_type_kick.toLowerCase().replace('طرد عضو', 'طرد')} @user`;
                 }
             }
             
@@ -2989,6 +3249,28 @@
         // Set placeholder for gemini output
         document.getElementById('welcome-output').setAttribute('data-placeholder', langData[localStorage.getItem('selectedLang') || 'ar']['gemini_output_placeholder']);
         document.getElementById('moderation-output').setAttribute('data-placeholder', langData[localStorage.getItem('selectedLang') || 'ar']['gemini_output_placeholder']);
+
+        // Add new language strings for Gemini errors/placeholders
+        langData.ar.gemini_output_empty_error = 'عذرًا، لم يتمكن الذكاء الاصطناعي من توليد استجابة. الرجاء المحاولة بمطلب مختلف.';
+        langData.ar.gemini_output_fetch_error = 'حدث خطأ أثناء الاتصال بالذكاء الاصطناعي';
+        langData.ar.gemini_output_retry_message = 'الرجاء التأكد من اتصالك بالإنترنت والمحاولة مرة أخرى.';
+        langData.ar.welcome_input_empty_error = 'الرجاء إدخال بعض الأفكار لتوليد رسالة ترحيب.';
+        langData.ar.moderation_input_empty_error = 'الرجاء وصف نوع خادمك أو المشاكل الشائعة لاقتراح قواعد الإشراف.';
+        langData.en.gemini_output_empty_error = 'Sorry, AI could not generate a response. Please try with a different query.';
+        langData.en.gemini_output_fetch_error = 'Error connecting to AI';
+        langData.en.gemini_output_retry_message = 'Please ensure you are connected to the internet and try again.';
+        langData.en.welcome_input_empty_error = 'Please enter some ideas to generate a welcome message.';
+        langData.en.moderation_input_empty_error = 'Please describe your server type or common issues to suggest moderation rules.';
+        langData.fr.gemini_output_empty_error = 'Désolé, l\'IA n\'a pas pu générer de réponse. Veuillez essayer avec une requête différente.';
+        langData.fr.gemini_output_fetch_error = 'Erreur de connexion à l\'IA';
+        langData.fr.gemini_output_retry_message = 'Veuillez vérifier votre connexion Internet et réessayer.';
+        langData.fr.welcome_input_empty_error = 'Veuillez saisir des idées pour générer un message de bienvenue.';
+        langData.fr.moderation_input_empty_error = 'Veuillez décrire le type de votre serveur ou les problèmes courants pour suggérer des règles de modération.';
+        langData.zh.gemini_output_empty_error = '抱歉，AI 无法生成响应。请尝试其他查询。';
+        langData.zh.gemini_output_fetch_error = '连接到 AI 时出错';
+        langData.zh.zh.gemini_output_retry_message = '请确保您已连接到互联网并重试。';
+        langData.zh.welcome_input_empty_error = '请输入一些想法来生成欢迎消息。';
+        langData.zh.moderation_input_empty_error = '请描述您的服务器类型或常见问题以建议版主规则。';
 
     </script>
 </body>

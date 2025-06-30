@@ -3,100 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم بوت VND - تحكم كامل ببوك في الديسكورد</title>
+    <title>VND Bot لوحة التحكم - تحكم كامل ببووت الديسكورد الخاص بك</title>
     <link rel="icon" href="https://media.discordapp.net/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=6862c4f3&is=68617373&hm=8f081e2ff1124f60bdc0035e8922fd3772694033c360e180caefa707545b0c2e" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <!-- خطوط عربية: Cairo، خطوط لاتينية وعامة: Noto Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome لأيقونات احترافية -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Three.js Library for 3D background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
+        /* المتغيرات الأساسية للألوان لسهولة التعديل */
         :root {
-            --primary-color: #FFD700; /* Gold */
-            --secondary-color: #FFA500; /* Orange */
-            --dark-bg: #1a1a1a;
-            --medium-dark-bg: #2a2a2a;
-            --light-text: #ffffff;
-            --soft-white: #f0f0f0;
-            --border-color: #3a3a3a;
-            --hover-color: #FFC000;
+            --primary-color: #5865F2; /* أزرق ديسكورد */
+            --secondary-color: #43B581; /* أخضر - للرسائل مثلاً */
+            --dark-bg: #1A1A2E; /* خلفية داكنة جداً */
+            --medium-dark-bg: #2B2B4A; /* خلفية داكنة متوسطة */
+            --light-text: #E0E0FF; /* نص فاتح مع تدرج بنفسجي خفيف */
+            --soft-white: #B0B0D0; /* أبيض ناعم مائل للرمادي البنفسجي */
+            --border-color: #3C3C60; /* لون الحدود الداكنة */
+            --hover-color: #7289DA; /* لون التظليل عند التحويم */
+            --accent-color: #FEE75C; /* أصفر، للتركيز وإبراز العناصر */
+            --accent-glow: #FEE75C; /* توهج أصفر */
+            --card-bg: rgba(43, 43, 74, 0.7); /* خلفية البطاقات شفافة مع ضبابية */
+            --glass-blur: 8px; /* قيمة الضبابية لتأثير الزجاج */
+            --glow-filter: drop-shadow(0 0 5px rgba(254, 231, 92, 0.5)); /* توهج أصفر للأيقونات */
+
+            /* ألوان جديدة لتدرجات أكثر احترافية */
+            --gradient-1-start: #3A478F;
+            --gradient-1-end: #5865F2;
+            --gradient-2-start: #C5B03C;
+            --gradient-2-end: #FEE75C;
+            --glow-strong: 0 0 20px rgba(88, 101, 242, 0.7), 0 0 30px rgba(254, 231, 92, 0.5);
+            --inset-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+            --button-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px var(--primary-color);
         }
 
+        /* إعادة ضبط CSS */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--light-text);
-            line-height: 1.6;
-            direction: rtl; /* Right-to-left for Arabic */
-            text-align: right;
-            overflow-x: hidden;
+        /* أنماط شريط التمرير المخصص (Scrollbar Styling) */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
         }
 
+        ::-webkit-scrollbar-track {
+            background: var(--medium-dark-bg);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 10px;
+            border: 2px solid var(--medium-dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--hover-color), var(--accent-color));
+        }
+
+        /* الأنماط العامة للجسم */
+        body {
+            font-family: 'Noto Sans', 'Cairo', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.7;
+            text-align: right;
+            overflow-x: hidden;
+            font-size: 16px;
+            transition: background-color 0.5s ease;
+            position: relative;
+            min-height: 100vh; /* تأكد أن الجسم يملأ كامل ارتفاع الشاشة */
+        }
+
+        /* أنماط الروابط */
         a {
             color: var(--primary-color);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
 
         a:hover {
             color: var(--hover-color);
+            text-shadow: 0 0 8px rgba(88, 101, 242, 0.5);
         }
 
+        /* إزالة نقاط القوائم */
         ul {
             list-style: none;
         }
 
-        /* Utility Classes */
+        /* الفئات المساعدة (Utility Classes) */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative; /* للحفاظ على المحتوى فوق الخلفية 3D */
+            z-index: 5;
         }
 
         .btn {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: var(--dark-bg);
-            padding: 12px 25px;
-            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, var(--gradient-1-start), var(--gradient-1-end));
+            color: var(--light-text);
+            padding: 16px 35px; /* حجم أكبر */
+            border-radius: 10px; /* حواف أكثر استدارة */
             font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 10px var(--primary-color); /* توهج خفيف */
             border: none;
             cursor: pointer;
+            font-size: 1.1rem; /* حجم خط أكبر */
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transform: translateZ(0); /* للحث على تسريع الأجهزة */
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: -1;
+            transform: skewX(-20deg);
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
-            background-color: var(--hover-color);
-            transform: translateY(-2px);
+            transform: translateY(-5px) scale(1.03); /* حركة أكثر وضوحاً */
+            box-shadow: var(--button-shadow), var(--glow-strong); /* توهج أقوى */
+            color: #FFF;
         }
+        .btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
 
         .btn-outline {
             background: transparent;
             border: 2px solid var(--primary-color);
             color: var(--primary-color);
             box-shadow: none;
+            transition: all 0.3s ease;
         }
 
         .btn-outline:hover {
-            background-color: var(--primary-color);
-            color: var(--dark-bg);
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(45deg, var(--primary-color), var(--hover-color));
+            color: var(--light-text);
+            border-color: transparent;
+            box-shadow: var(--button-shadow);
         }
 
         .text-center {
             text-align: center;
         }
 
+        /* أنماط عناوين الأقسام */
         .section-heading {
-            font-size: 2.5em;
-            margin-bottom: 40px;
+            font-size: 3.5rem; /* حجم أكبر للعناوين */
+            margin-bottom: 50px; /* مسافة أكبر */
             text-align: center;
+            color: var(--light-text);
             position: relative;
-            padding-bottom: 10px;
+            padding-bottom: 25px; /* مسافة أكبر للخط السفلي */
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 10px var(--accent-color); /* توهج أقوى */
+            letter-spacing: 1.5px;
+            font-weight: 700;
         }
 
         .section-heading::after {
@@ -105,21 +192,28 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background-color: var(--primary-color);
-            border-radius: 2px;
+            width: 120px; /* خط أطول وأسمك */
+            height: 6px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent); /* تدرج أصفر */
+            border-radius: 3px;
+            box-shadow: 0 0 15px var(--accent-color); /* توهج للخط */
         }
 
-        /* Header */
+        /* رأس الصفحة (Header) */
         .header {
-            background-color: var(--medium-dark-bg);
-            padding: 20px 0;
+            background-color: rgba(43, 43, 74, 0.85); /* خلفية شفافة أكثر */
+            padding: 18px 0; /* مساحة داخلية أكبر */
             border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* ظل أقوى */
             position: sticky;
             top: 0;
             z-index: 1000;
+            backdrop-filter: blur(var(--glass-blur)); /* تأثير الزجاج */
+            animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
         }
 
         .navbar {
@@ -132,469 +226,1509 @@
         .logo {
             display: flex;
             align-items: center;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.08);
+            text-shadow: 0 0 15px var(--primary-color);
         }
 
         .logo img {
-            height: 50px;
-            margin-left: 10px;
+            height: 50px; /* شعار أكبر */
+            margin-left: 15px;
             border-radius: 50%;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 12px rgba(88, 101, 242, 0.6); /* توهج أقوى */
+            transition: box-shadow 0.3s ease;
+        }
+        .logo img:hover {
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.8);
         }
 
         .logo span {
-            font-size: 1.8em;
+            font-size: 2.2rem; /* حجم أكبر للشعار النصي */
             font-weight: bold;
-            color: var(--primary-color);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            color: var(--light-text);
         }
 
         .nav-links {
             display: flex;
-            gap: 30px;
-            margin-right: auto; /* Push navigation links to the left in RTL */
+            gap: 35px; /* مسافة أكبر */
+            margin-right: auto;
+            transition: all 0.4s ease;
         }
 
         .nav-links li a {
             color: var(--soft-white);
-            font-weight: bold;
-            font-size: 1.1em;
-            padding: 5px 0;
+            font-weight: 600; /* وزن أكثر جرأة */
+            font-size: 1.15rem; /* حجم أكبر قليلاً */
+            padding: 10px 0;
             position: relative;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
         }
 
         .nav-links li a::after {
             content: '';
             position: absolute;
-            left: 0;
-            bottom: 0;
+            bottom: -5px; /* يظهر أسفل النص قليلاً */
+            right: 0; /* يبدأ من اليمين في RTL */
             width: 0;
-            height: 2px;
-            background-color: var(--primary-color);
-            transition: width 0.3s ease;
+            height: 3px; /* خط أسمك */
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 2px;
         }
 
         .nav-links li a:hover::after {
             width: 100%;
+            left: 0; /* يتحرك لليسار في RTL */
+        }
+
+        .nav-links li a:hover {
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(88, 101, 242, 0.6);
         }
 
         .auth-buttons {
             display: flex;
-            gap: 15px;
-            margin-right: 20px;
+            gap: 18px; /* مسافة أكبر */
+            margin-left: 25px;
+            transition: all 0.4s ease;
         }
 
         .hamburger {
             display: none;
             flex-direction: column;
             cursor: pointer;
-            gap: 5px;
+            gap: 7px; /* مسافة أكبر بين الخطوط */
+            padding: 8px;
         }
 
         .hamburger div {
-            width: 25px;
-            height: 3px;
-            background-color: var(--primary-color);
-            border-radius: 5px;
+            width: 32px; /* حجم أكبر */
+            height: 5px; /* سمك أكبر */
+            background-color: var(--light-text);
+            border-radius: 3px;
             transition: all 0.3s ease;
         }
 
-        /* Hero Section */
-        .hero {
-            /* استخدام رابط الصورة المباشر للخلفية */
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('https://media.discordapp.net/attachments/1248636782342443021/1388929555149885553/ChatGPT_Image_27_2025_03_36_55_.png?ex=6862c4f3&is=68617373&hm=1a50204bece5989e2e89f711499b4aa22c255a1dd3237f8f5bd0faf1805ea901') no-repeat center center/cover;
-            padding: 100px 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 3px solid var(--primary-color);
+        /* Hamburger animation */
+        .hamburger.open div:nth-child(1) {
+            transform: translateY(12px) rotate(-45deg);
+        }
+        .hamburger.open div:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.open div:nth-child(3) {
+            transform: translateY(-12px) rotate(45deg);
         }
 
-        .hero::before {
-            content: '';
+        /* قسم البطل (Hero Section) */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* يملأ ارتفاع الشاشة */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            background-color: var(--dark-bg); /* لون احتياطي */
+        }
+
+        #three-js-canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
-            pointer-events: none;
+            z-index: 1;
         }
 
-        .hero h1 {
-            font-size: 3.8em;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        .hero::before { /* شعار ديسكورد في الخلفية */
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(15deg); /* دوران طفيف */
+            width: 150%; /* اجعلها أكبر لتغطي مساحة أوسع */
+            height: 150%;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Discord_logo_blue.svg/1200px-Discord_logo_blue.svg.png'); /* شعار ديسكورد */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover; /* تغطية أفضل */
+            opacity: 0.03; /* شفافية خفيفة جداً */
+            z-index: 0; /* تأكد أنها خلف كل شيء */
+            filter: blur(8px) brightness(0.8); /* ضبابية وتغميق أكثر */
+            animation: rotateBackground 30s infinite linear; /* دوران مستمر */
+        }
+        @keyframes rotateBackground {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
-        .hero p {
-            font-size: 1.3em;
-            margin-bottom: 40px;
-            max-width: 800px;
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 950px; /* عرض أكبر للمحتوى */
+            color: var(--light-text);
+            padding: 40px 30px; /* مساحة داخلية أكبر */
+            background: rgba(0, 0, 0, 0.5); /* خلفية شفافة أكثر */
+            border-radius: 20px;
+            backdrop-filter: blur(var(--glass-blur) + 2px); /* ضبابية أعلى */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), var(--glow-strong); /* ظل وتوهج أقوى */
+            animation: fadeInScale 1.5s ease-out;
+            border: 2px solid rgba(88, 101, 242, 0.5); /* إطار متوهج */
+            overflow: hidden;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .hero-content h1 {
+            font-size: 5rem; /* حجم أكبر بكثير */
+            margin-bottom: 35px;
+            line-height: 1.1;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.9), 0 0 15px var(--accent-color); /* توهج أبيض وأصفر أقوى */
+            letter-spacing: 3px; /* تباعد الحروف أكثر */
+            background: linear-gradient(90deg, #E0E0FF, var(--primary-color), #E0E0FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .hero-content p {
+            font-size: 1.55rem; /* حجم أكبر */
+            opacity: 0.98;
+            margin-bottom: 60px; /* مسافة أكبر */
+            max-width: 750px;
             margin-left: auto;
-            color: var(--soft-white);
+            margin-right: auto;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
         }
 
         .hero-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px; /* مسافة أكبر بين الأزرار */
             flex-wrap: wrap;
         }
 
-        /* Features Section */
+        /* أنيميشن الظهور التدريجي للأقسام */
+        .section-animation {
+            opacity: 0;
+            transform: translateY(70px); /* حركة أطول */
+            transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .section-animation.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* قسم الميزات (Features Section) */
         .features {
-            padding: 80px 0;
+            padding: 120px 0; /* مساحة داخلية أكبر */
             background-color: var(--dark-bg);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid var(--medium-dark-bg);
+        }
+
+        .features::before { /* شعار ديسكورد في الخلفية */
+            content: '';
+            position: absolute;
+            bottom: -30%; /* يظهر من الأسفل أكثر */
+            right: -30%; /* يظهر من اليمين أكثر */
+            width: 120%;
+            height: 120%;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Discord_logo_blue.svg/1200px-Discord_logo_blue.svg.png'); /* شعار ديسكورد */
+            background-repeat: no-repeat;
+            background-position: bottom right;
+            background-size: 80%; /* حجم أكبر قليلاً */
+            opacity: 0.02; /* شفافية خفيفة جدا */
+            z-index: 0; /* تأكد أنها خلف كل شيء */
+            filter: blur(6px) brightness(0.7); /* ضبابية وتغميق أكثر */
+            animation: slideInRight 25s infinite alternate ease-in-out;
+        }
+        @keyframes slideInRight {
+            0% { transform: translateX(0); opacity: 0.02; }
+            50% { opacity: 0.04; }
+            100% { transform: translateX(-5%); opacity: 0.02; }
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* عرض أكبر للبطاقات */
+            gap: 50px; /* مسافة أكبر */
+            margin-top: 80px;
+            position: relative;
+            z-index: 1;
         }
 
-        .feature-card {
-            background-color: var(--medium-dark-bg);
-            padding: 30px;
-            border-radius: 15px;
+        .feature-item {
+            background: var(--card-bg); /* خلفية زجاجية */
+            padding: 45px; /* مساحة داخلية أكبر */
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.5s ease;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--border-color); /* حدود أكثر وضوحاً */
+            backdrop-filter: blur(var(--glass-blur));
+            position: relative;
+            overflow: hidden;
+            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
+            will-change: transform, opacity, box-shadow; /* تحسين الأداء */
+        }
+        /* سيتم إضافة "in-view" بواسطة IntersectionObserver */
+
+        .feature-item::before { /* تأثير وهج داخلي */
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(254, 231, 92, 0.1), transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+        .feature-item:hover::before {
+            opacity: 1;
         }
 
-        .feature-card:hover {
-            transform: translateY(-10px);
+        .feature-item:hover {
+            transform: translateY(-12px) scale(1.05); /* حركة وتكبير أكبر */
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.8), var(--glow-strong); /* ظل وتوهج أقوى بكثير */
+            border-color: var(--accent-color);
+        }
+
+        .feature-item i {
+            font-size: 5.5rem; /* أيقونات أكبر بكثير */
+            color: var(--accent-color); /* لون أصفر للأيقونات */
+            margin-bottom: 30px;
+            filter: var(--glow-filter); /* توهج للأيقونات */
+            transition: transform 0.3s ease;
+        }
+        .feature-item:hover i {
+            transform: rotateY(15deg) scale(1.1); /* دوران وتكبير للأيقونة */
+        }
+
+        .feature-item h3 {
+            font-size: 2.5rem; /* عناوين فرعية أكبر وأكثر بروزاً */
+            margin-bottom: 25px;
+            color: var(--light-text);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 0 5px var(--primary-color);
+            font-weight: 700;
+        }
+
+        .feature-item p {
+            color: var(--soft-white);
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.9;
+        }
+
+        /* قسم لوحة التحكم (Dashboard Preview) */
+        .dashboard-preview {
+            padding: 120px 0;
+            background-color: var(--dark-bg);
+            overflow: hidden;
+        }
+
+        .dashboard-preview p {
+            font-size: 1.4rem;
+            color: var(--soft-white);
+            text-align: center;
+            margin-bottom: 60px;
+            max-width: 950px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .dashboard-screenshot {
+            text-align: center;
+            margin-top: 60px;
+            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
+            will-change: transform, opacity;
+        }
+
+        .dashboard-screenshot img {
+            max-width: 98%; /* أقصى عرض لتملأ المساحة */
+            height: auto;
+            border-radius: 25px; /* حواف أكثر استدارة */
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px var(--primary-color); /* ظل وتوهج أقوى */
+            border: 4px solid var(--primary-color); /* حدود سميكة وبلون أساسي */
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .dashboard-screenshot img:hover {
+            transform: scale(1.01); /* تكبير طفيف */
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), var(--glow-strong);
+        }
+
+        /* قسم ميزات الذكاء الاصطناعي (Gemini API Features) */
+        .gemini-section {
+            padding: 120px 0;
+            background-color: var(--medium-dark-bg);
+            overflow: hidden;
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .gemini-section .container {
+            max-width: 950px;
+        }
+        .gemini-card {
+            background: var(--card-bg);
+            padding: 45px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(var(--glass-blur));
+            margin-bottom: 50px; /* مسافة أكبر */
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out, box-shadow 0.4s ease;
+            will-change: transform, opacity, box-shadow;
+        }
+        .gemini-card.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .gemini-card:hover {
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(254, 231, 92, 0.6); /* توهج أصفر عند التحويم */
+        }
+
+        .gemini-card h3 {
+            font-size: 2.8rem; /* حجم أكبر */
+            color: var(--accent-color);
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(254, 231, 92, 0.6);
+            font-weight: 700;
+        }
+        .gemini-card textarea {
+            width: 100%;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 2px solid var(--border-color);
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            min-height: 120px;
+            resize: vertical;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--inset-shadow);
+        }
+        .gemini-card textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: var(--inset-shadow), 0 0 15px rgba(88, 101, 242, 0.6);
+        }
+        .gemini-card button {
+            margin-top: 15px;
+            width: auto;
+            padding: 15px 30px;
+            font-size: 1.05rem;
+        }
+        .gemini-output {
+            background-color: var(--dark-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 40px;
+            text-align: right;
+            min-height: 120px;
+            max-height: 450px;
+            overflow-y: auto;
+            color: var(--soft-white);
+            font-size: 1.15rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            position: relative;
+            box-shadow: var(--inset-shadow);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .gemini-output.loading::before {
+            content: 'جاري التوليد...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.6rem;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        .gemini-output.error {
+            border-color: #E04343; /* أحمر للخطأ */
+        }
+        .gemini-output:empty:not(.loading) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--soft-white);
+            opacity: 0.6;
+        }
+        .gemini-output:empty:not(.loading)::before {
+            content: attr(data-placeholder);
+            position: static;
+            transform: none;
+            animation: none;
+            font-size: 1.15rem;
+        }
+
+        /* قسم نظرة على السيرفر (Server Overview) */
+        .server-overview {
+            padding: 120px 0;
+            background-color: var(--dark-bg);
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            border-bottom: 2px solid var(--medium-dark-bg);
+        }
+
+        .server-overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .server-stat-card {
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(var(--glass-blur));
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            will-change: transform, opacity;
+        }
+        .server-stat-card.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .server-stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-color);
+        }
+
+        .server-stat-card i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(88, 101, 242, 0.6));
+        }
+
+        .server-stat-card .stat-value {
+            font-size: 3.2rem;
+            font-weight: bold;
+            color: var(--light-text);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .server-stat-card .stat-label {
+            font-size: 1.2rem;
+            color: var(--soft-white);
+            opacity: 0.9;
+        }
+
+        /* قسم بناء الأوامر المخصصة (Custom Command Builder) */
+        .command-builder {
+            padding: 120px 0;
+            background-color: var(--medium-dark-bg);
+            overflow: hidden;
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .command-builder-content {
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--primary-color);
+            backdrop-filter: blur(var(--glass-blur) + 2px);
+            max-width: 1000px;
+            margin: 60px auto 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: transform, opacity;
+            position: relative;
+        }
+        .command-builder-content.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .command-builder-content h3 {
+            font-size: 2.8rem;
+            color: var(--light-text);
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            font-weight: 700;
+        }
+
+        .builder-area {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .command-input-group {
+            display: flex;
+            align-items: center;
+            background-color: var(--dark-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            padding: 15px 20px;
+            box-shadow: var(--inset-shadow);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .command-input-group:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: var(--inset-shadow), 0 0 10px rgba(254, 231, 92, 0.5);
+        }
+
+        .command-input-group label {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-left: 15px;
+            min-width: 100px; /* لتناسق التسميات */
+            text-align: right;
+        }
+
+        .command-input-group input[type="text"],
+        .command-input-group select {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--light-text);
+            font-size: 1.05rem;
+            padding: 8px 0;
+        }
+
+        .command-input-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%235865F2"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>');
+            background-repeat: no-repeat;
+            background-position: left 0.7em top 50%, 0 0;
+            background-size: 1.2em auto, 100%;
+            padding-left: 2.5em; /* مساحة للأيقونة */
+            cursor: pointer;
+        }
+
+        .command-preview {
+            background-color: var(--dark-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 40px;
+            text-align: right;
+            min-height: 100px;
+            color: var(--soft-white);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            position: relative;
+            box-shadow: var(--inset-shadow);
+        }
+        .command-preview::before {
+            content: 'معاينة الأمر';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            opacity: 0.7;
+        }
+        .command-preview code {
+            display: block;
+            background-color: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            color: #E0E0FF;
+            font-family: 'Fira Code', 'monospace'; /* خط للبرمجة */
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+
+        /* قسم التقييمات (Testimonials Section) */
+        .testimonials {
+            padding: 120px 0;
+            background-color: var(--dark-bg); /* تغيير لون الخلفية لتمايز أفضل */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid var(--medium-dark-bg);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* عرض أكبر للبطاقات */
+            gap: 45px;
+            margin-top: 70px;
+            margin-bottom: 70px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-item {
+            background: var(--card-bg); /* خلفية زجاجية */
+            padding: 45px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+            text-align: right;
+            border: 2px solid var(--border-color);
+            transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 25px; /* مسافة أكبر */
+            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
+            will-change: transform, opacity, box-shadow;
+        }
+
+        .testimonial-item:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.7), var(--glow-strong);
             border-color: var(--primary-color);
         }
 
-        .feature-card i {
-            font-size: 3em;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        .feature-card h3 {
-            font-size: 1.7em;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-        }
-
-        .feature-card p {
-            color: var(--soft-white);
-            font-size: 0.95em;
-        }
-
-        /* How It Works Section */
-        .how-it-works {
-            padding: 80px 0;
-            background-color: var(--medium-dark-bg);
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .steps-container {
+        .testimonial-author {
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 40px;
-            margin-top: 50px;
-        }
-
-        .step-card {
-            background-color: var(--dark-bg);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 350px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--primary-color);
-            position: relative;
-        }
-
-        .step-card .step-number {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--primary-color);
-            color: var(--dark-bg);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 1.8em;
-            font-weight: bold;
-            border: 3px solid var(--dark-bg);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+            justify-content: flex-end;
+            gap: 25px; /* مسافة أكبر */
+            width: 100%;
         }
 
-        .step-card h3 {
-            margin-top: 25px;
-            margin-bottom: 15px;
+        .testimonial-author img {
+            width: 80px; /* صور أكبر للمستخدمين */
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-color); /* حدود بلون التوهج (أصفر) */
+            box-shadow: 0 0 18px rgba(254, 231, 92, 0.6); /* توهج حول الصورة (أصفر) */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .testimonial-author img:hover {
+            transform: rotateZ(5deg);
+            box-shadow: 0 0 25px rgba(254, 231, 92, 0.8);
+        }
+
+        .author-info {
+            text-align: right;
+        }
+
+        .author-info h4 {
+            font-size: 1.5rem; /* حجم أكبر */
             color: var(--primary-color);
-            font-size: 1.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
+            font-weight: 700;
         }
 
-        .step-card p {
+        .author-info span {
+            font-size: 1.05rem;
             color: var(--soft-white);
+            display: block;
+            opacity: 0.9;
+        }
+        
+        .testimonial-item .testimonial-text-content {
+            font-size: 1.2rem; /* حجم نص أكبر */
+            font-style: italic; /* نص مائل */
+            color: var(--soft-white);
+            margin-bottom: 0;
+            text-align: right;
+            width: 100%;
+            line-height: 1.9;
+            quotes: "„" "“" "‚" "‘"; /* علامات اقتباس عربية */
+        }
+        .testimonial-text-content::before {
+            content: open-quote;
+            font-size: 2em;
+            color: var(--accent-color);
+            line-height: 0.1em;
+            vertical-align: -0.4em;
+            margin-left: 0.1em;
+        }
+        .testimonial-text-content::after {
+            content: close-quote;
+            font-size: 2em;
+            color: var(--accent-color);
+            line-height: 0.1em;
+            vertical-align: -0.4em;
+            margin-right: 0.1em;
         }
 
-        /* Dashboard Overview Section (Simulated) */
-        .dashboard-overview {
-            padding: 80px 0;
-            background-color: var(--dark-bg);
+        /* قسم إضافة التعليق */
+        .add-comment-section {
+            background: var(--card-bg); /* خلفية زجاجية */
+            padding: 55px; /* مساحة داخلية أكبر */
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--border-color);
+            max-width: 900px; /* عرض أكبر */
+            margin: 70px auto 0; /* مسافة أعلى وأسفل */
+            text-align: center;
+            backdrop-filter: blur(var(--glass-blur));
+            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
+            will-change: transform, opacity;
         }
 
-        .dashboard-content {
+        .add-comment-section h3 {
+            font-size: 2.5rem; /* حجم أكبر */
+            color: var(--light-text);
+            margin-bottom: 35px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            font-weight: 700;
+        }
+
+        .comment-input-area {
             display: flex;
             flex-direction: column;
-            gap: 40px;
-            margin-top: 50px;
+            gap: 25px; /* مسافة أكبر */
+            margin-bottom: 35px;
         }
 
-        .dashboard-section {
+        .comment-input-area textarea {
+            width: 100%;
+            padding: 22px; /* مساحة داخلية أكبر */
+            border: 2px solid var(--border-color);
+            background-color: var(--dark-bg); /* خلفية داكنة */
+            color: var(--light-text);
+            border-radius: 12px; /* حواف أكثر استدارة */
+            font-size: 1.15rem; /* حجم خط أكبر */
+            min-height: 180px; /* ارتفاع أكبر */
+            resize: vertical;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--inset-shadow);
+        }
+
+        .comment-input-area textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: var(--inset-shadow), 0 0 20px rgba(88, 101, 242, 0.7); /* توهج عند التركيز */
+        }
+
+        .comment-submit-button {
+            width: auto;
+            padding: 16px 40px; /* حجم زر أكبر */
+            align-self: flex-end;
+            font-size: 1.15rem;
+        }
+
+        .login-prompt {
             background-color: var(--medium-dark-bg);
-            padding: 30px;
+            padding: 35px;
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            margin-top: 45px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border-color);
         }
-
-        .dashboard-section h3 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-
-        .dashboard-section p {
+        .login-prompt p {
+            font-size: 1.3rem;
             color: var(--soft-white);
-            margin-bottom: 15px;
-        }
-
-        .dashboard-section ul {
-            list-style: disc;
-            padding-right: 20px;
-            color: var(--soft-white);
-        }
-
-        .dashboard-section ul li {
-            margin-bottom: 10px;
-        }
-
-        .dashboard-image {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .dashboard-image img {
-            max-width: 100%;
-            border-radius: 10px;
-            border: 2px solid var(--primary-color);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
-
-        /* Call to Action */
-        .cta {
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            padding: 60px 0;
-            text-align: center;
-            color: var(--dark-bg);
-            margin-top: 50px;
-        }
-
-        .cta h2 {
-            font-size: 2.8em;
-            margin-bottom: 20px;
-            color: var(--dark-bg);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .cta p {
-            font-size: 1.2em;
             margin-bottom: 30px;
-            color: var(--dark-bg);
+        }
+        .login-prompt .btn {
+            padding: 14px 28px;
+            font-size: 1.05rem;
         }
 
-        .cta .btn {
+        .message-box {
+            background: linear-gradient(90deg, var(--secondary-color), #60C99E); /* تدرج أخضر */
+            color: var(--light-text);
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+            font-size: 1.3rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.5s ease, transform 0.5s ease, background-color 0.4s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+        .message-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .message-box.error {
+            background: linear-gradient(90deg, #E04343, #FF7B7B); /* تدرج أحمر للخطأ */
+        }
+
+
+        /* قسم الأسئلة الشائعة (FAQ) */
+        .faq {
+            padding: 120px 0;
             background-color: var(--dark-bg);
+            overflow: hidden;
+            border-bottom: 2px solid var(--medium-dark-bg);
+        }
+
+        .faq-item {
+            background: var(--card-bg); /* خلفية زجاجية */
+            margin-bottom: 25px;
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            transition: box-shadow 0.4s ease, transform 0.3s ease;
+            backdrop-filter: blur(var(--glass-blur));
+            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
+            will-change: transform, opacity;
+        }
+        .faq-item:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+        }
+
+        .faq-question {
+            padding: 30px 35px; /* مساحة داخلية أكبر */
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.4rem; /* حجم أكبر */
+            font-weight: bold;
+            color: var(--light-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-bottom: 1px solid transparent;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+        }
+
+        .faq-question:hover {
+            background-color: var(--border-color);
             color: var(--primary-color);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .cta .btn:hover {
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: var(--primary-color);
+            filter: var(--glow-filter);
+            font-size: 1.1em;
+        }
+
+        .faq-answer {
+            padding: 0 35px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), padding 0.5s ease-out;
+            font-size: 1.1rem;
+            color: var(--soft-white);
+            line-height: 1.9;
+            opacity: 0.9;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 400px; /* تعديل حسب الحاجة */
+            padding: 20px 35px 30px;
+        }
+
+        .faq-item.active .faq-question {
+            border-bottom-color: var(--border-color);
             background-color: var(--medium-dark-bg);
-            color: var(--hover-color);
+            color: var(--accent-color);
         }
 
-        /* Footer */
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* قسم اتصل بنا (Contact Us) */
+        .contact {
+            padding: 120px 0;
+            background-color: var(--medium-dark-bg);
+            overflow: hidden;
+        }
+
+        .contact-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 60px; /* مسافة أكبر */
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            width: 100%;
+            background: var(--card-bg); /* خلفية زجاجية */
+            padding: 55px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(var(--glass-blur));
+            opacity: 0; /* مخفي افتراضيًا للأنيميشن */
+            will-change: transform, opacity;
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 30px; /* مسافة أكبر */
+            text-align: right;
+        }
+
+        .contact-form label {
+            display: block;
+            margin-bottom: 12px; /* مسافة أكبر */
+            font-weight: bold;
+            color: var(--light-text);
+            font-size: 1.2rem;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+        }
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 18px 25px; /* مساحة داخلية أكبر */
+            border: 2px solid var(--border-color);
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--inset-shadow);
+        }
+
+        .contact-form input[type="text"]:focus,
+        .contact-form input[type="email"]:focus,
+        .contact-form textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: var(--inset-shadow), 0 0 18px rgba(88, 101, 242, 0.7);
+            outline: none;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 200px; /* ارتفاع أكبر */
+        }
+
+        .contact-form button {
+            width: 100%;
+            padding: 20px; /* حجم زر أكبر */
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        /* التذييل (Footer) */
         .footer {
-            background-color: var(--medium-dark-bg);
-            padding: 40px 0;
-            border-top: 1px solid var(--border-color);
+            background-color: var(--dark-bg); /* تغيير لون الخلفية للتطابق */
+            padding: 60px 0; /* مساحة داخلية أكبر */
+            border-top: 2px solid var(--border-color);
             text-align: center;
+            color: var(--soft-white);
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px; /* مسافة أكبر */
         }
 
         .footer-links {
             display: flex;
-            justify-content: center;
             flex-wrap: wrap;
-            gap: 30px;
+            justify-content: center;
+            gap: 30px 50px; /* مسافة أكبر */
             margin-bottom: 30px;
         }
 
-        .footer-links a {
+        .footer-links li a {
             color: var(--soft-white);
-            font-weight: bold;
-            font-size: 1.1em;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            font-size: 1.1rem;
+            font-weight: 500;
         }
 
-        .social-icons {
-            margin-bottom: 30px;
-        }
-
-        .social-icons a {
-            color: var(--soft-white);
-            font-size: 1.8em;
-            margin: 0 15px;
-            transition: color 0.3s ease, transform 0.2s ease;
-        }
-
-        .social-icons a:hover {
+        .footer-links li a:hover {
             color: var(--primary-color);
-            transform: translateY(-3px);
+            text-shadow: 0 0 10px rgba(88, 101, 242, 0.6);
         }
 
-        .footer p {
-            font-size: 0.9em;
+        .social-media {
+            margin-top: 25px;
+            margin-bottom: 30px;
+        }
+
+        .social-media a {
+            color: var(--light-text);
+            font-size: 2.2rem; /* أيقونات أكبر */
+            margin: 0 15px;
+            transition: color 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .social-media a:hover {
+            color: var(--primary-color);
+            transform: translateY(-5px) scale(1.2);
+            filter: var(--glow-filter);
+        }
+
+        /* قسم اختيار اللغة والأيقونة المخصصة */
+        .language-selector-section {
+            margin-top: 50px; /* مسافة أعلى أكبر */
+            padding-top: 35px;
+            border-top: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .lang-button {
+            background-color: var(--medium-dark-bg);
             color: var(--soft-white);
+            padding: 14px 25px; /* حجم زر أكبر */
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            font-weight: bold;
+            font-size: 1.05rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
         }
 
-        /* Responsive Design */
+        .lang-button:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--light-text);
+            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
+        }
+
+        .lang-button.active {
+            background: linear-gradient(45deg, var(--primary-color), var(--hover-color));
+            border-color: var(--primary-color);
+            color: var(--light-text);
+            pointer-events: none;
+            box-shadow: 0 6px 18px rgba(88, 101, 242, 0.5);
+        }
+
+        .custom-icon img {
+            width: 70px; /* أيقونة أكبر */
+            height: 70px;
+            object-fit: contain;
+            margin-top: 25px;
+            filter: drop-shadow(0 0 15px rgba(88, 101, 242, 0.8)); /* توهج أكبر */
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .custom-icon img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* المودال للمطور */
+        .developer-modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9); /* خلفية داكنة أكثر */
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(var(--glass-blur) + 5px); /* ضبابية أعلى */
+        }
+
+        .developer-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(43, 43, 74, 0.95), rgba(26, 26, 46, 0.95)); /* خلفية متدرجة للمودال */
+            padding: 50px;
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8), var(--glow-strong); /* ظل وتوهج أقوى */
+            text-align: center;
+            transform: translateY(-80px); /* يبدأ من مكان أبعد */
+            opacity: 0;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            backdrop-filter: blur(var(--glass-blur));
+        }
+
+        .developer-modal.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .close-button {
+            color: var(--soft-white);
+            float: left;
+            font-size: 38px; /* حجم أكبر */
+            font-weight: bold;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: var(--accent-color);
+            text-shadow: 0 0 12px var(--accent-color);
+            cursor: pointer;
+        }
+
+        .modal-content h3 {
+            color: var(--primary-color);
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(88, 101, 242, 0.6);
+            font-weight: 700;
+        }
+
+        .modal-content img {
+            width: 150px; /* صورة مطور أكبر */
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--accent-color);
+            margin-bottom: 25px;
+            box-shadow: 0 0 25px rgba(254, 231, 92, 0.7); /* توهج أصفر أقوى */
+        }
+
+        .modal-content p {
+            font-size: 1.3rem;
+            color: var(--soft-white);
+            margin-bottom: 18px;
+            opacity: 0.95;
+            line-height: 1.8;
+        }
+
+        /* الاستجابة لتصغير الشاشات (Responsive Design) */
         @media (max-width: 992px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                background-color: var(--medium-dark-bg);
-                position: absolute;
-                top: 90px; /* Adjust based on header height */
-                left: 0;
-                padding: 20px 0;
-                border-top: 1px solid var(--border-color);
+            .hero-content h1 {
+                font-size: 4rem;
             }
-
-            .nav-links.active {
-                display: flex;
+            .hero-content p {
+                font-size: 1.35rem;
             }
-
-            .nav-links li {
-                text-align: center;
-                margin: 10px 0;
+            .section-heading {
+                font-size: 3rem;
             }
-
-            .auth-buttons {
-                margin-top: 20px;
-                justify-content: center;
-                width: 100%;
+            .feature-item h3 {
+                font-size: 2.2rem;
             }
-
-            .hamburger {
-                display: flex;
+            .gemini-card h3 {
+                font-size: 2.3rem;
             }
-
-            .hero h1 {
-                font-size: 3em;
+            .server-stat-card .stat-value {
+                font-size: 2.8rem;
             }
-
-            .hero p {
-                font-size: 1.1em;
+            .server-stat-card .stat-label {
+                font-size: 1.1rem;
             }
-
-            .features-grid, .steps-container {
-                grid-template-columns: 1fr;
+            .command-builder-content h3 {
+                font-size: 2.3rem;
             }
-
-            .step-card {
-                max-width: 90%;
-                margin-left: auto;
-                margin-right: auto;
+            .command-input-group label {
+                min-width: 80px;
             }
         }
 
         @media (max-width: 768px) {
+            body {
+                font-size: 15px;
+            }
+            .navbar {
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                margin-top: 20px;
+                background-color: rgba(43, 43, 74, 0.95);
+                padding: 15px 0;
+                border-radius: 10px;
+                order: 3;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .auth-buttons {
+                margin-left: 0;
+                margin-top: 20px;
+                width: 100%;
+                justify-content: center;
+                order: 2;
+            }
+            .hamburger {
+                display: flex;
+                order: 1;
+            }
+            .logo {
+                order: 0;
+            }
+            .hero-content h1 {
+                font-size: 3.2rem;
+            }
+            .hero-content p {
+                font-size: 1.2rem;
+                margin-bottom: 40px;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                gap: 18px;
+            }
+            .hero-buttons .btn {
+                width: 90%;
+                margin: 0 auto;
+            }
+            .features-grid, .testimonial-grid, .server-overview-grid {
+                grid-template-columns: 1fr;
+            }
             .section-heading {
-                font-size: 2em;
+                font-size: 2.5rem;
+                margin-bottom: 40px;
             }
-
-            .hero {
-                padding: 70px 0;
+            .feature-item, .testimonial-item, .add-comment-section, .contact-form, .faq-item, .gemini-card, .server-stat-card, .command-builder-content {
+                padding: 35px;
+                margin-bottom: 35px;
             }
-
-            .hero h1 {
-                font-size: 2.5em;
+            .feature-item i {
+                font-size: 4.5rem;
             }
-
-            .hero p {
-                font-size: 1em;
+            .feature-item h3 {
+                font-size: 2rem;
             }
-
-            .feature-card, .step-card {
-                padding: 25px;
+            .testimonial-author img {
+                width: 70px;
+                height: 70px;
             }
-
-            .dashboard-section h3 {
-                font-size: 1.7em;
+            .testimonial-author h4 {
+                font-size: 1.4rem;
             }
-
-            .cta h2 {
-                font-size: 2.2em;
+            .testimonial-item .testimonial-text-content {
+                font-size: 1.1rem;
             }
-
-            .cta p {
-                font-size: 1em;
+            .add-comment-section h3 {
+                font-size: 2.2rem;
+            }
+            .comment-input-area textarea {
+                min-height: 150px;
+            }
+            .faq-question {
+                font-size: 1.25rem;
+                padding: 25px 30px;
+            }
+            .faq-answer {
+                font-size: 1.05rem;
+                padding: 15px 30px 25px;
+            }
+            .contact-form label {
+                font-size: 1.1rem;
+            }
+            .contact-form input[type="text"], .contact-form input[type="email"], .contact-form textarea {
+                padding: 15px 20px;
+            }
+            .contact-form textarea {
+                min-height: 180px;
+            }
+            .gemini-card h3 {
+                font-size: 2.1rem;
+            }
+            .gemini-output {
+                font-size: 1.05rem;
+            }
+            .server-stat-card .stat-value {
+                font-size: 2.5rem;
+            }
+            .command-builder-content h3 {
+                font-size: 2.2rem;
+            }
+            .command-input-group label {
+                min-width: auto;
+                margin-left: 10px;
+                text-align: right;
+            }
+            .command-input-group input[type="text"],
+            .command-input-group select {
+                font-size: 1rem;
+                padding: 6px 0;
             }
         }
 
         @media (max-width: 480px) {
             .logo span {
-                font-size: 1.5em;
+                font-size: 1.8rem;
             }
-
+            .hero-content h1 {
+                font-size: 2.5rem;
+                letter-spacing: 1px;
+            }
+            .hero-content p {
+                font-size: 1rem;
+                margin-bottom: 30px;
+            }
             .btn {
-                padding: 10px 20px;
-                font-size: 0.9em;
+                padding: 12px 25px;
+                font-size: 0.95rem;
             }
-
-            .auth-buttons {
+            .section-heading {
+                font-size: 2rem;
+            }
+            .feature-item h3 {
+                font-size: 1.8rem;
+            }
+            .feature-item i {
+                font-size: 3.5rem;
+            }
+            .testimonial-item p {
+                font-size: 1rem;
+            }
+            .language-selector {
                 flex-direction: column;
-                gap: 10px;
+                gap: 15px;
+                width: 90%;
             }
+            .lang-button {
+                width: 100%;
+            }
+            .modal-content {
+                padding: 30px;
+            }
+            .modal-content h3 {
+                font-size: 2rem;
+            }
+            .modal-content img {
+                width: 120px;
+                height: 120px;
+            }
+            .modal-content p {
+                font-size: 1.1rem;
+            }
+            .gemini-card h3 {
+                font-size: 1.8rem;
+            }
+            .gemini-card button {
+                font-size: 0.95rem;
+            }
+            .server-stat-card .stat-value {
+                font-size: 2.2rem;
+            }
+            .server-stat-card .stat-label {
+                font-size: 0.95rem;
+            }
+            .command-builder-content h3 {
+                font-size: 1.8rem;
+            }
+        }
 
-            .hero h1 {
-                font-size: 2em;
-            }
-
-            .hero p {
-                font-size: 0.9em;
-            }
-
-            .feature-card h3 {
-                font-size: 1.4em;
-            }
+        /* تعديلات لاتجاه LTR عند تبديل اللغة (ليعكس التصميم العربي) */
+        body.en, body.fr, body.zh {
+            direction: ltr;
+            text-align: left;
+        }
+        body.en .logo img, body.fr .logo img, body.zh .logo img {
+            margin-right: 15px;
+            margin-left: 0;
+        }
+        body.en .nav-links, body.fr .nav-links, body.zh .nav-links {
+            margin-left: auto;
+            margin-right: 0;
+        }
+        body.en .nav-links li a::after, body.fr .nav-links li a::after, body.zh .nav-links li a::after {
+            right: unset;
+            left: 0;
+        }
+        body.en .auth-buttons, body.fr .auth-buttons, body.zh .auth-buttons {
+            margin-right: 25px;
+            margin-left: 0;
+        }
+        body.en .section-heading::after, body.fr .section-heading::after, body.zh .section-heading::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        body.en .feature-item, body.fr .feature-item, body.zh .feature-item {
+            text-align: center;
+        }
+        body.en .testimonial-item, body.fr .testimonial-item, body.zh .testimonial-item {
+            text-align: left;
+            align-items: flex-start;
+        }
+        body.en .testimonial-author, body.fr .testimonial-author, body.zh .testimonial-author {
+            justify-content: flex-start;
+        }
+        body.en .testimonial-author img, body.fr .testimonial-author img, body.zh .testimonial-author img {
+            margin-right: 25px;
+            margin-left: 0;
+        }
+        body.en .contact-form .form-group, body.fr .contact-form .form-group, body.zh .contact-form .form-group {
+            text-align: left;
+        }
+        body.en .close-button, body.fr .close-button, body.zh .close-button {
+            float: right;
+        }
+        body.en .comment-submit-button, body.fr .comment-submit-button, body.zh .comment-submit-button {
+            align-self: flex-start;
+        }
+        body.en .gemini-output, body.fr .gemini-output, body.zh .gemini-output {
+            text-align: left;
+        }
+        body.en .testimonial-text-content::before, body.fr .testimonial-text-content::before, body.zh .testimonial-text-content::before {
+            margin-right: 0.1em;
+            margin-left: 0;
+        }
+        body.en .testimonial-text-content::after, body.fr .testimonial-text-content::after, body.zh .testimonial-text-content::after {
+            margin-left: 0.1em;
+            margin-right: 0;
+        }
+        body.en .command-input-group label, body.fr .command-input-group label, body.zh .command-input-group label {
+            margin-right: 15px;
+            margin-left: 0;
+            text-align: left;
+        }
+        body.en .command-input-group select, body.fr .command-input-group select, body.zh .command-input-group select {
+            background-position: right 0.7em top 50%, 0 0;
+            padding-right: 2.5em;
+            padding-left: 0;
+        }
+        body.en .command-preview::before, body.fr .command-preview::before, body.zh .command-preview::before {
+            right: unset;
+            left: 15px;
         }
     </style>
 </head>
-<body>
-
+<body class="ar">
+    <!-- رأس الصفحة (Header) -->
     <header class="header">
         <div class="container">
             <nav class="navbar">
@@ -602,310 +1736,1260 @@
                     <img src="https://media.discordapp.net/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=6862c4f3&is=68617373&hm=8f081e2ff1124f60bdc0035e8922fd3772694033c360e180caefa707545b0c2e" alt="VND Bot Logo">
                     <span>VND Bot</span>
                 </a>
-
+                <ul class="nav-links">
+                    <li><a href="#hero" data-lang-key="home">الرئيسية</a></li>
+                    <li><a href="#features" data-lang-key="features">الميزات</a></li>
+                    <li><a href="#dashboard" data-lang-key="dashboard">لوحة التحكم</a></li>
+                    <li><a href="#server-overview" data-lang-key="server_overview_nav">نظرة على السيرفر</a></li> <!-- New Nav Link -->
+                    <li><a href="#command-builder" data-lang-key="command_builder_nav">بناء الأوامر</a></li> <!-- New Nav Link -->
+                    <li><a href="#llm-features" data-lang-key="llm_features_nav">ميزات الذكاء الاصطناعي</a></li>
+                    <li><a href="#testimonials" data-lang-key="testimonials">التقييمات</a></li>
+                    <li><a href="#faq" data-lang-key="faq">الأسئلة الشائعة</a></li>
+                    <li><a href="#contact" data-lang-key="contact">اتصل بنا</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="#" class="btn" id="login-button" data-lang-key="login"><i class="fab fa-discord"></i> تسجيل الدخول</a>
+                    <a href="#" class="btn btn-outline" id="invite-button" data-lang-key="invite_bot"><i class="fas fa-plus-circle"></i> دعوة البوت</a>
+                </div>
                 <div class="hamburger" id="hamburger-menu">
                     <div></div>
                     <div></div>
                     <div></div>
-                </div>
-
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="#home">الرئيسية</a></li>
-                    <li><a href="#features">المميزات</a></li>
-                    <li><a href="#how-it-works">كيف يعمل؟</a></li>
-                    <li><a href="#dashboard-preview">لوحة التحكم</a></li>
-                    <li><a href="#support">الدعم</a></li>
-                </ul>
-
-                <div class="auth-buttons">
-                    <a href="#" class="btn" id="login-button"><i class="fab fa-discord"></i> تسجيل الدخول بالديسكورد</a>
-                    <a href="/dashboard" class="btn btn-outline" id="dashboard-button" style="display: none;"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a>
                 </div>
             </nav>
         </div>
     </header>
 
     <main>
-        <section class="hero" id="home">
-            <div class="container">
-                <img src="https://media.discordapp.net/attachments/1248636782342443021/1388929555540213881/68186675_60_BNRConverted.png?ex=6862c4f3&is=68617373&hm=6cb1618f6a0cf0a540d7e6be3a4675b6c916f4ca2d0b31082e7a2f42e1ac6f32" alt="VND Bot Banner" style="max-width: 80%; height: auto; margin-bottom: 40px; border-radius: 15px; box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);">
-                <h1>ارتقِ بمجتمعك مع بوت VND للديسكورد</h1>
-                <p>تحكم كامل ومرونة لا مثيل لها لإدارة سيرفرك. من الإعدادات الأساسية إلى الميزات المتقدمة، كل شيء بين يديك.</p>
+        <!-- قسم البطل (Hero Section) -->
+        <section id="hero" class="hero">
+            <canvas id="three-js-canvas"></canvas>
+            <div class="container hero-content">
+                <h1 data-lang-key="hero_heading">تحكم كامل ببووت الديسكورد الخاص بك، بسهولة واحترافية</h1>
+                <p data-lang-key="hero_subheading">
+                    لوحة تحكم VND Bot توفر لك كل الأدوات التي تحتاجها لإدارة خادمك، الأوامر، الأعضاء والمزيد، بفضل واجهة بسيطة ومريحة.
+                </p>
                 <div class="hero-buttons">
-                    <a href="#" class="btn" id="invite-bot-button"><i class="fab fa-discord"></i> دعوة البوت الآن</a>
-                    <a href="#features" class="btn btn-outline"><i class="fas fa-info-circle"></i> اكتشف المميزات</a>
+                    <a href="#" class="btn" id="add-bot-button" data-lang-key="add_bot_to_server"><i class="fas fa-robot"></i> إضافة البوت إلى سيرفرك</a>
+                    <a href="#" class="btn btn-outline" id="control-bot-button" data-lang-key="control_bot" style="display: none;"><i class="fas fa-tachometer-alt"></i> تحكم بالبوت</a>
+                    <a href="#features" class="btn btn-outline" data-lang-key="explore_features"><i class="fas fa-info-circle"></i> استكشف الميزات</a>
                 </div>
             </div>
         </section>
 
-        <section class="features" id="features">
+        <!-- قسم الميزات (Features Section) -->
+        <section id="features" class="features section-animation">
             <div class="container">
-                <h2 class="section-heading">ميزات لا غنى عنها لـ VND Bot</h2>
+                <h2 class="section-heading" data-lang-key="features_title">ميزات قوية، تحكم كامل</h2>
                 <div class="features-grid">
-                    <div class="feature-card">
+                    <div class="feature-item">
                         <i class="fas fa-cogs"></i>
-                        <h3>إعدادات متقدمة</h3>
-                        <p>لوحة تحكم سهلة الاستخدام تمنحك تحكمًا دقيقًا في كل جانب من جوانب البوت، دون الحاجة لأي برمجة.</p>
+                        <h3 data-lang-key="feature1_title">إدارة الأوامر</h3>
+                        <p data-lang-key="feature1_desc">تحكم بأوامر البوت الخاصة بك، وقم بتفعيلها أو تعطيلها، وتخصيصها بسهولة.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-item">
+                        <i class="fas fa-users-cog"></i>
+                        <h3 data-lang-key="feature2_title">إدارة الأعضاء</h3>
+                        <p data-lang-key="feature2_desc">أدوات متقدمة لإدارة الأعضاء، الأدوار، والعقوبات في خادمك.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fab fa-youtube" style="color: var(--primary-color);"></i>
+                        <h3 data-lang-key="feature3_title">نظام لليوتيوبرز</h3>
+                        <p data-lang-key="feature3_desc">استخدم البوت لتنبيه الأعضاء بآخر فيديو تم تنزيله على قناتك، كما يمكنك إنشاء غرفة لتكون عداد مشتركين يتم تحديثه تلقائيًا.</p>
+                    </div>
+                    <div class="feature-item">
                         <i class="fas fa-shield-alt"></i>
-                        <h3>نظام حماية قوي</h3>
-                        <p>حافظ على سيرفرك آمنًا من التخريب والرسائل المزعجة باستخدام أدوات الإشراف الأوتوماتيكية والمخصصة.</p>
+                        <h3 data-lang-key="feature4_title">نظام حماية</h3>
+                        <p data-lang-key="feature4_desc">حافظ على أمان خادمك من خلال أنظمة حماية متقدمة ضد السبام والاختراق.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-item">
+                        <i class="fas fa-ticket-alt" style="color: var(--primary-color);"></i>
+                        <h3 data-lang-key="feature5_title">نظام التذاكر</h3>
+                        <p data-lang-key="feature5_desc">نظام التذاكر الاحترافي الذي يسهل على الأعضاء التواصل مع الإداريين وطلب المساعدة بكفاءة، إنه أفضل نظام تذاكر على الإطلاق.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-music" style="color: var(--primary-color);"></i>
+                        <h3 data-lang-key="feature6_title">تشغيل الأغاني</h3>
+                        <p data-lang-key="feature6_desc">يستطيع البوت تشغيل الأغاني المفضلة في غرفتك الصوتية على ديسكورد بجودة عالية وبدون تقطيع، مع دعم قوائم التشغيل والتحكم الكامل.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم لوحة التحكم (Dashboard Preview) -->
+        <section id="dashboard" class="dashboard-preview section-animation">
+            <div class="container">
+                <h2 class="section-heading" data-lang-key="dashboard_title">نظرة على لوحة التحكم</h2>
+                <p data-lang-key="dashboard_desc">
+                    واجهة سهلة الاستخدام وبديهية، تمنحك تحكمًا كاملاً في جميع جوانب بووت الديسكورد الخاص بك بلمسة زر.
+                </p>
+                <div class="dashboard-screenshot">
+                    <img src="https://media.discordapp.net/attachments/1248636782342443021/1388929555540213881/68186675_60_BNRConverted.png?ex=6862c4f3&is=68617373&hm=6cb1618f6a0cf0a540d7e6be3a4675b6c916f4ca2d0b31082e7a2f42e1ac6f32" alt="صورة البنر كمعاينة للوحة التحكم">
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم نظرة على السيرفر (Server Overview Section - NEW) -->
+        <section id="server-overview" class="server-overview section-animation">
+            <div class="container">
+                <h2 class="section-heading" data-lang-key="server_overview_title">📊 نظرة على سيرفرك</h2>
+                <p data-lang-key="server_overview_desc">
+                    تابع أهم الإحصائيات الحيوية لسيرفرك في الوقت الفعلي، من الأعضاء النشطين إلى الرسائل المرسلة والمزيد.
+                </p>
+                <div class="server-overview-grid">
+                    <div class="server-stat-card">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-value" id="total-members">15,340</div>
+                        <div class="stat-label" data-lang-key="total_members">إجمالي الأعضاء</div>
+                    </div>
+                    <div class="server-stat-card">
+                        <i class="fas fa-user-plus"></i>
+                        <div class="stat-value" id="new-members-today">245</div>
+                        <div class="stat-label" data-lang-key="new_members_today">أعضاء جدد اليوم</div>
+                    </div>
+                    <div class="server-stat-card">
+                        <i class="fas fa-user-friends"></i>
+                        <div class="stat-value" id="online-members">9,876</div>
+                        <div class="stat-label" data-lang-key="online_members">الأعضاء المتصلون</div>
+                    </div>
+                    <div class="server-stat-card">
+                        <i class="fas fa-comments"></i>
+                        <div class="stat-value" id="messages-sent">123,456</div>
+                        <div class="stat-label" data-lang-key="messages_sent">الرسائل المرسلة (اليوم)</div>
+                    </div>
+                    <div class="server-stat-card">
+                        <i class="fas fa-hashtag"></i>
+                        <div class="stat-value" id="total-channels">120</div>
+                        <div class="stat-label" data-lang-key="total_channels">إجمالي القنوات</div>
+                    </div>
+                    <div class="server-stat-card">
                         <i class="fas fa-robot"></i>
-                        <h3>أوامر مخصصة</h3>
-                        <p>أنشئ أوامر بوت خاصة بسيرفرك لتلبية احتياجاتك الفريدة ولإضفاء طابع شخصي على تفاعلات الأعضاء.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-bell"></i>
-                        <h3>إشعارات ترحيب ومغادرة</h3>
-                        <p>اجذب أعضاء جددًا واجعلهم يشعرون بالترحيب عبر رسائل ترحيب مخصصة وقابلة للتعديل بالكامل.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-chart-line"></i>
-                        <h3>إحصائيات السيرفر</h3>
-                        <p>راقب نشاط سيرفرك وأداء البوت من خلال لوحة الإحصائيات الشاملة التي توفر لك رؤى قيمة.</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-star"></i>
-                        <h3>نظام المستويات (Leveling)</h3>
-                        <p>شجع التفاعل في سيرفرك بمكافأة الأعضاء النشطين بنظام مستويات XP وتوزيع الرتب تلقائيًا.</p>
+                        <div class="stat-value" id="commands-used">7,890</div>
+                        <div class="stat-label" data-lang-key="commands_used">الأوامر المستخدمة (اليوم)</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="how-it-works" id="how-it-works">
+        <!-- قسم بناء الأوامر المخصصة (Custom Command Builder Section - NEW) -->
+        <section id="command-builder" class="command-builder section-animation">
             <div class="container">
-                <h2 class="section-heading">كيف يعمل بوت VND؟</h2>
-                <div class="steps-container">
-                    <div class="step-card">
-                        <div class="step-number">1</div>
-                        <h3>دعوة البوت</h3>
-                        <p>قم بدعوة بوت VND إلى سيرفرك على Discord. الأمر لا يستغرق سوى ثوانٍ!</p>
-                        <a href="#" class="btn btn-outline btn-small" id="invite-bot-step-button" style="margin-top: 15px;">دعوة الآن</a>
+                <h2 class="section-heading" data-lang-key="command_builder_title">🛠️ بناء الأوامر المخصصة</h2>
+                <p data-lang-key="command_builder_desc">
+                    أنشئ أوامر بوت فريدة لسيرفرك باستخدام واجهة سهلة وسلسة، دون الحاجة لأي برمجة!
+                </p>
+                <div class="command-builder-content">
+                    <h3>بناء أمر جديد</h3>
+                    <div class="builder-area">
+                        <div class="command-input-group">
+                            <label for="command-name" data-lang-key="command_name_label">اسم الأمر:</label>
+                            <input type="text" id="command-name" placeholder="مثال: hello، ping" onkeyup="updateCommandPreview()">
+                        </div>
+                        <div class="command-input-group">
+                            <label for="command-type" data-lang-key="command_type_label">نوع الأمر:</label>
+                            <select id="command-type" onchange="updateCommandPreview()">
+                                <option value="text" data-lang-key="command_type_text">رسالة نصية</option>
+                                <option value="embed" data-lang-key="command_type_embed">رسالة مضمنة (Embed)</option>
+                                <option value="kick" data-lang-key="command_type_kick">طرد عضو</option>
+                            </select>
+                        </div>
+                        <div class="command-input-group" id="command-response-group">
+                            <label for="command-response" data-lang-key="command_response_label">الاستجابة:</label>
+                            <input type="text" id="command-response" placeholder="الرسالة التي سيرد بها البوت" onkeyup="updateCommandPreview()">
+                        </div>
                     </div>
-                    <div class="step-card">
-                        <div class="step-number">2</div>
-                        <h3>تسجيل الدخول</h3>
-                        <p>سجل الدخول إلى لوحة التحكم الخاصة بنا باستخدام حسابك على Discord.</p>
-                        <a href="#" class="btn btn-outline btn-small" id="login-step-button" style="margin-top: 15px;"><i class="fab fa-discord"></i> تسجيل الدخول</a>
+                    <div class="command-preview">
+                        <code id="command-code-preview">/hello -> يرد بـ: أهلاً بك في السيرفر!</code>
                     </div>
-                    <div class="step-card">
-                        <div class="step-number">3</div>
-                        <h3>تحكم كامل</h3>
-                        <p>ابدأ بتخصيص إعدادات البوت، تفعيل الميزات، وإدارة سيرفرك بسهولة تامة.</p>
-                        <a href="/dashboard" class="btn btn-outline btn-small" id="dashboard-preview-button" style="margin-top: 15px;"><i class="fas fa-tachometer-alt"></i> استكشف اللوحة</a>
+                    <button class="btn" data-lang-key="save_command_btn"><i class="fas fa-save"></i> حفظ الأمر</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم ميزات الذكاء الاصطناعي (Gemini API Features) -->
+        <section id="llm-features" class="gemini-section section-animation">
+            <div class="container">
+                <h2 class="section-heading" data-lang-key="llm_features_title">✨ ميزات الذكاء الاصطناعي بواسطة Gemini</h2>
+
+                <!-- مولّد رسائل الترحيب الذكي -->
+                <div class="gemini-card">
+                    <h3 data-lang-key="welcome_message_generator_title">✨ مولّد رسائل الترحيب الذكي</h3>
+                    <textarea id="welcome-input" placeholder="اكتب أفكاراً لرسالة ترحيب (مثال: سيرفر ألعاب، ترحيب حماسي، قواعد أساسية)..." data-lang-key="welcome_input_placeholder"></textarea>
+                    <button class="btn" id="generate-welcome-btn" data-lang-key="generate_welcome_btn"><i class="fas fa-magic"></i> توليد رسالة ترحيب</button>
+                    <div class="gemini-output" id="welcome-output" data-placeholder="سيظهر النص الذي تم توليده هنا..."></div>
+                </div>
+
+                <!-- مقترح قواعد الإشراف الذكي -->
+                <div class="gemini-card">
+                    <h3 data-lang-key="moderation_rules_generator_title">✨ مقترح قواعد الإشراف الذكي</h3>
+                    <textarea id="moderation-input" placeholder="صف نوع خادمك (مثال: سيرفر مجتمع، ألعاب تنافسية، تعليمي) وما هي المشاكل الشائعة التي تواجهها..." data-lang-key="moderation_input_placeholder"></textarea>
+                    <button class="btn" id="generate-moderation-btn" data-lang-key="generate_moderation_btn"><i class="fas fa-scroll"></i> اقتراح قواعد إشراف</button>
+                    <div class="gemini-output" id="moderation-output" data-placeholder="سيظهر النص الذي تم توليده هنا..."></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم التقييمات (Testimonials Section) -->
+        <section id="testimonials" class="testimonials section-animation">
+            <div class="container">
+                <h2 class="section-heading" data-lang-key="testimonials_title">ماذا يقول المستخدمون عنا؟</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial-item">
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4 data-lang-key="testimonial1_author">bluetoon</h4>
+                                <span data-lang-key="testimonial1_role">يوتيوبر</span>
+                            </div>
+                            <img src="https://cdn.discordapp.com/attachments/1248636782342443021/1389025963714547722/image.png?ex=68631ebc&is=6861cd3c&hm=0f015b8956ee452b9a02e0a83deb2d4bc9365db5804b73d41441020f5d655602&" alt="صورة bluetoon">
+                        </div>
+                        <p class="testimonial-text-content" data-lang-key="testimonial1_text">البوت ذا رهيب وربي انه من افضل البوتات الي استعملتها , حرفيا اختصر علي كل شي</p>
+                    </div>
+                    <div class="testimonial-item">
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4 data-lang-key="testimonial2_author">xpoint</h4>
+                                <span data-lang-key="testimonial2_role">صاحب سيرفر</span>
+                            </div>
+                            <img src="https://media.discordapp.net/attachments/1248636782342443021/1389026001987702877/image.png?ex=68631ec5&is=6861cd45&hm=cd907818b3a7a61e03d6d5ab450e6a62ea5a3d2d05ccd8ff17b608a98aa332b0&=&format=webp&quality=lossless&width=960&height=960" alt="صورة xpoint">
+                        </div>
+                        <p class="testimonial-text-content" data-lang-key="testimonial2_text">سهولة الاستخدام مذهلة! حتى لو لم تكن خبيرًا في البوتات، يمكنك التحكم بكل شيء بسهولة.</p>
+                    </div>
+                    <div class="testimonial-item">
+                        <div class="testimonial-author">
+                            <div class="author-info">
+                                <h4 data-lang-key="testimonial3_author">SDsniper</h4>
+                                <span data-lang-key="testimonial3_role">مستخدم ديسكورد</span>
+                            </div>
+                            <img src="https://media.discordapp.net/attachments/1248636782342443021/1389026155419668560/image.png?ex=68631eea&is=6861cd6a&hm=d70f38e96ed23cd518c03b2b44e432a7010be964a93f2c8586ae9dfd7644a592&=&format=webp&quality=lossless&width=960&height=960" alt="صورة SDsniper">
+                        </div>
+                        <p class="testimonial-text-content" data-lang-key="testimonial3_text">البوت عجبني كثير , مجاني وميزاته مارح تحصلها في بوت واحد ولكن البوت ذا سهل كل شي , بس افضل عدم استخدامه</p>
+                    </div>
+                </div>
+
+                <!-- قسم إضافة التعليق الجديد -->
+                <div class="add-comment-section">
+                    <h3 data-lang-key="add_comment_title">إضافة تعليق</h3>
+                    <div id="comment-form-area">
+                        <!-- هذا القسم سيظهر إذا كان المستخدم مسجل دخول -->
+                        <div class="comment-input-area" id="logged-in-comment-area" style="display: none;">
+                            <textarea id="comment-textarea" placeholder="" data-lang-key="comment_placeholder" rows="4"></textarea>
+                            <button class="btn comment-submit-button" id="submit-comment-button" data-lang-key="submit_comment">إرسال التعليق</button>
+                        </div>
+                        <!-- هذا القسم سيظهر إذا لم يكن المستخدم مسجل دخول -->
+                        <div class="login-prompt" id="logged-out-prompt">
+                            <p data-lang-key="login_to_comment">الرجاء تسجيل الدخول عبر ديسكورد لإضافة تعليق.</p>
+                            <a href="#" class="btn" id="login-to-comment-button" data-lang-key="login_button_comment"><i class="fab fa-discord"></i> تسجيل الدخول</a>
+                        </div>
+                    </div>
+                    <div id="comment-message-box" class="message-box" style="display: none;"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- قسم الأسئلة الشائعة (FAQ Section) -->
+        <section id="faq" class="faq section-animation">
+            <div class="container">
+                <h2 class="section-heading" data-lang-key="faq_title">الأسئلة الشائعة</h2>
+                <div class="faq-items">
+                    <div class="faq-item">
+                        <div class="faq-question" data-lang-key="faq1_q">
+                            هل VND Bot مجاني للاستخدام؟
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer" data-lang-key="faq1_a">
+                            نعم البوت مجاني بالكامل ولا يوجد به خطة مدفوعة، هذا هو شعارنا.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" data-lang-key="faq2_q">
+                            كيف يمكنني دعوة البوت إلى خادمي؟
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer" data-lang-key="faq2_a">
+                            يمكنك دعوة البوت إلى خادمك مباشرة من خلال النقر على زر "دعوة البوت" الموجود في أعلى أو أسفل الصفحة.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" data-lang-key="faq3_q">
+                            هل أحتاج إلى معرفة برمجية لاستخدام لوحة التحكم؟
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer" data-lang-key="faq3_a">
+                            لا، تم تصميم لوحة تحكم VND Bot لتكون سهلة الاستخدام ولا تتطلب أي معرفة برمجية. يمكنك إدارة البوت بالكامل من خلال الواجهة الرسومية.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" data-lang-key="faq4_q">
+                            ما هي أنواع الأوامر التي يمكنني تخصيصها؟
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer" data-lang-key="faq4_a">
+                            يمكنك تخصيص العديد من الأوامر مثل أوامر الترحيب، أوامر المشرفين، أوامر الترفيه، والمزيد، بالإضافة إلى إنشاء أوامرك المخصصة.
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="dashboard-overview" id="dashboard-preview">
+        <!-- قسم اتصل بنا (Contact Us Section) -->
+        <section id="contact" class="contact section-animation">
             <div class="container">
-                <h2 class="section-heading">نظرة سريعة على لوحة التحكم</h2>
-                <div class="dashboard-content">
-                    <div class="dashboard-section">
-                        <h3><i class="fas fa-tachometer-alt"></i> نظرة عامة على السيرفر</h3>
-                        <p>شاهد أهم المعلومات عن سيرفرك بنظرة واحدة: عدد الأعضاء، القنوات، وحالة البوت.</p>
-                        <p>ستتمكن من:</p>
-                        <ul>
-                            <li>مراقبة إحصائيات الأعضاء النشطين.</li>
-                            <li>تتبع استخدام الأوامر الشائعة.</li>
-                            <li>الحصول على تقارير دورية عن أداء البوت.</li>
-                        </ul>
-                    </div>
-                    <div class="dashboard-section">
-                        <h3><i class="fas fa-sliders-h"></i> إعدادات المودريشن</h3>
-                        <p>تحكم بقوانين سيرفرك بدقة. قم بإعداد القوانين التلقائية، عقوبات المخالفين، والمزيد.</p>
-                        <ul>
-                            <li>تفعيل نظام التنبيهات (Warns)</li>
-                            <li>ضبط فلتر الكلمات المحظورة</li>
-                            <li>إدارة الأذونات للمشرفين</li>
-                        </ul>
-                    </div>
-                    <div class="dashboard-section">
-                        <h3><i class="fas fa-comments"></i> تخصيص الردود والأوامر</h3>
-                        <p>اجعل بوتك فريدًا من نوعه. قم بتخصيص رسائل الترحيب، رسائل المغادرة، وحتى إنشاء أوامر نصية مخصصة.</p>
-                        <ul>
-                            <li>تحرير رسالة الترحيب مع دعم المتغيرات.</li>
-                            <li>إنشاء أوامر نصية سريعة ومفيدة.</li>
-                            <li>إضافة ردود تلقائية على كلمات معينة.</li>
-                        </ul>
-                    </div>
-                    <div class="dashboard-image">
-                        <img src="https://via.placeholder.com/900x500/1a1a1a/FFD700?text=Dashboard+Mockup+Here" alt="Dashboard Screenshot" title="صورة توضيحية للوحة التحكم">
-                        <p style="margin-top: 20px; font-style: italic; color: var(--soft-white);">*صورة توضيحية لواجهة لوحة التحكم، قد تختلف الواجهة النهائية.</p>
-                    </div>
+                <h2 class="section-heading" data-lang-key="contact_title">تواصل معنا</h2>
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <label for="name" data-lang-key="contact_name">اسمك الكامل:</label>
+                            <input type="text" id="name" placeholder="أدخل اسمك" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" data-lang-key="contact_email">بريدك الإلكتروني:</label>
+                            <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" data-lang-key="contact_message">رسالتك:</label>
+                            <textarea id="message" placeholder="اكتب رسالتك هنا..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn" data-lang-key="contact_send">إرسال الرسالة</button>
+                    </form>
                 </div>
-            </div>
-        </section>
-
-        <section class="cta">
-            <div class="container">
-                <h2>جاهز للارتقاء بسيرفرك؟</h2>
-                <p>دع بوت VND يغير تجربة إدارة مجتمعك على Discord إلى الأفضل.</p>
-                <a href="#" class="btn" id="cta-button-invite"><i class="fas fa-plus-circle"></i> ابدأ الآن!</a>
             </div>
         </section>
     </main>
 
+    <!-- التذييل (Footer) -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-links">
-                <a href="#home">الرئيسية</a>
-                <a href="#features">المميزات</a>
-                <a href="#support">الدعم الفني</a>
-                <a href="#">سياسة الخصوصية</a>
-                <a href="#">شروط الخدمة</a>
+            <ul class="footer-links">
+                <li><a href="#" data-lang-key="footer_privacy">سياسة الخصوصية</a></li>
+                <li><a href="#" data-lang-key="footer_terms">شروط الخدمة</a></li>
+                <li><a href="#" data-lang-key="footer_support">الدعم</a></li>
+                <li><a href="https://discord.gg/7VWyVRUW" data-lang-key="footer_discord">سيرفر الديسكورد</a></li>
+                <li><a href="#" id="developer-link" data-lang-key="footer_developer">المطور</a></li>
+            </ul>
+            <div class="social-media">
+                <a href="https://discord.gg/7VWyVRUW" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
             </div>
-            <div class="social-icons">
-                <a href="#" target="_blank" title="Discord Server"><i class="fab fa-discord"></i></a>
-                <a href="#" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="#" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            <p data-lang-key="copyright">&copy; 2025 VND Bot. جميع الحقوق محفوظة.</p>
+
+            <!-- قسم اختيار اللغة والأيقونة المخصصة -->
+            <div class="language-selector-section">
+                <div class="language-selector">
+                    <button class="lang-button active" data-lang="ar">العربية</button>
+                    <button class="lang-button" data-lang="en">English</button>
+                    <button class="lang-button" data-lang="fr">Français</button>
+                    <button class="lang-button" data-lang="zh">中文</button>
+                </div>
+                <div class="custom-icon">
+                    <img src="https://media.discordapp.net/attachments/1248636782342443021/1389024051212582993/Layer_12.png?ex=68631cf4&is=6861cb74&hm=8a44e9fbd83c577fb972a9d6085812b097d386019ad30005ee229bc07cfda4ab&=&format=webp&quality=lossless" alt="أيقونة السيرفر VND">
+                </div>
             </div>
-            <p>&copy; 2025 VND Bot. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
+    <!-- مودال المطور (Developer Modal) -->
+    <div id="developerModal" class="developer-modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3 data-lang-key="developer_modal_title">معلومات المطور</h3>
+            <img src="https://media.discordapp.net/attachments/1248636782342443021/1389035705975443558/03081b3b-81d9-4bc2-a3ca-e98a2ae248c0.jpeg?ex=686327cf&is=6861d64f&hm=cea5a3d358d8d752f41b28b1531d4d5754d36d2f66ee2079c76f6b9018f8a856&=&format=webp" alt="صورة المطور: vnd anes">
+            <p data-lang-key="developer_name">المطور: vnd anes</p>
+            <p data-lang-key="developer_discord_id">معرف الديسكورد: `vnd8`</p>
+            <p data-lang-key="developer_contact">للتواصل، يرجى زيارة سيرفر الديسكورد للدعم.</p>
+        </div>
+    </div>
+
     <script>
+        // JavaScript for Hamburger Menu
         const hamburger = document.getElementById('hamburger-menu');
-        const navLinks = document.getElementById('nav-links');
+        const navLinks = document.querySelector('.nav-links');
+        const authButtons = document.querySelector('.auth-buttons');
 
-        // الأزرار التي تحتاج إلى تفعيل
-        const loginButton = document.getElementById('login-button'); // زر تسجيل الدخول في الهيدر
-        const inviteBotButton = document.getElementById('invite-bot-button'); // زر دعوة البوت في الهيرو سكشن
-        const inviteBotStepButton = document.getElementById('invite-bot-step-button'); // زر دعوة البوت في قسم "كيف يعمل؟"
-        const loginStepButton = document.getElementById('login-step-button'); // زر تسجيل الدخول في قسم "كيف يعمل؟"
-        const dashboardPreviewButton = document.getElementById('dashboard-preview-button'); // زر استكشاف اللوحة في قسم "كيف يعمل؟"
-        const ctaButtonInvite = document.getElementById('cta-button-invite'); // زر "ابدأ الآن!" في قسم الـ CTA
-        const dashboardButton = document.getElementById('dashboard-button'); // زر لوحة التحكم في الهيدر (يظهر بعد تسجيل الدخول)
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            authButtons.classList.toggle('active');
+            hamburger.classList.toggle('open');
+        });
 
-        // *** الأماكن التي يجب عليك تعديلها بمعلومات تطبيقك على Discord ***
-        // 1. Client ID لبوتك
-        const CLIENT_ID = '1387126725602709534'; // <--- تم التعديل إلى Client ID الخاص بك
+        // JavaScript for FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', event => {
+                const faqItem = item.closest('.faq-item');
+                document.querySelectorAll('.faq-item.active').forEach(openItem => {
+                    if (openItem !== faqItem) {
+                        openItem.classList.remove('active');
+                    }
+                });
+                faqItem.classList.toggle('active');
+            });
+        });
 
-        // 2. رابط إعادة التوجيه (Redirect URI) بعد تسجيل الدخول بـ OAuth2
-        // يجب أن يكون هذا مطابقًا تمامًا لما هو مسجل في Discord Developer Portal
-        const REDIRECT_URI = 'https://vnd-beryl.vercel.app'; // <--- تم التعديل إلى Redirect URI الخاص بك
+        // JavaScript for Language Switching
+        const langData = {
+            ar: {
+                home: "الرئيسية",
+                features: "الميزات",
+                dashboard: "لوحة التحكم",
+                server_overview_nav: "نظرة على السيرفر", // New
+                command_builder_nav: "بناء الأوامر", // New
+                llm_features_nav: "ميزات الذكاء الاصطناعي",
+                testimonials: "التقييمات",
+                faq: "الأسئلة الشائعة",
+                contact: "اتصل بنا",
+                login: "تسجيل الدخول",
+                invite_bot: "دعوة البوت",
+                hero_heading: "تحكم كامل ببووت الديسكورد الخاص بك، بسهولة واحترافية",
+                hero_subheading: "لوحة تحكم VND Bot توفر لك كل الأدوات التي تحتاجها لإدارة خادمك، الأوامر، الأعضاء والمزيد، بفضل واجهة بسيطة ومريحة.",
+                add_bot_to_server: "إضافة البوت إلى سيرفرك",
+                control_bot: "تحكم بالبوت",
+                explore_features: "استكشف الميزات",
+                features_title: "ميزات قوية، تحكم كامل",
+                feature1_title: "إدارة الأوامر",
+                feature1_desc: "تحكم بأوامر البوت الخاصة بك، وقم بتفعيلها أو تعطيلها، وتخصيصها بسهولة.",
+                feature2_title: "إدارة الأعضاء",
+                feature2_desc: "أدوات متقدمة لإدارة الأعضاء، الأدوار، والعقوبات في خادمك.",
+                feature3_title: "نظام لليوتيوبرز",
+                feature3_desc: "استخدم البوت لتنبيه الأعضاء بآخر فيديو تم تنزيله على قناتك، كما يمكنك إنشاء غرفة لتكون عداد مشتركين يتم تحديثه تلقائيًا.",
+                feature4_title: "نظام حماية",
+                feature4_desc: "حافظ على أمان خادمك من خلال أنظمة حماية متقدمة ضد السبام والاختراق.",
+                feature5_title: "نظام التذاكر",
+                feature5_desc: "نظام التذاكر الاحترافي الذي يسهل على الأعضاء التواصل مع الإداريين وطلب المساعدة بكفاءة، إنه أفضل نظام تذاكر على الإطلاق.",
+                feature6_title: "تشغيل الأغاني",
+                feature6_desc: "يستطيع البوت تشغيل الأغاني المفضلة في غرفتك الصوتية على ديسكورد بجودة عالية وبدون تقطيع، مع دعم قوائم التشغيل والتحكم الكامل.",
+                dashboard_title: "نظرة على لوحة التحكم",
+                dashboard_desc: "واجهة سهلة الاستخدام وبديهية، تمنحك تحكمًا كاملاً في جميع جوانب بووت الديسكورد الخاص بك بلمسة زر.",
+                server_overview_title: "نظرة على سيرفرك", // New
+                server_overview_desc: "تابع أهم الإحصائيات الحيوية لسيرفرك في الوقت الفعلي، من الأعضاء النشطين إلى الرسائل المرسلة والمزيد.", // New
+                total_members: "إجمالي الأعضاء", // New
+                new_members_today: "أعضاء جدد اليوم", // New
+                online_members: "الأعضاء المتصلون", // New
+                messages_sent: "الرسائل المرسلة (اليوم)", // New
+                total_channels: "إجمالي القنوات", // New
+                commands_used: "الأوامر المستخدمة (اليوم)", // New
+                command_builder_title: "بناء الأوامر المخصصة", // New
+                command_builder_desc: "أنشئ أوامر بوت فريدة لسيرفرك باستخدام واجهة سهلة وسلسة، دون الحاجة لأي برمجة!", // New
+                command_name_label: "اسم الأمر:", // New
+                command_type_label: "نوع الأمر:", // New
+                command_type_text: "رسالة نصية", // New
+                command_type_embed: "رسالة مضمنة (Embed)", // New
+                command_type_kick: "طرد عضو", // New
+                command_response_label: "الاستجابة:", // New
+                save_command_btn: "حفظ الأمر", // New
+                llm_features_title: "ميزات الذكاء الاصطناعي بواسطة Gemini",
+                welcome_message_generator_title: "مولّد رسائل الترحيب الذكي",
+                welcome_input_placeholder: "اكتب أفكاراً لرسالة ترحيب (مثال: سيرفر ألعاب، ترحيب حماسي، قواعد أساسية)...",
+                generate_welcome_btn: "توليد رسالة ترحيب",
+                moderation_rules_generator_title: "مقترح قواعد الإشراف الذكي",
+                moderation_input_placeholder: "صف نوع خادمك (مثال: سيرفر مجتمع، ألعاب تنافسية، تعليمي) وما هي المشاكل الشائعة التي تواجهها...",
+                generate_moderation_btn: "اقتراح قواعد إشراف",
+                testimonials_title: "ماذا يقول المستخدمون عنا؟",
+                testimonial1_text: "البوت ذا رهيب وربي انه من افضل البوتات الي استعملتها , حرفيا اختصر علي كل شي",
+                testimonial1_author: "bluetoon",
+                testimonial1_role: "يوتيوبر",
+                testimonial2_text: "سهولة الاستخدام مذهلة! حتى لو لم تكن خبيرًا في البوتات، يمكنك التحكم بكل شيء بسهولة.",
+                testimonial2_author: "xpoint",
+                testimonial2_role: "صاحب سيرفر",
+                testimonial3_text: "البوت عجبني كثير , مجاني وميزاته مارح تحصلها في بوت واحد ولكن البوت ذا سهل كل شي , بس افضل عدم استخدامه",
+                testimonial3_author: "SDsniper",
+                testimonial3_role: "مستخدم ديسكورد",
+                add_comment_title: "إضافة تعليق",
+                comment_placeholder: "اكتب تعليقك هنا...",
+                submit_comment: "إرسال التعليق",
+                login_to_comment: "الرجاء تسجيل الدخول عبر ديسكورد لإضافة تعليق.",
+                login_button_comment: "تسجيل الدخول",
+                comment_success_message: "تم إرسال تعليقك بنجاح! (التعليقات لا تحفظ في هذه النسخة التجريبية).",
+                login_required_comment: "الرجاء تسجيل الدخول أولاً لإضافة تعليق.",
+                login_required_dashboard: "الرجاء تسجيل الدخول أولاً للتحكم بالبوت.",
+                empty_comment_error: "الرجاء كتابة تعليق قبل الإرسال.",
+                faq_title: "الأسئلة الشائعة",
+                faq1_q: "هل VND Bot مجاني للاستخدام؟",
+                faq1_a: "نعم البوت مجاني بالكامل ولا يوجد به خطة مدفوعة، هذا هو شعارنا.",
+                faq2_q: "كيف يمكنني دعوة البوت إلى خادمي؟",
+                faq2_a: "يمكنك دعوة البوت إلى خادمك مباشرة من خلال النقر على زر \"دعوة البوت\" الموجود في أعلى أو أسفل الصفحة.",
+                faq3_q: "هل أحتاج إلى معرفة برمجية لاستخدام لوحة التحكم؟",
+                faq3_a: "لا، تم تصميم لوحة تحكم VND Bot لتكون سهلة الاستخدام ولا تتطلب أي معرفة برمجية. يمكنك إدارة البوت بالكامل من خلال الواجهة الرسومية.",
+                faq4_q: "ما هي أنواع الأوامر التي يمكنني تخصيصها؟",
+                faq4_a: "يمكنك تخصيص العديد من الأوامر مثل أوامر الترحيب، أوامر المشرفين، أوامر الترفيه، والمزيد، بالإضافة إلى إنشاء أوامرك المخصصة.",
+                contact_title: "تواصل معنا",
+                contact_name: "اسمك الكامل:",
+                contact_email: "بريدك الإلكتروني:",
+                contact_message: "رسالتك:",
+                contact_send: "إرسال الرسالة",
+                footer_privacy: "سياسة الخصوصية",
+                footer_terms: "شروط الخدمة",
+                footer_support: "الدعم",
+                footer_discord: "سيرفر الديسكورد",
+                footer_developer: "المطور",
+                copyright: "&copy; 2025 VND Bot. جميع الحقوق محفوظة.",
+                developer_modal_title: "معلومات المطور",
+                developer_name: "المطور: vnd anes",
+                developer_discord_id: "معرف الديسكورد: `vnd8`",
+                developer_contact: "للتواصل، يرجى زيارة سيرفر الديسكورد للدعم."
+            },
+            en: {
+                home: "Home",
+                features: "Features",
+                dashboard: "Dashboard",
+                server_overview_nav: "Server Overview", // New
+                command_builder_nav: "Command Builder", // New
+                llm_features_nav: "AI Features",
+                testimonials: "Testimonials",
+                faq: "FAQ",
+                contact: "Contact Us",
+                login: "Login",
+                invite_bot: "Invite Bot",
+                hero_heading: "Full Control of Your Discord Bot, Easily and Professionally",
+                hero_subheading: "VND Bot Dashboard provides you with all the tools you need to manage your server, commands, members, and more, with a simple and convenient interface.",
+                add_bot_to_server: "Add Bot to Your Server",
+                control_bot: "Control Bot",
+                explore_features: "Explore Features",
+                features_title: "Powerful Features, Complete Control",
+                feature1_title: "Command Management",
+                feature1_desc: "Control your bot's commands, enable or disable them, and customize them easily.",
+                feature2_title: "Member Management",
+                feature2_desc: "Advanced tools for managing members, roles, and punishments in your server.",
+                feature3_title: "YouTuber System",
+                feature3_desc: "Use the bot to notify members about your latest video, and you can also create a channel for subscriber count that updates automatically.",
+                feature4_title: "Protection System",
+                feature4_desc: "Keep your server safe with advanced protection systems against spam and intrusion.",
+                feature5_title: "Ticket System",
+                feature5_desc: "The professional ticket system makes it easy for members to communicate with administrators and ask for help efficiently, it is the best ticket system ever.",
+                feature6_title: "Music Playback",
+                feature6_desc: "The bot can play your favorite songs in your Discord voice channel with high quality and no interruptions, with playlist support and full control.",
+                dashboard_title: "A Look at the Dashboard",
+                dashboard_desc: "A user-friendly and intuitive interface, giving you full control over all aspects of your Discord bot at the touch of a button.",
+                server_overview_title: "📊 Server Overview", // New
+                server_overview_desc: "Monitor key live statistics for your server, from active members to messages sent and more.", // New
+                total_members: "Total Members", // New
+                new_members_today: "New Members Today", // New
+                online_members: "Online Members", // New
+                messages_sent: "Messages Sent (Today)", // New
+                total_channels: "Total Channels", // New
+                commands_used: "Commands Used (Today)", // New
+                command_builder_title: "🛠️ Custom Command Builder", // New
+                command_builder_desc: "Create unique bot commands for your server using a simple and seamless interface, no coding required!", // New
+                command_name_label: "Command Name:", // New
+                command_type_label: "Command Type:", // New
+                command_type_text: "Text Message", // New
+                command_type_embed: "Embed Message", // New
+                command_type_kick: "Kick Member", // New
+                command_response_label: "Response:", // New
+                save_command_btn: "Save Command", // New
+                llm_features_title: "AI Features Powered by Gemini",
+                welcome_message_generator_title: "Smart Welcome Message Generator",
+                welcome_input_placeholder: "Enter ideas for a welcome message (e.g., gaming server, enthusiastic welcome, basic rules)...",
+                generate_welcome_btn: "Generate Welcome Message",
+                moderation_rules_generator_title: "Smart Moderation Rule Suggestion",
+                moderation_input_placeholder: "Describe your server type (e.g., community server, competitive gaming, educational) and common issues you face...",
+                generate_moderation_btn: "Suggest Moderation Rules",
+                testimonials_title: "What Our Users Say?",
+                testimonial1_text: "This bot is amazing, seriously one of the best bots I've ever used. It literally simplified everything for me.",
+                testimonial1_author: "bluetoon",
+                testimonial1_role: "YouTuber",
+                testimonial2_text: "The ease of use is incredible! Even if you're not a bot expert, you can control everything with ease.",
+                testimonial2_author: "xpoint",
+                testimonial2_role: "Server Owner",
+                testimonial3_text: "I really liked this bot, it's free and its features can't be found in one bot, but this bot made everything easy, but I prefer not to use it.",
+                testimonial3_author: "SDsniper",
+                testimonial3_role: "Discord User",
+                add_comment_title: "Add Comment",
+                comment_placeholder: "Write your comment here...",
+                submit_comment: "Submit Comment",
+                login_to_comment: "Please log in via Discord to add a comment.",
+                login_button_comment: "Login",
+                comment_success_message: "Your comment has been sent successfully! (Comments are not saved in this demo version).",
+                login_required_comment: "Please log in first to add a comment.",
+                login_required_dashboard: "Please log in first to control the bot.",
+                empty_comment_error: "Please write a comment before submitting.",
+                faq_title: "Frequently Asked Questions",
+                faq1_q: "Is VND Bot free to use?",
+                faq1_a: "Yes, the bot is completely free and has no paid plan, this is our motto.",
+                faq2_q: "How can I invite the bot to my server?",
+                faq2_a: "You can invite the bot to your server directly by clicking the 'Invite Bot' button at the top or bottom of the page.",
+                faq3_q: "Do I need coding knowledge to use the dashboard?",
+                faq3_a: "No, VND Bot Dashboard is designed to be user-friendly and does not require any coding knowledge. You can fully manage the bot through the graphical graphical interface.",
+                faq4_q: "What types of commands can I customize?",
+                faq4_a: "You can customize many commands such as welcome commands, moderation commands, entertainment commands, and more, in addition to creating your own custom commands.",
+                contact_title: "Contact Us",
+                contact_name: "Your Full Name:",
+                contact_email: "Your Email:",
+                contact_message: "Your Message:",
+                contact_send: "Send Message",
+                footer_privacy: "Privacy Policy",
+                footer_terms: "Terms of Service",
+                footer_support: "Support",
+                footer_discord: "Discord Server",
+                footer_developer: "Developer",
+                copyright: "&copy; 2025 VND Bot. All Rights Reserved.",
+                developer_modal_title: "Developer Info",
+                developer_name: "Developer: vnd anes",
+                developer_discord_id: "Discord ID: `vnd8`",
+                developer_contact: "For contact, please visit our Discord support server."
+            },
+            fr: {
+                home: "Accueil",
+                features: "Fonctionnalités",
+                dashboard: "Tableau de bord",
+                server_overview_nav: "Aperçu du serveur", // New
+                command_builder_nav: "Constructeur de commandes", // New
+                llm_features_nav: "Fonctionnalités IA",
+                testimonials: "Témoignages",
+                faq: "FAQ",
+                contact: "Contactez-nous",
+                login: "Connexion",
+                invite_bot: "Inviter le Bot",
+                hero_heading: "Contrôle total de votre Bot Discord, facilement et professionnellement",
+                hero_subheading: "Le tableau de bord VND Bot vous offre tous les outils dont vous avez besoin pour gérer votre serveur, vos commandes, vos membres et plus encore, grâce à une interface simple et pratique.",
+                add_bot_to_server: "Ajouter le Bot à votre serveur",
+                control_bot: "Contrôler le Bot",
+                explore_features: "Explorer les fonctionnalités",
+                features_title: "Fonctionnalités puissantes, contrôle total",
+                feature1_title: "Gestion des commandes",
+                feature1_desc: "Contrôlez les commandes de votre bot, activez-les ou désactivez-les, et personnalisez-les facilement.",
+                feature2_title: "Gestion des membres",
+                feature2_desc: "Outils avancés pour gérer les membres, les rôles et les sanctions sur votre serveur.",
+                feature3_title: "Système pour YouTubers",
+                feature3_desc: "Utilisez le bot pour notifier les membres de votre dernière vidéo, et vous pouvez également créer un salon pour le nombre d'abonnés qui se met à jour automatiquement.",
+                feature4_title: "Système de protection",
+                feature4_desc: "Protégez votre serveur grâce à des systèmes de protection avancés contre le spam et les intrusions.",
+                feature5_title: "Système de Tickets",
+                feature5_desc: "Le système de tickets professionnel facilite la communication des membres avec les administrateurs et la demande d'aide de manière efficace, c'est le meilleur système de tickets jamais créé.",
+                feature6_title: "Lecture de Musique",
+                feature6_desc: "Le bot peut jouer vos chansons préférées dans votre salon vocal Discord en haute qualité et sans interruption, avec prise en charge des listes de lecture et control total.",
+                dashboard_title: "Aperçu du Tableau de bord",
+                dashboard_desc: "Une interface conviviale et intuitive, vous donnant un control total sur tous les aspects de votre bot Discord d'une simple touche.",
+                server_overview_title: "📊 Aperçu du serveur", // New
+                server_overview_desc: "Surveillez les statistiques clés de votre serveur en temps réel, des membres actifs aux messages envoyés et plus encore.", // New
+                total_members: "Membres Totaux", // New
+                new_members_today: "Nouveaux membres aujourd'hui", // New
+                online_members: "Membres en ligne", // New
+                messages_sent: "Messages envoyés (aujourd'hui)", // New
+                total_channels: "Canaux Totaux", // New
+                commands_used: "Commandes utilisées (aujourd'hui)", // New
+                command_builder_title: "🛠️ Constructeur de commandes personnalisées", // New
+                command_builder_desc: "Créez des commandes de bot uniques pour votre serveur à l'aide d'une interface simple et transparente, aucun codage requis!", // New
+                command_name_label: "Nom de la commande:", // New
+                command_type_label: "Type de commande:", // New
+                command_type_text: "Message texte", // New
+                command_type_embed: "Message intégré (Embed)", // New
+                command_type_kick: "Expulser un membre", // New
+                command_response_label: "Réponse:", // New
+                save_command_btn: "Enregistrer la commande", // New
+                llm_features_title: "Fonctionnalités IA propulsées par Gemini",
+                welcome_message_generator_title: "Générateur de messages de bienvenue intelligent",
+                welcome_input_placeholder: "Saisissez des idées pour un message de bienvenue (ex : serveur de jeu, bienvenue enthousiaste, règles de base)...",
+                generate_welcome_btn: "Générer un message de bienvenue",
+                moderation_rules_generator_title: "Suggestion de règles de modération intelligente",
+                moderation_input_placeholder: "Décrivez le type de votre serveur (ex : serveur communautaire, jeu compétitif, éducatif) et les problèmes courants que vous rencontrez...",
+                generate_moderation_btn: "Suggérer des règles de modération",
+                testimonials_title: "Ce que disent nos utilisateurs ?",
+                testimonial1_text: "Ce bot est incroyable, sérieusement l'un des meilleurs bots que j'aie jamais utilisé. Il m'a littéralement tout simplifié.",
+                testimonial1_author: "bluetoon",
+                testimonial1_role: "YouTuber",
+                testimonial2_text: "Incroyablement facile à utiliser ! Même si vous n'êtes pas un expert en bots, vous pouvez tout contrôler facilement.",
+                testimonial2_author: "xpoint",
+                testimonial2_role: "Propriétaire du serveur",
+                testimonial3_text: "J'ai vraiment aimé ce bot, il est gratuit et ses fonctionnalités ne peuvent pas être trouvées dans un seul bot, mais ce bot a tout simplifié, mais je préfère ne pas l'utiliser.",
+                testimonial3_author: "SDsniper",
+                testimonial3_role: "Utilisateur Discord",
+                add_comment_title: "Ajouter un commentaire",
+                comment_placeholder: "Écrivez votre commentaire ici...",
+                submit_comment: "Envoyer le commentaire",
+                login_to_comment: "Veuillez vous connecter via Discord pour ajouter un commentaire.",
+                login_button_comment: "Connexion",
+                comment_success_message: "Votre commentaire a été envoyé avec succès ! (Les commentaires ne sont pas sauvegardés dans cette version démo).",
+                login_required_comment: "Veuillez vous connecter d'abord pour ajouter un commentaire.",
+                login_required_dashboard: "Veuillez vous connecter d'abord pour contrôler le bot.",
+                empty_comment_error: "Veuillez écrire un commentaire avant de soumettre.",
+                faq_title: "Questions Fréquemment Posées",
+                faq1_q: "VND Bot est-il gratuit ?",
+                faq1_a: "Oui, le bot est entièrement gratuit et n'a pas de plan payant, c'est notre devise.",
+                faq2_q: "Comment puis-je inviter le bot sur mon serveur ?",
+                faq2_a: "Vous pouvez inviter le bot sur votre serveur directement en cliquant sur le bouton 'Inviter le Bot' en haut ou en bas de la page.",
+                faq3_q: "Ai-je besoin de connaissances en codage pour utiliser le tableau de bord ?",
+                faq3_a: "Non, le tableau de bord VND Bot est conçu pour être convivial et ne nécessite aucune connaissance en codage. Vous pouvez gérer entièrement le bot via l'interface graphique.",
+                faq4_q: "Quels types de commandes puis-je personnaliser ?",
+                faq4_a: "Vous pouvez personnaliser de nombreuses commandes telles que les commandes de bienvenue, les commandes de modération, les commandes de divertissement, et plus encore, en plus de créer vos propres commandes personnalisées.",
+                contact_title: "Contactez-nous",
+                contact_name: "Votre Nom Complet :",
+                contact_email: "Votre E-mail :",
+                contact_message: "Votre Message :",
+                contact_send: "Envoyer le Message",
+                footer_privacy: "Politique de Confidentialité",
+                footer_terms: "Conditions d'utilisation",
+                footer_support: "Support",
+                footer_discord: "Serveur Discord",
+                footer_developer: "Développeur",
+                copyright: "&copy; 2025 VND Bot. Tous droits réservés."
+            },
+            zh: {
+                home: "主页",
+                features: "功能",
+                dashboard: "仪表板",
+                server_overview_nav: "服务器概览", // New
+                command_builder_nav: "命令构建器", // New
+                llm_features_nav: "人工智能功能",
+                testimonials: "推荐",
+                faq: "常见问题",
+                contact: "联系我们",
+                login: "登录",
+                invite_bot: "邀请机器人",
+                hero_heading: "轻松专业地完全控制您的 Discord 机器人",
+                hero_subheading: "VND Bot 仪表板为您提供管理服务器、命令、成员等所需的所有工具，界面简洁方便。",
+                add_bot_to_server: "将机器人添加到您的服务器",
+                control_bot: "控制机器人",
+                explore_features: "探索功能",
+                features_title: "强大功能，全面掌控",
+                feature1_title: "命令管理",
+                feature1_desc: "控制您的机器人命令，轻松启用或禁用它们，并进行自定义。",
+                feature2_title: "成员管理",
+                feature2_desc: "管理服务器成员、角色和惩罚的高级工具。",
+                feature3_title: "YouTube 主播系统",
+                feature3_desc: "使用机器人通知成员您的最新视频，您还可以创建一个频道用于订阅者计数，该计数会自动更新。",
+                feature4_title: "保护系统",
+                feature4_desc: "通过高级保护系统抵御垃圾邮件和入侵，确保您的服务器安全。",
+                feature5_title: "工单系统",
+                feature5_desc: "专业的工单系统使成员可以轻松有效地与管理员沟通并寻求帮助，这是有史以来最好的工单系统。",
+                feature6_title: "音乐播放",
+                feature6_desc: "机器人可以在您的 Discord 语音频道中播放您喜欢的歌曲，音质高，不中断，支持播放列表和完全控制。",
+                dashboard_title: "仪表板概览",
+                dashboard_desc: "一个用户友好且直观的界面，让您只需轻触按钮即可完全控制 Discord 机器人的所有方面。",
+                server_overview_title: "📊 服务器概览", // New
+                server_overview_desc: "监控您的服务器关键实时统计数据，从活跃成员到已发送消息等。", // New
+                total_members: "总成员", // New
+                new_members_today: "今日新增成员", // New
+                online_members: "在线成员", // New
+                messages_sent: "已发送消息（今日）", // New
+                total_channels: "总频道", // New
+                commands_used: "已使用命令（今日）", // New
+                command_builder_title: "🛠️ 自定义命令构建器", // New
+                command_builder_desc: "使用简单无缝的界面为您的服务器创建独特的机器人命令，无需编码！", // New
+                command_name_label: "命令名称：", // New
+                command_type_label: "命令类型：", // New
+                command_type_text: "文本消息", // New
+                command_type_embed: "嵌入消息", // New
+                command_type_kick: "踢出成员", // New
+                command_response_label: "回复：", // New
+                save_command_btn: "保存命令", // New
+                llm_features_title: "由 Gemini 提供支持的 AI 功能",
+                welcome_message_generator_title: "智能欢迎消息生成器",
+                welcome_input_placeholder: "输入欢迎消息的想法（例如：游戏服务器、热情欢迎、基本规则）...",
+                generate_welcome_btn: "生成欢迎消息",
+                moderation_rules_generator_title: "智能版主规则建议",
+                moderation_input_placeholder: "描述您的服务器类型（例如：社区服务器、竞技游戏、教育）以及您面临的常见问题...",
+                generate_moderation_btn: "建议版主规则",
+                testimonials_title: "用户评价",
+                testimonial1_text: "这个机器人太棒了，说真的，它是我用过的最好的机器人之一。它简直为我简化了一切。",
+                testimonial1_author: "bluetoon",
+                testimonial1_role: "YouTube 主播",
+                testimonial2_text: "使用起来非常简单！即使您不是机器人专家，也可以轻松控制一切。",
+                testimonial2_author: "xpoint",
+                testimonial2_role: "服务器所有者",
+                testimonial3_text: "我真的很喜欢这个机器人，它是免费的，它的功能在一个机器人中找不到，但是这个机器人让一切都变得简单，但我更喜欢不使用它。",
+                testimonial3_author: "SDsniper",
+                testimonial3_role: "Discord 用户",
+                add_comment_title: "添加评论",
+                comment_placeholder: "在此处撰写您的评论...",
+                submit_comment: "提交评论",
+                login_to_comment: "请通过 Discord 登录以添加评论。",
+                login_button_comment: "登录",
+                comment_success_message: "您的评论已成功发送！ (此演示版本中不保存评论)。",
+                login_required_comment: "请先登录才能添加评论。",
+                login_required_dashboard: "请先登录才能控制机器人。",
+                empty_comment_error: "请在提交前撰写评论。",
+                faq_title: "常见问题",
+                faq1_q: "VND Bot 是否免费使用？",
+                faq1_a: "是的，机器人是完全免费的，没有付费计划، 这是我们的座右铭。",
+                faq2_q: "如何邀请机器人到我的服务器？",
+                faq2_a: "您可以通过点击页面顶部或底部的“邀请机器人”按钮直接邀请机器人到您的服务器。",
+                faq3_q: "我需要编程知识才能使用仪表板吗？",
+                faq3_a: "不需要، VND Bot 仪表板设计用户友好، 不需要任何编程知识。您可以通过图形界面完全管理机器人。",
+                faq4_q: "我可以自定义哪些类型的命令？",
+                faq4_a: "您可以自定义许多命令، 例如欢迎命令، 管理命令، 娱乐命令等، 此外还可以创建自己的自定义命令。",
+                contact_title: "联系我们",
+                contact_name: "您的全名：",
+                contact_email: "您的电子邮件：",
+                contact_message: "您的消息：",
+                contact_send: "发送消息",
+                footer_privacy: "隐私政策",
+                footer_terms: "服务条款",
+                footer_support: "支持",
+                footer_discord: "Discord 服务器",
+                footer_developer: "开发者",
+                copyright: "&copy; 2025 VND Bot. 版权所有。"
+            }
+        };
 
-        // 3. رابط دعوة البوت إلى السيرفر (مع الأذونات المطلوبة)
-        // Permissions: 1153419908984311 هو الرقم الذي أرفقته في رابط الـ Redirect URI الأصلي (صلاحيات Admin)
-        // Scope: bot هو المطلوب لدعوة البوت. applications.commands للslash commands
+        function setLanguage(lang) {
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.dataset.langKey;
+                if (langData[lang] && langData[lang][key]) {
+                    element.innerHTML = langData[lang][key];
+                }
+            });
+
+            document.body.className = '';
+            document.body.classList.add(lang);
+            document.body.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+            
+            document.querySelectorAll('.lang-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector(`.lang-button[data-lang="${lang}"]`).classList.add('active');
+
+            localStorage.setItem('selectedLang', lang);
+            updateCommentSectionUI();
+            updateCommandPreview(); // Update preview when language changes
+        }
+
+        document.querySelectorAll('.lang-button').forEach(button => {
+            button.addEventListener('click', () => {
+                setLanguage(button.dataset.lang);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('selectedLang') || 'ar';
+            setLanguage(savedLang);
+        });
+
+        // Intersection Observer for Section Animations
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.2 // Trigger when 20% of the section is visible
+        };
+
+        // This map will keep track of sections that have already been animated
+        const animatedSections = new Map();
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Check if it's already animated. If not, add 'in-view'
+                    if (!animatedSections.has(entry.target)) {
+                        entry.target.classList.add('in-view');
+                        animatedSections.set(entry.target, true); // Mark as animated
+                    }
+                    // If it's intersecting and already animated, keep 'in-view' class
+                } else {
+                    // For persistent visibility, we don't remove 'in-view' when it leaves
+                    // Unless we want the animation to *reset* every time it goes out of view.
+                    // Based on previous feedback, we want persistent visibility after reveal.
+                    // So, we do nothing here to remove the class.
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-animation').forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId && targetId !== '#') {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Discord OAuth2 & Invite URLs
+        const CLIENT_ID = '1387126725602709534';
+        const REDIRECT_URI = 'https://vnd-beryl.vercel.app';
+
         const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&permissions=1153419908984311&scope=bot%20applications.commands`;
-
-        // 4. رابط تسجيل الدخول بـ Discord OAuth2
-        // Scope: identify = للحصول على معلومات المستخدم, guilds = للحصول على قائمة سيرفرات المستخدم
-        // إذا كنت قد فعلت guilds.members.read في Discord Developer Portal، يمكنك إضافته هنا أيضاً: 'identify%20guilds%20guilds.members.read'
         const LOGIN_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=identify%20guilds`;
-        // *******************************************************************
 
+        document.getElementById('login-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = LOGIN_URL;
+        });
 
-        // وظيفة للتحقق مما إذا كان المستخدم مسجل الدخول (محاكاة أو تحقق حقيقي)
-        // في تطبيق حقيقي، ستتحقق من وجود "رمز وصول" (access token) في Local Storage أو في ملفات تعريف الارتباط (cookies)
-        function checkLoginStatus() {
-            // هذا مجرد محاكاة بسيطة. في الواقع، ستحتاج إلى طلب من الخادم للتحقق من الجلسة.
-            // يمكنك هنا التحقق من وجود 'code' في الـ URL بعد إعادة التوجيه، للدلالة على محاولة تسجيل دخول ناجحة.
+        document.getElementById('invite-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = INVITE_URL;
+        });
+        
+        document.getElementById('add-bot-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = INVITE_URL;
+        });
+
+        document.getElementById('control-bot-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                window.location.href = '/dashboard'; 
+            } else {
+                const currentLang = localStorage.getItem('selectedLang') || 'ar';
+                showMessage(langData[currentLang].login_required_dashboard, 'error');
+                setTimeout(() => {
+                    window.location.href = LOGIN_URL;
+                }, 1500);
+            }
+        });
+        
+        function updateAuthButtonsUI() {
             const urlParams = new URLSearchParams(window.location.search);
             const authCode = urlParams.get('code');
 
             if (authCode) {
-                // إذا وجد كود المصادقة، هذا يعني أن ديسكورد أعاد توجيه المستخدم بنجاح.
-                // في هذه المرحلة، يجب أن يرسل الـ Backend هذا الكود إلى Discord لتبديله برمز الوصول (access token).
-                // هنا نقوم بمحاكاة بسيطة لغرض الواجهة الأمامية.
                 localStorage.setItem('isLoggedIn', 'true');
-                // لإزالة الكود من الـ URL بعد التعامل معه (لجعل الـ URL نظيفاً)
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; // تحقق من Local Storage
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+            const loginButton = document.getElementById('login-button');
+            const inviteButton = document.getElementById('invite-button');
+            const controlBotButton = document.getElementById('control-bot-button');
 
             if (isLoggedIn) {
-                loginButton.style.display = 'none';
-                dashboardButton.style.display = 'inline-block';
-                // يمكنك أيضًا إظهار اسم المستخدم وصورته هنا (يتطلب واجهة خلفية)
+                if (loginButton) loginButton.style.display = 'none';
+                if (controlBotButton) controlBotButton.style.display = 'inline-flex';
             } else {
-                loginButton.style.display = 'inline-block';
-                dashboardButton.style.display = 'none';
+                if (loginButton) loginButton.style.display = 'inline-flex';
+                if (controlBotButton) controlBotButton.style.display = 'none';
+            }
+            if (inviteButton) inviteButton.style.display = 'inline-flex';
+
+            updateCommentSectionUI();
+        }
+
+        function updateCommentSectionUI() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const loggedInCommentArea = document.getElementById('logged-in-comment-area');
+            const loggedOutPrompt = document.getElementById('logged-out-prompt');
+            const commentTextarea = document.getElementById('comment-textarea');
+            const currentLang = localStorage.getItem('selectedLang') || 'ar';
+
+            if (isLoggedIn) {
+                loggedInCommentArea.style.display = 'flex';
+                loggedOutPrompt.style.display = 'none';
+                commentTextarea.placeholder = langData[currentLang].comment_placeholder;
+            } else {
+                loggedInCommentArea.style.display = 'none';
+                loggedOutPrompt.style.display = 'block';
             }
         }
 
-        // استدعاء الوظيفة عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+        function showMessage(msg, type = 'success') {
+            const messageBox = document.getElementById('comment-message-box');
+            messageBox.textContent = msg;
+            messageBox.style.display = 'block';
+            messageBox.classList.remove('success', 'error');
+            messageBox.classList.add(type);
+            messageBox.classList.add('show');
 
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+                setTimeout(() => {
+                    messageBox.style.display = 'none';
+                }, 400); // Increased time for transition to finish
+            }, 3000);
+        }
 
-        // -----------------------------------------------------------
-        //               تفعيل الأزرار (ربطها بالروابط الصحيحة)
-        // -----------------------------------------------------------
+        document.getElementById('submit-comment-button').addEventListener('click', () => {
+            const commentTextarea = document.getElementById('comment-textarea');
+            const comment = commentTextarea.value.trim();
+            const currentLang = localStorage.getItem('selectedLang') || 'ar';
 
-        // زر "تسجيل الدخول بالديسكورد" في الهيدر وفي قسم "كيف يعمل؟"
-        loginButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = LOGIN_URL; // توجيه المستخدم لصفحة تسجيل الدخول بالديسكورد
-        });
-
-        loginStepButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = LOGIN_URL; // توجيه المستخدم لصفحة تسجيل الدخول بالديسكورد
-        });
-
-        // زر "دعوة البوت الآن" في الهيرو سكشن وفي قسم "كيف يعمل؟" وفي الـ CTA
-        inviteBotButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = INVITE_URL; // توجيه المستخدم لصفحة دعوة البوت
-        });
-
-        inviteBotStepButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = INVITE_URL; // توجيه المستخدم لصفحة دعوة البوت
-        });
-
-        ctaButtonInvite.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = INVITE_URL; // توجيه المستخدم لصفحة دعوة البوت
-        });
-
-        // زر "لوحة التحكم" في الهيدر و "استكشف اللوحة" في قسم "كيف يعمل؟"
-        // هذه الأزرار ستأخذ المستخدم إلى واجهة التحكم الداخلية
-        dashboardButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            // في تطبيق حقيقي، يجب التحقق هنا من أن المستخدم مسجل الدخول
-            // ثم إعادة توجيهه إلى لوحة التحكم
-            if (localStorage.getItem('isLoggedIn') === 'true') { // تحقق مبدئي (سيتم التعامل معه بشكل أفضل في الواجهة الخلفية)
-                window.location.href = '/dashboard'; // هذا سيذهب إلى مسار في الواجهة الخلفية لموقعك
+            if (comment) {
+                showMessage(langData[currentLang].comment_success_message, 'success');
+                commentTextarea.value = '';
             } else {
-                alert('الرجاء تسجيل الدخول أولاً للوصول إلى لوحة التحكم.');
-                window.location.href = LOGIN_URL;
+                showMessage(langData[currentLang].empty_comment_error, 'error');
             }
         });
 
-        dashboardPreviewButton.addEventListener('click', (e) => {
+        document.getElementById('login-to-comment-button').addEventListener('click', (e) => {
             e.preventDefault();
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                window.location.href = '/dashboard'; // هذا سيذهب إلى مسار في الواجهة الخلفية لموقعك
-            } else {
-                alert('الرجاء تسجيل الدخول أولاً لاستكشاف لوحة التحكم.');
-                window.location.href = LOGIN_URL;
+            window.location.href = LOGIN_URL;
+        });
+
+        document.addEventListener('DOMContentLoaded', updateAuthButtonsUI);
+
+        // Developer Modal Logic
+        const developerLink = document.getElementById('developer-link');
+        const developerModal = document.getElementById('developerModal');
+        const closeButton = document.querySelector('.developer-modal .close-button');
+
+        developerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            developerModal.classList.add('show');
+        });
+
+        closeButton.addEventListener('click', () => {
+            developerModal.classList.remove('show');
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === developerModal) {
+                developerModal.classList.remove('show');
             }
         });
 
+        // Three.js Particle Background
+        let scene, camera, renderer, particles, particleMaterial, particleCount;
+        let mouseX = 0, mouseY = 0;
+        let windowHalfX = window.innerWidth / 2;
+        let windowHalfY = window.innerHeight / 2;
 
-        // -----------------------------------------------------------
-        //               وظائف الـ UI (القائمة المتنقلة والتمرير السلس)
-        // -----------------------------------------------------------
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            hamburger.classList.toggle('open');
-        });
+        function initThreeJS() {
+            const canvas = document.getElementById('three-js-canvas');
 
-        // إغلاق قائمة التنقل عند النقر على رابط (للجوال)
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                hamburger.classList.remove('open');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio); // For sharp rendering on high-DPI screens
+
+            particleCount = 1000; // Increased particle count
+            const particlesGeometry = new THREE.BufferGeometry();
+            const positions = [];
+            const colors = [];
+
+            const color1 = new THREE.Color(0x5865F2); // Primary color (Discord Blue)
+            const color2 = new THREE.Color(0xFEE75C); // Accent color (Yellow)
+            const color3 = new THREE.Color(0xBB86FC); // A subtle purple for variety
+
+            for (let i = 0; i < particleCount; i++) {
+                const x = (Math.random() * 2 - 1) * 15; // Wider spread
+                const y = (Math.random() * 2 - 1) * 15;
+                const z = (Math.random() * 2 - 1) * 15;
+                positions.push(x, y, z);
+
+                const lerpFactor = Math.random();
+                const color = new THREE.Color();
+                if (lerpFactor < 0.5) {
+                    color.copy(color1).lerp(color2, lerpFactor * 2);
+                } else {
+                    color.copy(color2).lerp(color3, (lerpFactor - 0.5) * 2);
+                }
+                colors.push(color.r, color.g, color.b);
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            particlesGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            particleMaterial = new THREE.PointsMaterial({
+                size: 0.15, // Slightly larger particles
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: true
             });
+
+            particles = new THREE.Points(particlesGeometry, particleMaterial);
+            scene.add(particles);
+
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            window.addEventListener('resize', onWindowResize, false);
+
+            animateThreeJS();
+        }
+
+        function onDocumentMouseMove(event) {
+            mouseX = (event.clientX - windowHalfX);
+            mouseY = (event.clientY - windowHalfY);
+        }
+
+        function onWindowResize() {
+            windowHalfX = window.innerWidth / 2;
+            windowHalfY = window.innerHeight / 2;
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animateThreeJS() {
+            requestAnimationFrame(animateThreeJS);
+
+            // Smooth camera movement based on mouse
+            camera.position.x += (mouseX * 0.001 - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY * 0.001 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            // Particle movement and subtle rotation
+            particles.rotation.x += 0.0003;
+            particles.rotation.y += 0.0005;
+            particles.position.z = Math.sin(Date.now() * 0.0001) * 0.5; // Subtle Z movement
+
+            renderer.render(scene, camera);
+        }
+
+        window.onload = initThreeJS;
+
+
+        // Gemini API Integration Logic
+        async function callGeminiAPI(prompt, outputElementId) {
+            const outputElement = document.getElementById(outputElementId);
+            outputElement.innerHTML = ''; // Clear previous output
+            outputElement.classList.remove('error'); // Clear any previous error styling
+            outputElement.classList.add('loading'); // Show loading indicator
+            outputElement.setAttribute('data-placeholder', ''); // Remove placeholder when loading
+            console.log(`[Gemini API] Sending prompt for ${outputElementId}:`, prompt);
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                // API Key is handled by the Canvas environment for gemini-2.0-flash
+                const apiKey = ""; // Keep this empty; Canvas will inject the key
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log(`[Gemini API] Response status for ${outputElementId}:`, response.status);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error(`[Gemini API] API error for ${outputElementId}:`, errorData);
+                    throw new Error(`API error (${response.status}): ${errorData.error.message || 'Unknown API error'}`);
+                }
+
+                const result = await response.json();
+                console.log(`[Gemini API] Raw result for ${outputElementId}:`, result);
+                
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    outputElement.innerText = text; // Display the response
+                    console.log(`[Gemini API] Content displayed for ${outputElementId}.`);
+                } else {
+                    console.warn(`[Gemini API] Unexpected response structure or empty content for ${outputElementId}.`, result);
+                    outputElement.innerText = 'عذرًا، لم يتمكن الذكاء الاصطناعي من توليد استجابة. قد تكون المشكلة في التنسيق أو لا توجد بيانات متاحة. الرجاء المحاولة مرة أخرى.';
+                    outputElement.classList.add('error');
+                }
+            } catch (error) {
+                console.error(`[Gemini API] Fetch error for ${outputElementId}:`, error);
+                outputElement.innerText = `حدث خطأ: ${error.message}. الرجاء التأكد من اتصالك بالإنترنت والمحاولة مرة أخرى.`;
+                outputElement.classList.add('error');
+            } finally {
+                outputElement.classList.remove('loading'); // Hide loading indicator
+                outputElement.setAttribute('data-placeholder', langData[localStorage.getItem('selectedLang') || 'ar']['gemini_output_placeholder']); // Restore placeholder
+                console.log(`[Gemini API] Generation finished for ${outputElementId}.`);
+            }
+        }
+
+        // Event Listeners for Gemini Features
+        document.getElementById('generate-welcome-btn').addEventListener('click', () => {
+            const welcomeInput = document.getElementById('welcome-input').value.trim();
+            if (welcomeInput) {
+                // Instruct Gemini to respond in Arabic
+                const prompt = `Generate a creative and enthusiastic welcome message for a new member joining a Discord server. The message should be friendly and inviting and **must be in Arabic**. Here are some keywords/themes: ${welcomeInput}.`;
+                callGeminiAPI(prompt, 'welcome-output');
+            } else {
+                document.getElementById('welcome-output').innerText = 'الرجاء إدخال بعض الأفكار لتوليد رسالة ترحيب.';
+            }
         });
+
+        document.getElementById('generate-moderation-btn').addEventListener('click', () => {
+            const moderationInput = document.getElementById('moderation-input').value.trim();
+            if (moderationInput) {
+                // Instruct Gemini to respond in Arabic
+                const prompt = `Suggest a list of concise and effective moderation rules for a Discord server. The server type and common issues are: ${moderationInput}. Format the rules as a numbered list and **they must be in Arabic**.`;
+                callGeminiAPI(prompt, 'moderation-output');
+            } else {
+                document.getElementById('moderation-output').innerText = 'الرجاء وصف نوع خادمك أو المشاكل الشائعة لاقتراح قواعد الإشراف.';
+            }
+        });
+
+        // Mock Server Stats Update (for Server Overview Section)
+        function updateServerStats() {
+            const totalMembers = document.getElementById('total-members');
+            const newMembersToday = document.getElementById('new-members-today');
+            const onlineMembers = document.getElementById('online-members');
+            const messagesSent = document.getElementById('messages-sent');
+            const totalChannels = document.getElementById('total-channels');
+            const commandsUsed = document.getElementById('commands-used');
+
+            // Simulate live data
+            totalMembers.textContent = (15000 + Math.floor(Math.random() * 500)).toLocaleString();
+            newMembersToday.textContent = (200 + Math.floor(Math.random() * 50)).toLocaleString();
+            onlineMembers.textContent = (9000 + Math.floor(Math.random() * 800)).toLocaleString();
+            messagesSent.textContent = (100000 + Math.floor(Math.random() * 20000)).toLocaleString();
+            totalChannels.textContent = (100 + Math.floor(Math.random() * 20)).toLocaleString();
+            commandsUsed.textContent = (7000 + Math.floor(Math.random() * 1000)).toLocaleString();
+        }
+
+        // Update stats every 5 seconds (mock)
+        setInterval(updateServerStats, 5000);
+        document.addEventListener('DOMContentLoaded', updateServerStats); // Initial update on load
+
+        // Custom Command Builder Logic
+        function updateCommandPreview() {
+            const commandName = document.getElementById('command-name').value.trim();
+            const commandType = document.getElementById('command-type').value;
+            const commandResponse = document.getElementById('command-response').value.trim();
+            const commandCodePreview = document.getElementById('command-code-preview');
+            const commandResponseGroup = document.getElementById('command-response-group');
+            const currentLang = localStorage.getItem('selectedLang') || 'ar';
+
+            let previewText = '';
+
+            if (commandType === 'text') {
+                commandResponseGroup.style.display = 'flex';
+                document.querySelector('#command-response-group label').innerHTML = langData[currentLang].command_response_label;
+                document.getElementById('command-response').placeholder = 'الرسالة التي سيرد بها البوت';
+                if (commandName && commandResponse) {
+                    previewText = `/${commandName} -> ${langData[currentLang].command_type_text.toLowerCase().replace('message', '')}: ${commandResponse}`;
+                } else if (commandName) {
+                    previewText = `/${commandName} -> ${langData[currentLang].command_type_text.toLowerCase().replace('message', '')}: ...`;
+                } else {
+                    previewText = `/امر_جديد -> ${langData[currentLang].command_type_text.toLowerCase().replace('message', '')}: اهلاً بك`;
+                }
+            } else if (commandType === 'embed') {
+                commandResponseGroup.style.display = 'flex';
+                document.querySelector('#command-response-group label').innerHTML = langData[currentLang].command_response_label;
+                document.getElementById('command-response').placeholder = 'JSON لرسالة Embed';
+                if (commandName && commandResponse) {
+                    previewText = `/${commandName} -> ${langData[currentLang].command_type_embed.toLowerCase().replace('message', '')} JSON: ${commandResponse.substring(0, 50)}...`;
+                } else if (commandName) {
+                    previewText = `/${commandName} -> ${langData[currentLang].command_type_embed.toLowerCase().replace('message', '')} JSON: { ... }`;
+                } else {
+                    previewText = `/امر_جديد -> ${langData[currentLang].command_type_embed.toLowerCase().replace('message', '')} JSON: { "title": "مرحباً!" }`;
+                }
+            } else if (commandType === 'kick') {
+                commandResponseGroup.style.display = 'none'; // No direct response needed for kick
+                if (commandName) {
+                    previewText = `/${commandName} @user -> ${langData[currentLang].command_type_kick.toLowerCase().replace('member', '')} @user`;
+                } else {
+                    previewText = `/طرد @user -> ${langData[currentLang].command_type_kick.toLowerCase().replace('member', '')} @user`;
+                }
+            }
+            
+            commandCodePreview.textContent = previewText;
+        }
+
+        document.getElementById('command-name').addEventListener('keyup', updateCommandPreview);
+        document.getElementById('command-type').addEventListener('change', updateCommandPreview);
+        document.getElementById('command-response').addEventListener('keyup', updateCommandPreview);
+        document.addEventListener('DOMContentLoaded', updateCommandPreview); // Initial update on load
+
+        // Set placeholder for gemini output
+        document.getElementById('welcome-output').setAttribute('data-placeholder', langData[localStorage.getItem('selectedLang') || 'ar']['gemini_output_placeholder']);
+        document.getElementById('moderation-output').setAttribute('data-placeholder', langData[localStorage.getItem('selectedLang') || 'ar']['gemini_output_placeholder']);
+
     </script>
 </body>
 </html>

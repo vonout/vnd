@@ -1,1 +1,1324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VND Bot لوحة التحكم</title>
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=68641673&is=6862c4f3&hm=d925482012ca4168df4f37d0871826536f19038bae94a7a87211c27bd1c2646d&" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Noto+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* تعريف الخط AA-TYPO */
+        @font-face {
+            font-family: 'AA-TYPO';
+            src: url('fonts/AA-TYPO-Regular.woff2') format('woff2'),
+                 url('fonts/AA-TYPO-Regular.woff') format('woff'),
+                 url('fonts/AA-TYPO-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'AA-TYPO';
+            src: url('fonts/AA-TYPO-Bold.woff2') format('woff2'),
+                 url('fonts/AA-TYPO-Bold.woff') format('woff'),
+                 url('fonts/AA-TYPO-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        /* المتغيرات الأساسية للألوان */
+        :root {
+            --primary-color: #5865F2; /* Discord Blue */
+            --secondary-color: #43B581; /* Green */
+            --dark-bg: #0D0C1D; /* Very dark background */
+            --medium-dark-bg: #1A1934; /* Medium dark background */
+            --light-text: #E0E0FF; /* Light text with slight purple tint */
+            --soft-white: #B0B0D0; /* Soft white/grayish purple */
+            --border-color: #3C3C60; /* Dark border color */
+            --hover-color: #7289DA; /* Hover color */
+            --accent-color: #FEE75C; /* Yellow accent */
+            --card-bg: rgba(26, 25, 52, 0.75); /* Transparent card background with blur */
+            --glass-blur: 10px; /* Glassmorphism blur value */
+            --neon-border: 2px solid rgba(88, 101, 242, 0.7);
+            --neon-shadow: 0 0 15px rgba(88, 101, 242, 0.8), 0 0 25px rgba(254, 231, 92, 0.5);
+            --inset-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* إعادة ضبط CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* أنماط شريط التمرير المخصص */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 10px;
+            border: 2px solid var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--hover-color), var(--accent-color));
+        }
+
+        /* الأنماط العامة للجسم */
+        body {
+            font-family: 'AA-TYPO', 'Noto Sans', 'Cairo', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.7;
+            text-align: right;
+            overflow: hidden; /* Prevent body scroll, let inner containers scroll */
+            font-size: 16px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* شريط لوحة التحكم العلوي */
+        .dashboard-header {
+            background-color: rgba(13, 12, 29, 0.9);
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(var(--glass-blur));
+        }
+
+        .dashboard-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-header .logo img {
+            height: 45px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
+        }
+
+        .dashboard-header .logo span {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--light-text);
+            font-family: 'Cairo', 'Noto Sans', sans-serif;
+        }
+
+        .dashboard-header .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .dashboard-header .lang-button,
+        .dashboard-header .commands-button {
+            background-color: var(--medium-dark-bg);
+            color: var(--soft-white);
+            padding: 10px 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-header .lang-button:hover,
+        .dashboard-header .commands-button:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--light-text);
+            box-shadow: 0 4px 10px rgba(88, 101, 242, 0.4);
+        }
+
+        /* تخطيط لوحة التحكم */
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            background-color: var(--dark-bg);
+            padding: 20px;
+            gap: 20px;
+            direction: rtl; /* Ensure RTL for the main layout */
+        }
+
+        /* الشريط الجانبي (Sidebar) - الآن على اليمين */
+        .sidebar {
+            width: 300px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: var(--neon-border);
+            backdrop-filter: blur(var(--glass-blur));
+            flex-shrink: 0;
+            overflow-y: auto;
+            order: 2; /* Move sidebar to the right */
+        }
+
+        .sidebar h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(88, 101, 242, 0.7);
+            font-weight: 900;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--soft-white);
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .sidebar ul li a i {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            filter: drop-shadow(0 0 5px rgba(254, 231, 92, 0.5));
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.5);
+            transform: translateX(-5px);
+        }
+        .sidebar ul li a.active i {
+            color: var(--light-text);
+            filter: none;
+        }
+
+        /* منطقة المحتوى الرئيسية - الآن على اليسار */
+        .main-content {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: var(--neon-border);
+            backdrop-filter: blur(var(--glass-blur));
+            overflow-y: auto;
+            order: 1; /* Move main content to the left */
+        }
+
+        .main-content h1 {
+            font-size: 3rem;
+            color: var(--light-text);
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            font-weight: 800;
+        }
+
+        .main-content p {
+            font-size: 1.1rem;
+            color: var(--soft-white);
+            margin-bottom: 20px;
+        }
+
+        /* أنماط العناصر داخل المحتوى (مثال: حقول الإدخال، الأزرار) */
+        .setting-section {
+            background-color: rgba(13, 12, 29, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--inset-shadow);
+        }
+
+        .setting-section h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            border-bottom: 2px solid rgba(88, 101, 242, 0.3);
+            padding-bottom: 10px;
+            text-shadow: 0 0 8px rgba(88, 101, 242, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.1rem;
+            color: var(--light-text);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            background-color: rgba(13, 12, 29, 0.8);
+            color: var(--light-text);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background-color: rgba(13, 12, 29, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .toggle-switch label {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            font-weight: bold;
+            flex-grow: 1;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* زر الحفظ */
+        .save-button-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .save-button {
+            background: linear-gradient(45deg, var(--gradient-1-start), var(--gradient-1-end));
+            color: var(--light-text);
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .save-button:hover {
+            background: linear-gradient(45deg, var(--hover-color), var(--primary-color));
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* رسائل النظام */
+        .message-box {
+            background: linear-gradient(90deg, var(--secondary-color), #60C99E);
+            color: var(--light-text);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: none; /* مخفي افتراضياً */
+        }
+        .message-box.show {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+        .message-box.error {
+            background: linear-gradient(90deg, #E04343, #FF7B7B);
+        }
+
+        /* الاستجابة لتصغير الشاشات */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                flex-direction: column; /* Stack vertically on smaller screens */
+                padding: 15px;
+            }
+            .sidebar {
+                width: 100%;
+                max-height: 300px;
+                margin-bottom: 20px;
+                order: 2; /* Keep sidebar at bottom for mobile */
+            }
+            .main-content {
+                padding: 30px;
+                order: 1; /* Keep main content at top for mobile */
+            }
+            .dashboard-header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            .dashboard-header .header-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .dashboard-header .logo span {
+                font-size: 1.8rem;
+            }
+            .dashboard-header .lang-button,
+            .dashboard-header .commands-button {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+            }
+            .sidebar h2 {
+                font-size: 2rem;
+            }
+            .sidebar ul li a {
+                font-size: 1.1rem;
+                padding: 12px 15px;
+            }
+            .main-content h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 10px;
+            }
+            .sidebar {
+                padding: 20px 15px;
+            }
+            .sidebar h2 {
+                font-size: 1.8rem;
+            }
+            .sidebar ul li a {
+                font-size: 1rem;
+                gap: 10px;
+            }
+            .main-content {
+                padding: 20px;
+            }
+            .main-content h1 {
+                font-size: 2rem;
+            }
+            .setting-section {
+                padding: 20px;
+            }
+            .setting-section h3 {
+                font-size: 1.5rem;
+            }
+            .form-group label {
+                font-size: 1rem;
+            }
+            .form-group input, .form-group textarea, .form-group select {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+            .save-button {
+                padding: 12px 25px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                border-radius: 15px;
+            }
+            .sidebar h2 {
+                font-size: 1.6rem;
+                margin-bottom: 20px;
+            }
+            .sidebar ul li a {
+                font-size: 0.9rem;
+                padding: 10px 12px;
+            }
+            .main-content {
+                border-radius: 15px;
+                padding: 15px;
+            }
+            .main-content h1 {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+            .main-content p {
+                font-size: 0.95rem;
+            }
+            .setting-section h3 {
+                font-size: 1.3rem;
+            }
+            .form-group input, .form-group textarea, .form-group select {
+                font-size: 0.85rem;
+            }
+            .toggle-switch label {
+                font-size: 0.95rem;
+            }
+            .switch {
+                width: 50px;
+                height: 28px;
+            }
+            .slider:before {
+                height: 20px;
+                width: 20px;
+                left: 3px;
+                bottom: 3px;
+            }
+            input:checked + .slider:before {
+                transform: translateX(22px);
+            }
+        }
+
+        /* LTR adjustments */
+        body.en, body.fr, body.zh {
+            direction: ltr;
+            text-align: left;
+        }
+
+        .dashboard-container.ltr {
+            direction: lltr;
+        }
+
+        .sidebar ul li a {
+            justify-content: flex-end; /* Align sidebar links to left in LTR */
+        }
+        .sidebar ul li a i {
+            margin-right: 15px; /* Space between icon and text in LTR */
+            margin-left: 0;
+        }
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            transform: translateX(5px); /* Move right on hover in LTR */
+        }
+        .main-content h1, .main-content p, .setting-section h3, .form-group label {
+            text-align: left;
+        }
+        .toggle-switch {
+            flex-direction: row-reverse; /* Swap label and switch for LTR */
+        }
+        .toggle-switch label {
+            margin-left: 15px; /* Space between label and switch in LTR */
+            margin-right: 0;
+        }
+        .save-button-container {
+            text-align: left;
+        }
+        .dashboard-header .logo {
+            flex-direction: row;
+        }
+        .dashboard-header .logo img {
+            margin-right: 10px;
+            margin-left: 0;
+        }
+        .dashboard-header .header-controls {
+            flex-direction: row;
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط لوحة التحكم العلوي -->
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="https://cdn.discordapp.com/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=68641673&is=6862c4f3&hm=d925482012ca4168df4f37d0871826536f19038bae94a7a87211c27bd1c2646d&" alt="VND Bot Logo">
+            <span>VND Bot</span>
+        </div>
+        <div class="header-controls">
+            <button class="lang-button" id="lang-toggle-button">
+                <i class="fas fa-globe"></i>
+                <span id="current-lang-text">العربية</span>
+            </button>
+            <button class="commands-button">
+                <i class="fas fa-terminal"></i>
+                <span>الأوامر</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- الشريط الجانبي (Sidebar) -->
+        <aside class="sidebar">
+            <h2>إعدادات البوت</h2>
+            <ul>
+                <li><a href="#" class="sidebar-link active" data-section="general-commands"><i class="fas fa-cogs"></i> الأوامر العامة</a></li>
+                <li><a href="#" class="sidebar-link" data-section="moderation"><i class="fas fa-shield-alt"></i> الإشراف</a></li>
+                <li><a href="#" class="sidebar-link" data-section="welcome-leave"><i class="fas fa-handshake"></i> الترحيب والمغادرة</a></li>
+                <li><a href="#" class="sidebar-link" data-section="auto-reply"><i class="fas fa-reply"></i> الرد التلقائي</a></li>
+                <li><a href="#" class="sidebar-link" data-section="level-system"><i class="fas fa-chart-line"></i> نظام اللفلات</a></li>
+                <li><a href="#" class="sidebar-link" data-section="auto-roles"><i class="fas fa-user-tag"></i> الرولات التلقائية</a></li>
+                <li><a href="#" class="sidebar-link" data-section="logs"><i class="fas fa-clipboard-list"></i> اللوق</a></li>
+                <li><a href="#" class="sidebar-link" data-section="rgb-role"><i class="fas fa-palette"></i> رتبة RGB</a></li>
+                <li><a href="#" class="sidebar-link" data-section="youtube"><i class="fab fa-youtube"></i> اليوتيوب</a></li>
+                <li><a href="#" class="sidebar-link" data-section="tickets"><i class="fas fa-ticket-alt"></i> التذاكر</a></li>
+            </ul>
+        </aside>
+
+        <!-- منطقة المحتوى الرئيسية -->
+        <main class="main-content">
+            <h1 id="content-title">الأوامر العامة</h1>
+            <p id="content-description">هنا يمكنك إدارة الإعدادات العامة للأوامر في بوتك.</p>
+
+            <!-- محتوى الأقسام المختلفة -->
+            <div id="general-commands" class="content-section">
+                <div class="setting-section">
+                    <h3>تفعيل/تعطيل الأوامر</h3>
+                    <div class="toggle-switch">
+                        <label for="enable-commands">تفعيل جميع الأوامر</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-commands" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="command-prefix">بادئة الأوامر (Prefix)</label>
+                        <input type="text" id="command-prefix" value="!">
+                    </div>
+                </div>
+            </div>
+
+            <div id="moderation" class="content-section" style="display:none;">
+                <div class="setting-section">
+                    <h3>إعدادات الإشراف</h3>
+                    <div class="toggle-switch">
+                        <label for="enable-moderation">تفعيل نظام الإشراف</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-moderation" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="moderation-log-channel">قناة سجل الإشراف</label>
+                        <input type="text" id="moderation-log-channel" placeholder="#سجل-الإشراف">
+                    </div>
+                    <div class="form-group">
+                        <label for="auto-mute-duration">مدة الكتم التلقائي (بالدقائق)</label>
+                        <input type="number" id="auto-mute-duration" value="10">
+                    </div>
+                </div>
+            </div>
+
+            <div id="welcome-leave" class="content-section" style="display:none;">
+                <div class="setting-section">
+                    <h3>رسائل الترحيب والمغادرة</h3>
+                    <div class="toggle-switch">
+                        <label for="enable-welcome">تفعيل رسالة الترحيب</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-welcome" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="welcome-channel">قناة الترحيب</label>
+                        <input type="text" id="welcome-channel" placeholder="#الترحيب">
+                    </div>
+                    <div class="form-group">
+                        <label for="welcome-message">رسالة الترحيب</label>
+                        <textarea id="welcome-message" rows="3" placeholder="أهلاً بك {user} في {server}!"></textarea>
+                    </div>
+                    <div class="toggle-switch">
+                        <label for="enable-leave">تفعيل رسالة المغادرة</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-leave">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="leave-channel">قناة المغادرة</label>
+                        <input type="text" id="leave-channel" placeholder="#المغادرون">
+                    </div>
+                    <div class="form-group">
+                        <label for="leave-message">رسالة المغادرة</label>
+                        <textarea id="leave-message" rows="3" placeholder="{user} غادر السيرفر. نتمنى له التوفيق!"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div id="auto-reply" class="content-section" style="display:none;">
+                <div class="setting-section">
+                    <h3>إعدادات الرد التلقائي</h3>
+                    <div class="toggle-switch">
+                        <label for="enable-auto-reply">تفعيل الرد التلقائي</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-auto-reply">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="trigger-word">كلمة الزناد</label>
+                        <input type="text" id="trigger-word" placeholder="مثال: مرحبا">
+                    </div>
+                    <div class="form-group">
+                        <label for="auto-reply-message">رسالة الرد</label>
+                        <textarea id="auto-reply-message" rows="3" placeholder="أهلاً بك! كيف يمكنني المساعدة؟"></textarea>
+                    </div>
+                    <button class="save-button">إضافة رد تلقائي جديد</button>
+                </div>
+            </div>
+
+            <div id="level-system" class="content-section" style="display:none;">
+                <div class="setting-section">
+                    <h3>نظام اللفلات</h3>
+                    <div class="toggle-switch">
+                        <label for="enable-levels">تفعيل نظام اللفلات</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-levels" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="level-up-message">رسالة الارتقاء بالمستوى</label>
+                        <textarea id="level-up-message" rows="3" placeholder="تهانينا {user}! لقد وصلت إلى المستوى {level}!"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="xp-per-message">نقاط الخبرة لكل رسالة</label>
+                        <input type="number" id="xp-per-message" value="15">
+                    </div>
+                </div>
+            </div>
+
+            <div id="auto-roles" class="content-section" style="display:none;">
+                <div class="setting-section">
+                    <h3>الرولات التلقائية</h3>
+                    <div class="toggle-switch">
+                        <label for="enable-auto-roles">تفعيل الرولات التلقائية</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-auto-roles">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-member-role">رول الأعضاء الجدد</label>
+                        <input type="text" id="new-member-role" placeholder="@عضو جديد">
+                    </div>
+                    <div class="form-group">
+                        <label for="bot-role">رول البوتات</label>
+                        <input type="text" id="bot-role" placeholder="@بوت">
+                    </div>
+                </div>
+            </div>
+
+            <div id="logs" class="content-section" style="display:none;">
+                <div class="setting-section">
+                    <h3>إعدادات اللوق (السجلات)</h3>
+                    <div class="toggle-switch">
+                        <label for="enable-logs">تفعيل نظام السجلات</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-logs" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-log-channel">قناة سجل الرسائل</label>
+                        <input type="text" id="message-log-channel" placeholder="#سجل-الرسائل">
+                    </div>
+                    <div class="form-group">
+                        <label for="member-log-channel">قناة سجل الأعضاء</label>
+                        <input type="text" id="member-log-channel" placeholder="#سجل-الأعضاء">
+                    </div>
+                </div>
+            </div>
+
+            <div id="rgb-role" class="content-section" style="display:none;">
+                <div class="setting-section">
+                    <h3>رتبة RGB (متغيرة الألوان)</h3>
+                    <div class="toggle-switch">
+                        <label for="enable-rgb-role">تفعيل رتبة RGB</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-rgb-role">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="rgb-role-name">اسم رتبة RGB</label>
+                        <input type="text" id="rgb-role-name" placeholder="@RGB Role">
+                    </div>
+                    <div class="form-group">
+                        <label for="rgb-speed">سرعة تغيير الألوان (بالثواني)</label>
+                        <input type="number" id="rgb-speed" value="5">
+                    </div>
+                </div>
+            </div>
+
+            <div id="youtube" class="content-section" style="display:none;">
+                <div class="setting-section">
+                    <h3>نظام اليوتيوب</h3>
+                    <div class="toggle-switch">
+                        <label for="enable-youtube-alerts">تفعيل تنبيهات اليوتيوب</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-youtube-alerts">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="youtube-channel-id">معرف قناة اليوتيوب</label>
+                        <input type="text" id="youtube-channel-id" placeholder="أدخل معرف القناة">
+                    </div>
+                    <div class="form-group">
+                        <label for="youtube-alert-channel">قناة تنبيهات اليوتيوب</label>
+                        <input type="text" id="youtube-alert-channel" placeholder="#تنبيهات-اليوتيوب">
+                    </div>
+                    <div class="toggle-switch">
+                        <label for="enable-subscriber-counter">تفعيل عداد المشتركين</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-subscriber-counter">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="subscriber-counter-channel">قناة عداد المشتركين</label>
+                        <input type="text" id="subscriber-counter-channel" placeholder="#عدد-المشتركين">
+                    </div>
+                </div>
+            </div>
+
+            <div id="tickets" class="content-section" style="display:none;">
+                <div class="setting-section">
+                    <h3>نظام التذاكر</h3>
+                    <div class="toggle-switch">
+                        <label for="enable-tickets">تفعيل نظام التذاكر</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable-tickets" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket-category">فئة قنوات التذاكر</label>
+                        <input type="text" id="ticket-category" placeholder="اسم الفئة أو معرفها">
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket-staff-role">رول فريق الدعم</label>
+                        <input type="text" id="ticket-staff-role" placeholder="@الدعم">
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket-message">رسالة إنشاء التذكرة</label>
+                        <textarea id="ticket-message" rows="3" placeholder="اضغط على الزر لإنشاء تذكرة دعم."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="save-button-container">
+                <button class="save-button" id="save-settings-button">حفظ الإعدادات</button>
+            </div>
+            <div id="dashboard-message-box" class="message-box"></div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const contentTitle = document.getElementById('content-title');
+            const contentDescription = document.getElementById('content-description');
+            const saveSettingsButton = document.getElementById('save-settings-button');
+            const messageBox = document.getElementById('dashboard-message-box');
+            const langToggleButton = document.getElementById('lang-toggle-button');
+            const currentLangText = document.getElementById('current-lang-text');
+            const dashboardContainer = document.querySelector('.dashboard-container');
+
+            // Language Data (simplified for dashboard)
+            const langDataDashboard = {
+                ar: {
+                    sidebar_title: "إعدادات البوت",
+                    general_commands_title: "الأوامر العامة",
+                    general_commands_desc: "هنا يمكنك إدارة الإعدادات العامة للأوامر في بوتك.",
+                    enable_all_commands: "تفعيل جميع الأوامر",
+                    command_prefix: "بادئة الأوامر (Prefix)",
+                    moderation_title: "الإشراف",
+                    moderation_desc: "تحكم في أدوات الإشراف لحماية سيرفرك.",
+                    enable_moderation: "تفعيل نظام الإشراف",
+                    moderation_log_channel: "قناة سجل الإشراف",
+                    auto_mute_duration: "مدة الكتم التلقائي (بالدقائق)",
+                    welcome_leave_title: "الترحيب والمغادرة",
+                    welcome_leave_desc: "خصص رسائل الترحيب والمغادرة لأعضائك.",
+                    enable_welcome: "تفعيل رسالة الترحيب",
+                    welcome_channel: "قناة الترحيب",
+                    welcome_message: "رسالة الترحيب",
+                    enable_leave: "تفعيل رسالة المغادرة",
+                    leave_channel: "قناة المغادرة",
+                    leave_message: "رسالة المغادرة",
+                    auto_reply_title: "الرد التلقائي",
+                    auto_reply_desc: "قم بإعداد ردود تلقائية للكلمات المفتاحية.",
+                    enable_auto_reply: "تفعيل الرد التلقائي",
+                    trigger_word: "كلمة الزناد",
+                    auto_reply_message: "رسالة الرد",
+                    add_auto_reply: "إضافة رد تلقائي جديد",
+                    level_system_title: "نظام اللفلات",
+                    level_system_desc: "قم بتفعيل وإدارة نظام المستويات لأعضاء سيرفرك.",
+                    enable_levels: "تفعيل نظام اللفلات",
+                    level_up_message: "رسالة الارتقاء بالمستوى",
+                    xp_per_message: "نقاط الخبرة لكل رسالة",
+                    auto_roles_title: "الرولات التلقائية",
+                    auto_roles_desc: "عين رولات تلقائية للأعضاء الجدد أو البوتات.",
+                    enable_auto_roles: "تفعيل الرولات التلقائية",
+                    new_member_role: "رول الأعضاء الجدد",
+                    bot_role: "رول البوتات",
+                    logs_title: "اللوق",
+                    logs_desc: "تتبع جميع الأنشطة والأحداث في سيرفرك.",
+                    enable_logs: "تفعيل نظام السجلات",
+                    message_log_channel: "قناة سجل الرسائل",
+                    member_log_channel: "قناة سجل الأعضاء",
+                    rgb_role_title: "رتبة RGB",
+                    rgb_role_desc: "قم بإعداد رتبة متغيرة الألوان (RGB) لأعضائك.",
+                    enable_rgb_role: "تفعيل رتبة RGB",
+                    rgb_role_name: "اسم رتبة RGB",
+                    rgb_speed: "سرعة تغيير الألوان (بالثواني)",
+                    youtube_title: "اليوتيوب",
+                    youtube_desc: "ربط قناتك على اليوتيوب بالبوت لتنبيهات وميزات أخرى.",
+                    enable_youtube_alerts: "تفعيل تنبيهات اليوتيوب",
+                    youtube_channel_id: "معرف قناة اليوتيوب",
+                    youtube_alert_channel: "قناة تنبيهات اليوتيوب",
+                    enable_subscriber_counter: "تفعيل عداد المشتركين",
+                    subscriber_counter_channel: "قناة عداد المشتركين",
+                    tickets_title: "التذاكر",
+                    tickets_desc: "إدارة نظام التذاكر لتقديم الدعم لأعضائك.",
+                    enable_tickets: "تفعيل نظام التذاكر",
+                    ticket_category: "فئة قنوات التذاكر",
+                    ticket_staff_role: "رول فريق الدعم",
+                    ticket_message: "رسالة إنشاء التذكرة",
+                    save_settings: "حفظ الإعدادات",
+                    settings_saved_success: "تم حفظ الإعدادات بنجاح!",
+                    lang_ar: "العربية",
+                    lang_en: "الإنجليزية",
+                    lang_fr: "الفرنسية",
+                    lang_zh: "الصينية",
+                    commands_button_text: "الأوامر"
+                },
+                en: {
+                    sidebar_title: "Bot Settings",
+                    general_commands_title: "General Commands",
+                    general_commands_desc: "Here you can manage general command settings for your bot.",
+                    enable_all_commands: "Enable All Commands",
+                    command_prefix: "Command Prefix",
+                    moderation_title: "Moderation",
+                    moderation_desc: "Control moderation tools to protect your server.",
+                    enable_moderation: "Enable Moderation System",
+                    moderation_log_channel: "Moderation Log Channel",
+                    auto_mute_duration: "Auto Mute Duration (minutes)",
+                    welcome_leave_title: "Welcome & Leave",
+                    welcome_leave_desc: "Customize welcome and leave messages for your members.",
+                    enable_welcome: "Enable Welcome Message",
+                    welcome_channel: "Welcome Channel",
+                    welcome_message: "Welcome Message",
+                    enable_leave: "Enable Leave Message",
+                    leave_channel: "Leave Channel",
+                    leave_message: "Leave Message",
+                    auto_reply_title: "Auto Reply",
+                    auto_reply_desc: "Set up automatic replies for keywords.",
+                    enable_auto_reply: "Enable Auto Reply",
+                    trigger_word: "Trigger Word",
+                    auto_reply_message: "Reply Message",
+                    add_auto_reply: "Add New Auto Reply",
+                    level_system_title: "Level System",
+                    level_system_desc: "Enable and manage the level system for your server members.",
+                    enable_levels: "Enable Level System",
+                    level_up_message: "Level Up Message",
+                    xp_per_message: "XP Per Message",
+                    auto_roles_title: "Auto Roles",
+                    auto_roles_desc: "Assign automatic roles to new members or bots.",
+                    enable_auto_roles: "Enable Auto Roles",
+                    new_member_role: "New Member Role",
+                    bot_role: "Bot Role",
+                    logs_title: "Logs",
+                    logs_desc: "Track all activities and events in your server.",
+                    enable_logs: "Enable Logging System",
+                    message_log_channel: "Message Log Channel",
+                    member_log_channel: "Member Log Channel",
+                    rgb_role_title: "RGB Role",
+                    rgb_role_desc: "Set up a color-changing (RGB) role for your members.",
+                    enable_rgb_role: "Enable RGB Role",
+                    rgb_role_name: "RGB Role Name",
+                    rgb_speed: "Color Change Speed (seconds)",
+                    youtube_title: "YouTube",
+                    youtube_desc: "Connect your YouTube channel to the bot for alerts and other features.",
+                    enable_youtube_alerts: "Enable YouTube Alerts",
+                    youtube_channel_id: "YouTube Channel ID",
+                    youtube_alert_channel: "YouTube Alert Channel",
+                    enable_subscriber_counter: "Enable Subscriber Counter",
+                    subscriber_counter_channel: "Subscriber Counter Channel",
+                    tickets_title: "Tickets",
+                    tickets_desc: "Manage the ticket system to provide support to your members.",
+                    enable_tickets: "Enable Ticket System",
+                    ticket_category: "Ticket Channel Category",
+                    ticket_staff_role: "Support Staff Role",
+                    ticket_message: "Ticket Creation Message",
+                    save_settings: "Save Settings",
+                    settings_saved_success: "Settings saved successfully!",
+                    lang_ar: "Arabic",
+                    lang_en: "English",
+                    lang_fr: "French",
+                    lang_zh: "Chinese",
+                    commands_button_text: "Commands"
+                },
+                fr: {
+                    sidebar_title: "Paramètres du Bot",
+                    general_commands_title: "Commandes Générales",
+                    general_commands_desc: "Ici, vous pouvez gérer les paramètres généraux des commandes de votre bot.",
+                    enable_all_commands: "Activer toutes les commandes",
+                    command_prefix: "Préfixe de commande",
+                    moderation_title: "Modération",
+                    moderation_desc: "Contrôlez les outils de modération pour protéger votre serveur.",
+                    enable_moderation: "Activer le système de modération",
+                    moderation_log_channel: "Salon des logs de modération",
+                    auto_mute_duration: "Durée du mute automatique (minutes)",
+                    welcome_leave_title: "Bienvenue et Départ",
+                    welcome_leave_desc: "Personnalisez les messages de bienvenue et de départ pour vos membres.",
+                    enable_welcome: "Activer le message de bienvenue",
+                    welcome_channel: "Salon de bienvenue",
+                    welcome_message: "Message de bienvenue",
+                    enable_leave: "Activer le message de départ",
+                    leave_channel: "Salon de départ",
+                    leave_message: "Message de départ",
+                    auto_reply_title: "Réponse Automatique",
+                    auto_reply_desc: "Configurez des réponses automatiques pour les mots-clés.",
+                    enable_auto_reply: "Activer la réponse automatique",
+                    trigger_word: "Mot déclencheur",
+                    auto_reply_message: "Message de réponse",
+                    add_auto_reply: "Ajouter une nouvelle réponse automatique",
+                    level_system_title: "Système de Niveaux",
+                    level_system_desc: "Activez et gérez le système de niveaux pour les membres de votre serveur.",
+                    enable_levels: "Activer le système de niveaux",
+                    level_up_message: "Message de montée de niveau",
+                    xp_per_message: "XP par message",
+                    auto_roles_title: "Rôles Automatiques",
+                    auto_roles_desc: "Attribuez des rôles automatiques aux nouveaux membres ou bots.",
+                    enable_auto_roles: "Activer les rôles automatiques",
+                    new_member_role: "Rôle des nouveaux membres",
+                    bot_role: "Rôle des bots",
+                    logs_title: "Logs",
+                    logs_desc: "Suivez toutes les activités et événements sur votre serveur.",
+                    enable_logs: "Activer le système de logs",
+                    message_log_channel: "Salon des logs de messages",
+                    member_log_channel: "Salon des logs de membres",
+                    rgb_role_title: "Rôle RGB",
+                    rgb_role_desc: "Configurez un rôle à couleur changeante (RGB) pour vos membres.",
+                    enable_rgb_role: "Activer le rôle RGB",
+                    rgb_role_name: "Nom du rôle RGB",
+                    rgb_speed: "Vitesse de changement de couleur (secondes)",
+                    youtube_title: "YouTube",
+                    youtube_desc: "Connectez votre chaîne YouTube au bot pour les alertes et autres fonctionnalités.",
+                    enable_youtube_alerts: "Activer les alertes YouTube",
+                    youtube_channel_id: "ID de la chaîne YouTube",
+                    youtube_alert_channel: "Salon des alertes YouTube",
+                    enable_subscriber_counter: "Activer le compteur d'abonnés",
+                    subscriber_counter_channel: "Salon du compteur d'abonnés",
+                    tickets_title: "Tickets",
+                    tickets_desc: "Gérez le système de tickets pour fournir un support à vos membres.",
+                    enable_tickets: "Activer le système de tickets",
+                    ticket_category: "Catégorie des salons de tickets",
+                    ticket_staff_role: "Rôle du personnel de support",
+                    ticket_message: "Message de création de ticket",
+                    save_settings: "Enregistrer les paramètres",
+                    settings_saved_success: "Paramètres enregistrés avec succès !",
+                    lang_ar: "Arabe",
+                    lang_en: "Anglais",
+                    lang_fr: "Français",
+                    lang_zh: "Chinois",
+                    commands_button_text: "Commandes"
+                },
+                zh: {
+                    sidebar_title: "机器人设置",
+                    general_commands_title: "通用命令",
+                    general_commands_desc: "您可以在此处管理机器人的通用命令设置。",
+                    enable_all_commands: "启用所有命令",
+                    command_prefix: "命令前缀",
+                    moderation_title: "管理",
+                    moderation_desc: "控制管理工具以保护您的服务器。",
+                    enable_moderation: "启用管理系统",
+                    moderation_log_channel: "管理日志频道",
+                    auto_mute_duration: "自动禁言时长（分钟）",
+                    welcome_leave_title: "欢迎与离开",
+                    welcome_leave_desc: "为您的成员自定义欢迎和离开消息。",
+                    enable_welcome: "启用欢迎消息",
+                    welcome_channel: "欢迎频道",
+                    welcome_message: "欢迎消息",
+                    enable_leave: "启用离开消息",
+                    leave_channel: "离开频道",
+                    leave_message: "离开消息",
+                    auto_reply_title: "自动回复",
+                    auto_reply_desc: "为关键词设置自动回复。",
+                    enable_auto_reply: "启用自动回复",
+                    trigger_word: "触发词",
+                    auto_reply_message: "回复消息",
+                    add_auto_reply: "添加新自动回复",
+                    level_system_title: "等级系统",
+                    level_system_desc: "为您的服务器成员启用和管理等级系统。",
+                    enable_levels: "启用等级系统",
+                    level_up_message: "升级消息",
+                    xp_per_message: "每条消息经验值",
+                    auto_roles_title: "自动角色",
+                    auto_roles_desc: "为新成员或机器人分配自动角色。",
+                    enable_auto_roles: "启用自动角色",
+                    new_member_role: "新成员角色",
+                    bot_role: "机器人角色",
+                    logs_title: "日志",
+                    logs_desc: "跟踪服务器中的所有活动和事件。",
+                    enable_logs: "启用日志系统",
+                    message_log_channel: "消息日志频道",
+                    member_log_channel: "成员日志频道",
+                    rgb_role_title: "RGB 角色",
+                    rgb_role_desc: "为您的成员设置一个变色（RGB）角色。",
+                    enable_rgb_role: "启用 RGB 角色",
+                    rgb_role_name: "RGB 角色名称",
+                    rgb_speed: "颜色变化速度（秒）",
+                    youtube_title: "YouTube",
+                    youtube_desc: "将您的 YouTube 频道连接到机器人以获取警报和其他功能。",
+                    enable_youtube_alerts: "启用 YouTube 警报",
+                    youtube_channel_id: "YouTube 频道 ID",
+                    youtube_alert_channel: "YouTube 警报频道",
+                    enable_subscriber_counter: "启用订阅者计数器",
+                    subscriber_counter_channel: "订阅者计数器频道",
+                    tickets_title: "工单",
+                    tickets_desc: "管理工单系统以为您的成员提供支持。",
+                    enable_tickets: "启用工单系统",
+                    ticket_category: "工单频道类别",
+                    ticket_staff_role: "支持人员角色",
+                    ticket_message: "工单创建消息",
+                    save_settings: "保存设置",
+                    settings_saved_success: "设置保存成功！",
+                    lang_ar: "阿拉伯语",
+                    lang_en: "英语",
+                    lang_fr: "法语",
+                    lang_zh: "中文",
+                    commands_button_text: "命令"
+                }
+            };
+
+            let currentLang = 'ar'; // Default language
+
+            function applyLanguage(lang) {
+                currentLang = lang;
+                document.body.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+                dashboardContainer.classList.toggle('ltr', lang !== 'ar');
+
+                // Update text content based on langDataDashboard
+                document.querySelector('.sidebar h2').textContent = langDataDashboard[lang].sidebar_title;
+                document.getElementById('save-settings-button').textContent = langDataDashboard[lang].save_settings;
+                document.getElementById('current-lang-text').textContent = langDataDashboard[lang][`lang_${lang}`];
+                document.querySelector('.commands-button span').textContent = langDataDashboard[lang].commands_button_text;
+
+                // Update sidebar links
+                document.querySelector('.sidebar-link[data-section="general-commands"] i').nextSibling.textContent = ` ${langDataDashboard[lang].general_commands_title}`;
+                document.querySelector('.sidebar-link[data-section="moderation"] i').nextSibling.textContent = ` ${langDataDashboard[lang].moderation_title}`;
+                document.querySelector('.sidebar-link[data-section="welcome-leave"] i').nextSibling.textContent = ` ${langDataDashboard[lang].welcome_leave_title}`;
+                document.querySelector('.sidebar-link[data-section="auto-reply"] i').nextSibling.textContent = ` ${langDataDashboard[lang].auto_reply_title}`;
+                document.querySelector('.sidebar-link[data-section="level-system"] i').nextSibling.textContent = ` ${langDataDashboard[lang].level_system_title}`;
+                document.querySelector('.sidebar-link[data-section="auto-roles"] i').nextSibling.textContent = ` ${langDataDashboard[lang].auto_roles_title}`;
+                document.querySelector('.sidebar-link[data-section="logs"] i').nextSibling.textContent = ` ${langDataDashboard[lang].logs_title}`;
+                document.querySelector('.sidebar-link[data-section="rgb-role"] i').nextSibling.textContent = ` ${langDataDashboard[lang].rgb_role_title}`;
+                document.querySelector('.sidebar-link[data-section="youtube"] i').nextSibling.textContent = ` ${langDataDashboard[lang].youtube_title}`;
+                document.querySelector('.sidebar-link[data-section="tickets"] i').nextSibling.textContent = ` ${langDataDashboard[lang].tickets_title}`;
+
+
+                // Update active section content
+                const activeSectionId = document.querySelector('.sidebar-link.active').dataset.section;
+                showSection(activeSectionId); // Re-render active section with new language
+            }
+
+            // Function to show a specific content section
+            function showSection(sectionId) {
+                // Hide all content sections
+                contentSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                // Show the selected section
+                const activeSection = document.getElementById(sectionId);
+                if (activeSection) {
+                    activeSection.style.display = 'block';
+                    // Update title and description based on selected section
+                    contentTitle.textContent = langDataDashboard[currentLang][`${sectionId}_title`];
+                    contentDescription.textContent = langDataDashboard[currentLang][`${sectionId}_desc`];
+
+                    // Update specific form labels and placeholders for the active section
+                    // This part needs to be more robust for a full localization, but for demo,
+                    // we'll target specific elements.
+                    if (sectionId === 'general-commands') {
+                        document.querySelector('#general-commands label[for="enable-commands"]').textContent = langDataDashboard[currentLang].enable_all_commands;
+                        document.querySelector('#general-commands label[for="command-prefix"]').textContent = langDataDashboard[currentLang].command_prefix;
+                    } else if (sectionId === 'moderation') {
+                        document.querySelector('#moderation label[for="enable-moderation"]').textContent = langDataDashboard[currentLang].enable_moderation;
+                        document.querySelector('#moderation label[for="moderation-log-channel"]').textContent = langDataDashboard[currentLang].moderation_log_channel;
+                        document.querySelector('#moderation input[id="moderation-log-channel"]').placeholder = langDataDashboard[currentLang].moderation_log_channel;
+                        document.querySelector('#moderation label[for="auto-mute-duration"]').textContent = langDataDashboard[currentLang].auto_mute_duration;
+                    } else if (sectionId === 'welcome-leave') {
+                        document.querySelector('#welcome-leave label[for="enable-welcome"]').textContent = langDataDashboard[currentLang].enable_welcome;
+                        document.querySelector('#welcome-leave label[for="welcome-channel"]').textContent = langDataDashboard[currentLang].welcome_channel;
+                        document.querySelector('#welcome-leave input[id="welcome-channel"]').placeholder = langDataDashboard[currentLang].welcome_channel;
+                        document.querySelector('#welcome-leave label[for="welcome-message"]').textContent = langDataDashboard[currentLang].welcome_message;
+                        document.querySelector('#welcome-leave textarea[id="welcome-message"]').placeholder = "أهلاً بك {user} في {server}!"; // Placeholder is fixed for now
+                        document.querySelector('#welcome-leave label[for="enable-leave"]').textContent = langDataDashboard[currentLang].enable_leave;
+                        document.querySelector('#welcome-leave label[for="leave-channel"]').textContent = langDataDashboard[currentLang].leave_channel;
+                        document.querySelector('#welcome-leave input[id="leave-channel"]').placeholder = langDataDashboard[currentLang].leave_channel;
+                        document.querySelector('#welcome-leave label[for="leave-message"]').textContent = langDataDashboard[currentLang].leave_message;
+                        document.querySelector('#welcome-leave textarea[id="leave-message"]').placeholder = "{user} غادر السيرفر. نتمنى له التوفيق!"; // Placeholder is fixed for now
+                    } else if (sectionId === 'auto-reply') {
+                        document.querySelector('#auto-reply label[for="enable-auto-reply"]').textContent = langDataDashboard[currentLang].enable_auto_reply;
+                        document.querySelector('#auto-reply label[for="trigger-word"]').textContent = langDataDashboard[currentLang].trigger_word;
+                        document.querySelector('#auto-reply label[for="auto-reply-message"]').textContent = langDataDashboard[currentLang].auto_reply_message;
+                        document.querySelector('#auto-reply button').textContent = langDataDashboard[currentLang].add_auto_reply;
+                    } else if (sectionId === 'level-system') {
+                        document.querySelector('#level-system label[for="enable-levels"]').textContent = langDataDashboard[currentLang].enable_levels;
+                        document.querySelector('#level-system label[for="level-up-message"]').textContent = langDataDashboard[currentLang].level_up_message;
+                        document.querySelector('#level-system label[for="xp-per-message"]').textContent = langDataDashboard[currentLang].xp_per_message;
+                    } else if (sectionId === 'auto-roles') {
+                        document.querySelector('#auto-roles label[for="enable-auto-roles"]').textContent = langDataDashboard[currentLang].enable_auto_roles;
+                        document.querySelector('#auto-roles label[for="new-member-role"]').textContent = langDataDashboard[currentLang].new_member_role;
+                        document.querySelector('#auto-roles label[for="bot-role"]').textContent = langDataDashboard[currentLang].bot_role;
+                    } else if (sectionId === 'logs') {
+                        document.querySelector('#logs label[for="enable-logs"]').textContent = langDataDashboard[currentLang].enable_logs;
+                        document.querySelector('#logs label[for="message-log-channel"]').textContent = langDataDashboard[currentLang].message_log_channel;
+                        document.querySelector('#logs label[for="member-log-channel"]').textContent = langDataDashboard[currentLang].member_log_channel;
+                    } else if (sectionId === 'rgb-role') {
+                        document.querySelector('#rgb-role label[for="enable-rgb-role"]').textContent = langDataDashboard[currentLang].enable_rgb_role;
+                        document.querySelector('#rgb-role label[for="rgb-role-name"]').textContent = langDataDashboard[currentLang].rgb_role_name;
+                        document.querySelector('#rgb-role label[for="rgb-speed"]').textContent = langDataDashboard[currentLang].rgb_speed;
+                    } else if (sectionId === 'youtube') {
+                        document.querySelector('#youtube label[for="enable-youtube-alerts"]').textContent = langDataDashboard[currentLang].enable_youtube_alerts;
+                        document.querySelector('#youtube label[for="youtube-channel-id"]').textContent = langDataDashboard[currentLang].youtube_channel_id;
+                        document.querySelector('#youtube label[for="youtube-alert-channel"]').textContent = langDataDashboard[currentLang].youtube_alert_channel;
+                        document.querySelector('#youtube label[for="enable-subscriber-counter"]').textContent = langDataDashboard[currentLang].enable_subscriber_counter;
+                        document.querySelector('#youtube label[for="subscriber-counter-channel"]').textContent = langDataDashboard[currentLang].subscriber_counter_channel;
+                    } else if (sectionId === 'tickets') {
+                        document.querySelector('#tickets label[for="enable-tickets"]').textContent = langDataDashboard[currentLang].enable_tickets;
+                        document.querySelector('#tickets label[for="ticket-category"]').textContent = langDataDashboard[currentLang].ticket_category;
+                        document.querySelector('#tickets label[for="ticket-staff-role"]').textContent = langDataDashboard[currentLang].ticket_staff_role;
+                        document.querySelector('#tickets label[for="ticket-message"]').textContent = langDataDashboard[currentLang].ticket_message;
+                    }
+                }
+
+                // Update active link in sidebar
+                sidebarLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.querySelector(`.sidebar-link[data-section="${sectionId}"]`).classList.add('active');
+            }
+
+            // Event listeners for sidebar links
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const sectionId = e.currentTarget.dataset.section;
+                    showSection(sectionId);
+                });
+            });
+
+            // Handle save settings button click
+            saveSettingsButton.addEventListener('click', () => {
+                showMessage(langDataDashboard[currentLang].settings_saved_success, 'success');
+            });
+
+            // Function to show messages (success/error)
+            function showMessage(msg, type = 'success') {
+                messageBox.textContent = msg;
+                messageBox.classList.remove('success', 'error');
+                messageBox.classList.add(type);
+                messageBox.classList.add('show');
+
+                setTimeout(() => {
+                    messageBox.classList.remove('show');
+                }, 3000); // Hide after 3 seconds
+            }
+
+            // Language toggle logic for the dashboard header
+            const languages = ['ar', 'en', 'fr', 'zh'];
+            let currentLangIndex = 0;
+
+            langToggleButton.addEventListener('click', () => {
+                currentLangIndex = (currentLangIndex + 1) % languages.length;
+                applyLanguage(languages[currentLangIndex]);
+            });
+
+            // Initial language application
+            applyLanguage(currentLang);
+
+            // Initially show the 'general-commands' section
+            showSection('general-commands');
+        });
+    </script>
+</body>
+</html>
 

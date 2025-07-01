@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VND Bot لوحة التحكم - محور الديسكورد المتوهج</title>
-    <link rel="icon" href="https://media.discordapp.net/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=6862c4f3&is=68617373&hm=8f081e2ff1124f60bdc0035e8922fd3772694033c360e180caefa707545b0c2e" type="image/png">
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=68641673&is=6862c4f3&hm=d925482012ca4168df4f37d0871826536f19038bae94a7a87211c27bd1c2646d&" type="image/png">
     <!-- خطوط عربية: Cairo، خطوط لاتينية وعامة: Noto Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Noto+Sans:wght@400;700;900&display=swap" rel="stylesheet">
     <!-- Font Awesome لأيقونات احترافية -->
@@ -207,7 +207,7 @@
             color: var(--light-text);
             position: relative;
             padding-bottom: 30px; /* مسافة أكبر للخط السفلي */
-            text-shadow: 0 0 25px rgba(255, 255, 255, 0.7), 0 0 15px var(--accent-color); /* توهج أقوى */
+            /* Removed text-shadow for glow */
             letter-spacing: 2px;
             font-weight: 800; /* أكثر جرأة */
         }
@@ -324,9 +324,11 @@
 
         .auth-buttons {
             display: flex;
-            gap: 20px; /* مسافة أكبر */
+            gap: 20px; /* مسافة أكبر بين الأزرار */
             margin-left: 30px;
             transition: all 0.5s ease;
+            /* Added order to ensure consistent placement */
+            order: 2; /* Default order for larger screens */
         }
 
         .hamburger {
@@ -798,222 +800,12 @@
 
         /* قسم التقييمات (Testimonials Section) */
         .testimonials {
-            padding: 120px 0;
-            background-color: var(--medium-dark-bg); /* تغيير لون الخلفية لتمايز أفضل */
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); /* عرض أكبر للبطاقات */
-            gap: 50px;
-            margin-top: 70px;
-            margin-bottom: 80px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .testimonial-item {
-            background: var(--card-bg);
-            padding: 60px; /* مساحة داخلية أكبر */
-            border-radius: 25px;
-            text-align: right;
-            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 255, 255, 0.2); /* ظل وتوهج أكثر احترافية */
-            border: 3px solid var(--primary-color); /* حدود سميكة وواضحة */
-            backdrop-filter: blur(var(--glass-blur));
-            position: relative;
-            overflow: hidden;
-            opacity: 1;
-            will-change: transform, opacity, box-shadow;
-            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 28px; /* مسافة أكبر */
-        }
-        .testimonial-item:hover {
-            transform: translateY(-15px) scale(1.03) perspective(1000px) rotateX(2deg) rotateY(-2deg);
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), var(--glow-strong);
-            border-color: var(--accent-color);
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 28px; /* مسافة أكبر */
-            width: 100%;
-        }
-
-        .testimonial-author img {
-            width: 90px; /* صور أكبر للمستخدمين */
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--accent-color); /* حدود بلون التوهج (أصفر) */
-            box-shadow: 0 0 20px rgba(254, 231, 92, 0.7); /* توهج حول الصورة (أصفر) */
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
-        .testimonial-author img:hover {
-            transform: rotateZ(8deg) scale(1.05);
-            box-shadow: 0 0 30px rgba(254, 231, 92, 0.9);
-        }
-
-        .author-info {
-            text-align: right;
-        }
-
-        .author-info h4 {
-            font-size: 1.6rem; /* حجم أكبر */
-            color: var(--primary-color);
-            margin-bottom: 12px;
-            text-shadow: 0 0 12px rgba(88, 101, 242, 0.6);
-            font-weight: 800;
-        }
-
-        .author-info span {
-            font-size: 1.15rem;
-            color: var(--soft-white);
-            display: block;
-            opacity: 0.95;
-        }
-        
-        .testimonial-item .testimonial-text-content {
-            font-size: 1.45rem; /* حجم نص أكبر وواضح */
-            font-style: italic; /* نص مائل */
-            color: var(--soft-white);
-            margin-bottom: 0;
-            text-align: right;
-            width: 100%;
-            line-height: 2.1; /* تباعد أسطر أوضح */
-            quotes: "„" "“" "‚" "‘"; /* علامات اقتباس عربية */
-        }
-        .testimonial-text-content::before {
-            content: open-quote;
-            font-size: 2.5em; /* علامات اقتباس أكبر */
-            color: var(--accent-color);
-            line-height: 0.1em;
-            vertical-align: -0.4em;
-            margin-left: 0.1em;
-            opacity: 0.9; /* أكثر وضوحاً */
-            filter: var(--glow-filter);
-        }
-        .testimonial-text-content::after {
-            content: close-quote;
-            font-size: 2.5em; /* علامات اقتباس أكبر */
-            color: var(--accent-color);
-            line-height: 0.1em;
-            vertical-align: -0.4em;
-            margin-right: 0.1em;
-            opacity: 0.9; /* أكثر وضوحاً */
-            filter: var(--glow-filter);
+            display: none; /* Hide the entire section */
         }
 
         /* قسم إضافة التعليق */
         .add-comment-section {
-            background: var(--card-bg);
-            padding: 60px;
-            border-radius: 25px;
-            text-align: center;
-            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.6s ease;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.15);
-            border: var(--neon-border);
-            backdrop-filter: blur(var(--glass-blur));
-            position: relative;
-            overflow: hidden;
-            opacity: 1;
-            will-change: transform, opacity, box-shadow;
-            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-
-            max-width: 950px; /* عرض أكبر */
-            margin: 70px auto 0;
-        }
-
-        .add-comment-section h3 {
-            font-size: 2.8rem; /* حجم أكبر */
-            color: var(--light-text);
-            margin-bottom: 40px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-            font-weight: 800;
-        }
-
-        .comment-input-area {
-            display: flex;
-            flex-direction: column;
-            gap: 30px; /* مسافة أكبر */
-            margin-bottom: 40px;
-        }
-
-        .comment-input-area textarea {
-            width: 100%;
-            padding: 25px; /* مساحة داخلية أكبر */
-            border: var(--neon-border);
-            background-color: rgba(13, 12, 29, 0.6); /* خلفية داكنة */
-            color: var(--light-text);
-            border-radius: 15px; /* حواف أكثر استدارة */
-            font-size: 1.2rem; /* حجم خط أكبر */
-            min-height: 200px; /* ارتفاع أكبر */
-            resize: vertical;
-            transition: border-color 0.4s ease, box-shadow 0.4s ease;
-            box-shadow: var(--inset-shadow);
-        }
-
-        .comment-input-area textarea:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: var(--inset-shadow), 0 0 25px rgba(88, 101, 242, 0.8); /* توهج عند التركيز */
-        }
-
-        .comment-submit-button {
-            width: auto;
-            padding: 18px 45px; /* حجم زر أكبر */
-            align-self: flex-end;
-            font-size: 1.25rem;
-        }
-
-        .login-prompt {
-            background-color: var(--medium-dark-bg);
-            padding: 40px;
-            border-radius: 18px;
-            margin-top: 50px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-            border: 2px solid var(--border-color);
-        }
-        .login-prompt p {
-            font-size: 1.4rem;
-            color: var(--soft-white);
-            margin-bottom: 35px;
-        }
-        .login-prompt .btn {
-            padding: 16px 30px;
-            font-size: 1.15rem;
-        }
-
-        .message-box {
-            background: linear-gradient(90deg, var(--secondary-color), #60C99E); /* تدرج أخضر */
-            color: var(--light-text);
-            padding: 30px;
-            border-radius: 15px;
-            margin-top: 35px;
-            font-size: 1.4rem;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.6s ease, transform 0.6s ease, background-color 0.5s ease;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            font-weight: 700;
-        }
-        .message-box.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .message-box.error {
-            background: linear-gradient(90deg, #E04343, #FF7B7B); /* تدرج أحمر للخطأ */
+            display: none; /* Hide the entire section */
         }
 
 
@@ -1404,9 +1196,7 @@
             .server-stat-card .stat-label {
                 font-size: 1.2rem;
             }
-            .testimonial-item .testimonial-text-content {
-                font-size: 1.2rem;
-            }
+            /* Removed testimonial-item specific styles as the section is removed */
         }
 
         @media (max-width: 768px) {
@@ -1436,7 +1226,7 @@
                 margin-top: 25px;
                 width: 100%;
                 justify-content: center;
-                order: 2;
+                order: 2; /* Ensure it's below nav-links on mobile */
             }
             .hamburger {
                 display: flex;
@@ -1461,7 +1251,7 @@
                 width: 90%;
                 margin: 0 auto;
             }
-            .features-grid, .testimonial-grid, .server-overview-grid {
+            .features-grid, .server-overview-grid { /* Removed .testimonial-grid */
                 grid-template-columns: 1fr;
             }
             .section-heading {
@@ -1478,16 +1268,7 @@
             .feature-item h3 {
                 font-size: 2.2rem;
             }
-            .testimonial-author img {
-                width: 80px;
-                height: 80px;
-            }
-            .testimonial-author h4 {
-                font-size: 1.5rem;
-            }
-            .testimonial-item .testimonial-text-content {
-                font-size: 1.15rem;
-            }
+            /* Removed testimonial-author and testimonial-item specific styles */
             .add-comment-section h3 {
                 font-size: 2.5rem;
             }
@@ -1565,9 +1346,7 @@
             .feature-item i {
                 font-size: 4rem;
             }
-            .testimonial-item p {
-                font-size: 1rem;
-            }
+            /* Removed testimonial-item p styles */
             .language-selector {
                 flex-direction: column;
                 gap: 20px;
@@ -1614,9 +1393,6 @@
             .activity-icon {
                 font-size: 1.5rem;
             }
-            .activity-content .message {
-                font-size: 1rem;
-            }
         }
 
         /* تعديلات لاتجاه LTR عند تبديل اللغة (ليعكس التصميم العربي) */
@@ -1647,17 +1423,7 @@
         body.en .feature-item, body.fr .feature-item, body.zh .feature-item {
             text-align: center;
         }
-        body.en .testimonial-item, body.fr .testimonial-item, body.zh .testimonial-item {
-            text-align: left;
-            align-items: flex-start;
-        }
-        body.en .testimonial-author, body.fr .testimonial-author, body.zh .testimonial-author {
-            justify-content: flex-start;
-        }
-        body.en .testimonial-author img, body.fr .testimonial-author img, body.zh .testimonial-author img {
-            margin-right: 28px;
-            margin-left: 0;
-        }
+        /* Removed testimonial-item specific styles for LTR */
         body.en .contact-form .form-group, body.fr .contact-form .form-group, body.zh .contact-form .form-group {
             text-align: left;
         }
@@ -1670,14 +1436,7 @@
         body.en .gemini-output, body.fr .gemini-output, body.zh .gemini-output {
             text-align: left;
         }
-        body.en .testimonial-text-content::before, body.fr .testimonial-text-content::before, body.zh .testimonial-text-content::before {
-            margin-right: 0.1em;
-            margin-left: 0;
-        }
-        body.en .testimonial-text-content::after, body.fr .testimonial-text-content::after, body.zh .testimonial-text-content::after {
-            margin-left: 0.1em;
-            margin-right: 0;
-        }
+        /* Removed testimonial-text-content::before/after for LTR */
         body.en .command-input-group label, body.fr .command-input-group label, body.zh .command-input-group label {
             margin-right: 20px;
             margin-left: 0;
@@ -1710,7 +1469,7 @@
         <div class="container">
             <nav class="navbar">
                 <a href="#" class="logo">
-                    <img src="https://media.discordapp.net/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=6862c4f3&is=68617373&hm=8f081e2ff1124f60bdc0035e8922fd3772694033c360e180caefa707545b0c2e" alt="VND Bot Logo">
+                    <img src="https://cdn.discordapp.com/attachments/1248636782342443021/1388929555846402058/68186675_60_Converted.png?ex=68641673&is=6862c4f3&hm=d925482012ca4168df4f37d0871826536f19038bae94a7a87211c27bd1c2646d&" alt="VND Bot Logo">
                     <span>VND Bot</span>
                 </a>
                 <ul class="nav-links">
@@ -1721,13 +1480,13 @@
                     <li><a href="#live-activity" data-lang-key="live_activity_nav">النشاط المباشر</a></li> <!-- New Nav Link -->
                     <!-- <li><a href="#command-builder" data-lang-key="command_builder_nav">بناء الأوامر</a></li> --> <!-- Removed Command Builder Nav Link -->
                     <!-- <li><a href="#llm-features" data-lang-key="llm_features_nav">ميزات الذكاء الاصطناعي</a></li> --> <!-- Removed LLM Features Nav Link -->
-                    <li><a href="#testimonials" data-lang-key="testimonials">التقييمات</a></li>
+                    <!-- Removed Testimonials Nav Link as the section is removed -->
                     <li><a href="#faq" data-lang-key="faq">الأسئلة الشائعة</a></li>
                     <li><a href="#contact" data-lang-key="contact">اتصل بنا</a></li>
                 </ul>
                 <div class="auth-buttons">
-                    <a href="#" class="btn" id="login-button" data-lang-key="login"><i class="fab fa-discord"></i> تسجيل الدخول</a>
                     <a href="#" class="btn btn-outline" id="invite-button" data-lang-key="invite_bot"><i class="fas fa-plus-circle"></i> دعوة البوت</a>
+                    <a href="#" class="btn" id="login-button" data-lang-key="login"><i class="fab fa-discord"></i> تسجيل الدخول</a>
                 </div>
                 <div class="hamburger" id="hamburger-menu">
                     <div></div>
@@ -1803,7 +1562,7 @@
                     واجهة سهلة الاستخدام وبديهية، تمنحك تحكمًا كاملاً في جميع جوانب بووت الديسكورد الخاص بك بلمسة زر.
                 </p>
                 <div class="dashboard-screenshot">
-                    <img src="https://media.discordapp.net/attachments/1248636782342443021/1388929555540213881/68186675_60_BNRConverted.png?ex=6862c4f3&is=68617373&hm=6cb1618f6a0cf0a540d7e6be3a4675b6c916f4ca2d0b31082e7a2f42e1ac6f32" alt="صورة البنر كمعاينة للوحة التحكم">
+                    <img src="https://media.discordapp.net/attachments/1248636782342443021/1388929555540213881/68186675_60_BNRConverted.png?ex=68641673&is=6862c4f3&hm=9b295c92b5f9915943a208017f65723e49cce9c541a991492fcd6c0b184bc05b&=&format=webp&quality=lossless" alt="صورة البنر كمعاينة للوحة التحكم">
                 </div>
             </div>
         </section>
@@ -1868,6 +1627,7 @@
 
         <!-- قسم التقييمات (Testimonials Section) -->
         <section id="testimonials" class="testimonials section-animation">
+            <!-- This section is now hidden via CSS -->
             <div class="container">
                 <h2 class="section-heading" data-lang-key="testimonials_title">آراء المستخدمين المتميزين</h2>
                 <div class="testimonial-grid">
@@ -1902,25 +1662,6 @@
                         <p class="testimonial-text-content" data-lang-key="testimonial3_text">البوت عجبني كثير , مجاني وميزاته مارح تحصلها في بوت واحد ولكن البوت ذا سهل كل شي , بس افضل عدم استخدامه</p>
                     </div>
                 </div>
-
-                <!-- قسم إضافة التعليق الجديد -->
-                <div class="add-comment-section glow-card">
-                    <h3 data-lang-key="add_comment_title">إضافة تعليق</h3>
-                    <div id="comment-form-area">
-                        <!-- هذا القسم سيظهر إذا كان المستخدم مسجل دخول -->
-                        <div class="comment-input-area" id="logged-in-comment-area" style="display: none;">
-                            <textarea id="comment-textarea" placeholder="" data-lang-key="comment_placeholder" rows="4"></textarea>
-                            <button class="btn comment-submit-button" id="submit-comment-button" data-lang-key="submit_comment">إرسال التعليق</button>
-                        </div>
-                        <!-- هذا القسم سيظهر إذا لم يكن المستخدم مسجل دخول -->
-                        <div class="login-prompt" id="logged-out-prompt">
-                            <p data-lang-key="login_to_comment">الرجاء تسجيل الدخول عبر ديسكورد لإضافة تعليق.</p>
-                            <a href="#" class="btn" id="login-to-comment-button" data-lang-key="login_button_comment"><i class="fab fa-discord"></i> تسجيل الدخول</a>
-                        </div>
-                    </div>
-                    <div id="comment-message-box" class="message-box" style="display: none;"></div>
-                </div>
-
             </div>
         </section>
 
@@ -2020,7 +1761,7 @@
                     <button class="lang-button" data-lang="zh">中文</button>
                 </div>
                 <div class="custom-icon">
-                    <img src="https://cdn.discordapp.com/attachments/1248636782342443021/1389211667736559696/1128443567195566220.webp?ex=6863cbaf&is=68627a2f&hm=44cdfe536161dc72e67dcdba73315c7c651b9b679692154ea03eb6b341813e32&" alt="أيقونة السيرفر VND">
+                    <img src="https://media.discordapp.net/attachments/1248636782342443021/1389024051212582993/Layer_12.png?ex=6863c5b4&is=68627434&hm=dd0666f699fef16eb5f335aeaac11c81ee1f5fa9ab3396df96e8030cc4d6ce42&=&format=webp&quality=lossless" alt="أيقونة السيرفر VND">
                 </div>
             </div>
         </div>
@@ -2031,7 +1772,7 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h3 data-lang-key="developer_modal_title">معلومات المطور</h3>
-            <img src="https://media.discordapp.net/attachments/1248636782342443021/1389035705975443558/03081b3b-81d9-4bc2-a3ca-e98a2ae248c0.jpeg?ex=686327cf&is=6861d64f&hm=cea5a3d358d8d752f41b28b1531d4d5754d36d2f66ee2079c76f6b9018f8a856&=&format=webp" alt="صورة المطور: vnd anes">
+            <img src="https://cdn.discordapp.com/attachments/1248636782342443021/1389035705975443558/03081b3b-81d9-4bc2-a3ca-e98a2ae248c0.jpeg?ex=6863d08f&is=68627f0f&hm=775df96f9542e0d48a2a8816886d43c8527be800199dcb0fc26ae997a0e9dc19&" alt="صورة المطور: vnd anes">
             <p data-lang-key="developer_name">المطور: vnd anes</p>
             <p data-lang-key="developer_discord_id">معرف الديسكورد: `vnd8`</p>
             <p data-lang-key="developer_contact">للتواصل، يرجى زيارة سيرفر الديسكورد للدعم.</p>
@@ -2073,7 +1814,7 @@
                 live_activity_nav: "النشاط المباشر",
                 command_builder_nav: "بناء الأوامر",
                 llm_features_nav: "ميزات الذكاء الاصطناعي", // Keep for lang data for flexibility
-                testimonials: "التقييمات",
+                // Removed testimonials from nav link data
                 faq: "الأسئلة الشائعة",
                 contact: "اتصل بنا",
                 login: "تسجيل الدخول",
@@ -2140,15 +1881,15 @@
                 testimonial3_text: "البوت عجبني كثير , مجاني وميزاته مارح تحصلها في بوت واحد ولكن البوت ذا سهل كل شي , بس افضل عدم استخدامه",
                 testimonial3_author: "SDsniper",
                 testimonial3_role: "مستخدم ديسكورد",
-                add_comment_title: "إضافة تعليق",
-                comment_placeholder: "اكتب تعليقك هنا...",
-                submit_comment: "إرسال التعليق",
-                login_to_comment: "الرجاء تسجيل الدخول عبر ديسكورد لإضافة تعليق.",
-                login_button_comment: "تسجيل الدخول",
-                comment_success_message: "تم إرسال تعليقك بنجاح! (التعليقات لا تحفظ في هذه النسخة التجريبية).",
-                login_required_comment: "الرجاء تسجيل الدخول أولاً لإضافة تعليق.",
+                add_comment_title: "إضافة تعليق", // Kept for langData consistency, though section removed
+                comment_placeholder: "اكتب تعليقك هنا...", // Kept for langData consistency, though section removed
+                submit_comment: "إرسال التعليق", // Kept for langData consistency, though section removed
+                login_to_comment: "الرجاء تسجيل الدخول عبر ديسكورد لإضافة تعليق.", // Kept for langData consistency, though section removed
+                login_button_comment: "تسجيل الدخول", // Kept for langData consistency, though section removed
+                comment_success_message: "تم إرسال تعليقك بنجاح! (التعليقات لا تحفظ في هذه النسخة التجريبية).", // Kept for langData consistency, though section removed
+                login_required_comment: "الرجاء تسجيل الدخول أولاً لإضافة تعليق.", // Kept for langData consistency, though section removed
                 login_required_dashboard: "الرجاء تسجيل الدخول أولاً للتحكم بالبوت.",
-                empty_comment_error: "الرجاء كتابة تعليق قبل الإرسال.",
+                empty_comment_error: "الرجاء كتابة تعليق قبل الإرسال.", // Kept for langData consistency, though section removed
                 faq_title: "الأسئلة الشائعة",
                 faq1_q: "هل VND Bot مجاني للاستخدام؟",
                 faq1_a: "نعم البوت مجاني بالكامل ولا يوجد به خطة مدفوعة، هذا هو شعارنا.",
@@ -2182,7 +1923,7 @@
                 live_activity_nav: "Live Activity",
                 command_builder_nav: "Command Builder",
                 llm_features_nav: "AI Features",
-                testimonials: "Testimonials",
+                // Removed testimonials from nav link data
                 faq: "FAQ",
                 contact: "Contact Us",
                 login: "Login",
@@ -2249,15 +1990,15 @@
                 testimonial3_text: "I really liked this bot, it's free and its features can't be found in one bot, but this bot made everything easy, but I prefer not to use it.",
                 testimonial3_author: "SDsniper",
                 testimonial3_role: "Discord User",
-                add_comment_title: "Add Comment",
-                comment_placeholder: "Write your comment here...",
-                submit_comment: "Submit Comment",
-                login_to_comment: "Please log in via Discord to add a comment.",
-                login_button_comment: "Login",
-                comment_success_message: "Your comment has been sent successfully! (Comments are not saved in this demo version).",
-                login_required_comment: "Please log in first to add a comment.",
+                add_comment_title: "Add Comment", // Kept for langData consistency, though section removed
+                comment_placeholder: "Write your comment here...", // Kept for langData consistency, though section removed
+                submit_comment: "Submit Comment", // Kept for langData consistency, though section removed
+                login_to_comment: "Please log in via Discord to add a comment.", // Kept for langData consistency, though section removed
+                login_button_comment: "Login", // Kept for langData consistency, though section removed
+                comment_success_message: "Your comment has been sent successfully! (Comments are not saved in this demo version).", // Kept for langData consistency, though section removed
+                login_required_comment: "Please log in first to add a comment.", // Kept for langData consistency, though section removed
                 login_required_dashboard: "Please log in first to control the bot.",
-                empty_comment_error: "Please write a comment before submitting.",
+                empty_comment_error: "Please write a comment before submitting.", // Kept for langData consistency, though section removed
                 faq_title: "Frequently Asked Questions",
                 faq1_q: "Is VND Bot free to use?",
                 faq1_a: "Yes, the bot is completely free and has no paid plan, this is our motto.",
@@ -2291,7 +2032,7 @@
                 live_activity_nav: "Activité en direct",
                 command_builder_nav: "Constructeur de commandes",
                 llm_features_nav: "Fonctionnalités IA",
-                testimonials: "Témoignages",
+                // Removed testimonials from nav link data
                 faq: "FAQ",
                 contact: "Contactez-nous",
                 login: "Connexion",
@@ -2358,15 +2099,15 @@
                 testimonial3_text: "J'ai vraiment aimé ce bot, il est gratuit et ses fonctionnalités ne peuvent pas être trouvées dans un seul bot, mais ce bot a tout simplifié, mais je préfère ne pas l'utiliser.",
                 testimonial3_author: "SDsniper",
                 testimonial3_role: "Utilisateur Discord",
-                add_comment_title: "Ajouter un commentaire",
-                comment_placeholder: "Écrivez votre commentaire ici...",
-                submit_comment: "Envoyer le commentaire",
-                login_to_comment: "Veuillez vous connecter via Discord pour ajouter un commentaire.",
-                login_button_comment: "Connexion",
-                comment_success_message: "Votre commentaire a été envoyé avec succès ! (Les commentaires ne sont pas sauvegardés dans cette version démo).",
-                login_required_comment: "Veuillez vous connecter d'abord pour ajouter un commentaire.",
+                add_comment_title: "Ajouter un commentaire", // Kept for langData consistency, though section removed
+                comment_placeholder: "Écrivez votre commentaire ici...", // Kept for langData consistency, though section removed
+                submit_comment: "Envoyer le commentaire", // Kept for langData consistency, though section removed
+                login_to_comment: "Veuillez vous connecter via Discord pour ajouter un commentaire.", // Kept for langData consistency, though section removed
+                login_button_comment: "Connexion", // Kept for langData consistency, though section removed
+                comment_success_message: "Votre commentaire a été envoyé avec succès ! (Les commentaires ne sont pas sauvegardés dans cette version démo).", // Kept for langData consistency, though section removed
+                login_required_comment: "Veuillez vous connecter d'abord pour ajouter un commentaire.", // Kept for langData consistency, though section removed
                 login_required_dashboard: "Veuillez vous connecter d'abord pour contrôler le bot.",
-                empty_comment_error: "Veuillez écrire un commentaire avant de soumettre.",
+                empty_comment_error: "Veuillez écrire un commentaire avant de soumettre.", // Kept for langData consistency, though section removed
                 faq_title: "Questions Fréquemment Posées",
                 faq1_q: "VND Bot est-il gratuit ?",
                 faq1_a: "Oui, le bot est entièrement gratuit et n'a pas de plan payant, c'est notre devise.",
@@ -2396,7 +2137,7 @@
                 live_activity_nav: "实时活动",
                 command_builder_nav: "命令构建器",
                 llm_features_nav: "人工智能功能",
-                testimonials: "推荐",
+                // Removed testimonials from nav link data
                 faq: "常见问题",
                 contact: "联系我们",
                 login: "登录",
@@ -2463,15 +2204,15 @@
                 testimonial3_text: "我真的很喜欢这个机器人، 它是免费的، 它的功能在一个机器人中找不到، 但是这个机器人让一切都变得简单، 但我更喜欢不使用它。",
                 testimonial3_author: "SDsniper",
                 testimonial3_role: "Discord 用户",
-                add_comment_title: "添加评论",
-                comment_placeholder: "在此处撰写您的评论...",
-                submit_comment: "提交评论",
-                login_to_comment: "请通过 Discord 登录以添加评论。",
-                login_button_comment: "登录",
-                comment_success_message: "您的评论已成功发送！ (此演示版本中不保存评论)。",
-                login_required_comment: "请先登录才能添加评论。",
+                add_comment_title: "添加评论", // Kept for langData consistency, though section removed
+                comment_placeholder: "在此处撰写您的评论...", // Kept for langData consistency, though section removed
+                submit_comment: "提交评论", // Kept for langData consistency, though section removed
+                login_to_comment: "请通过 Discord 登录以添加评论。", // Kept for langData consistency, though section removed
+                login_button_comment: "登录", // Kept for langData consistency, though section removed
+                comment_success_message: "您的评论已成功发送！ (此演示版本中不保存评论)。", // Kept for langData consistency, though section removed
+                login_required_comment: "请先登录才能添加评论。", // Kept for langData consistency, though section removed
                 login_required_dashboard: "请先登录才能控制机器人。",
-                empty_comment_error: "请在提交前撰写评论。",
+                empty_comment_error: "请在提交前撰写评论。", // Kept for langData consistency, though section removed
                 faq_title: "常见问题",
                 faq1_q: "VND Bot 是否免费使用؟",
                 faq1_a: "是的، 机器人是完全免费的، 没有付费计划، 这是我们的座右铭。",
@@ -2513,7 +2254,7 @@
             document.querySelector(`.lang-button[data-lang="${lang}"]`).classList.add('active');
 
             localStorage.setItem('selectedLang', lang);
-            updateCommentSectionUI();
+            // Removed updateCommentSectionUI() as the section is removed
             // No need to call updateCommandPreview() as the section is removed
         }
 
@@ -2603,42 +2344,19 @@
             }
             if (inviteButton) inviteButton.style.display = 'inline-flex';
 
-            updateCommentSectionUI();
+            // Removed updateCommentSectionUI() call here
         }
 
-        function updateCommentSectionUI() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const loggedInCommentArea = document.getElementById('logged-in-comment-area');
-            const loggedOutPrompt = document.getElementById('logged-out-prompt');
-            const commentTextarea = document.getElementById('comment-textarea');
-            const currentLang = localStorage.getItem('selectedLang') || 'ar';
+        // Removed updateCommentSectionUI() function entirely
 
-            if (isLoggedIn) {
-                loggedInCommentArea.style.display = 'flex';
-                loggedOutPrompt.style.display = 'none';
-                commentTextarea.placeholder = langData[currentLang].comment_placeholder;
-            } else {
-                loggedInCommentArea.style.display = 'none';
-                loggedOutPrompt.style.display = 'block';
-            }
-        }
 
         function showMessage(msg, type = 'success') {
-            const messageBox = document.getElementById('comment-message-box');
-            messageBox.textContent = msg;
-            messageBox.style.display = 'block';
-            messageBox.classList.remove('success', 'error');
-            messageBox.classList.add(type);
-            messageBox.classList.add('show');
-
-            setTimeout(() => {
-                messageBox.classList.remove('show');
-                setTimeout(() => {
-                    messageBox.style.display = 'none';
-                }, 400); // Increased time for transition to finish
-            }, 3000);
+            // This function is now a placeholder as the message box element is removed from HTML
+            console.log(`Message (${type}): ${msg}`);
         }
 
+        // Removed event listeners related to comment section
+        /*
         document.getElementById('submit-comment-button').addEventListener('click', () => {
             const commentTextarea = document.getElementById('comment-textarea');
             const comment = commentTextarea.value.trim();
@@ -2656,6 +2374,7 @@
             e.preventDefault();
             window.location.href = LOGIN_URL;
         });
+        */
 
         document.addEventListener('DOMContentLoaded', updateAuthButtonsUI);
 
